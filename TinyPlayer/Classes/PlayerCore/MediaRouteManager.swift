@@ -11,20 +11,45 @@
 import AVFoundation
 import MediaPlayer
 
+/**
+     For iOS devices, TinyVideoPlayer can detect three media routing modes:
+     
+     - airplayPlayback: Media is routed to an Airplay capable device. The video content is *only* rendered on
+     this device, and rendering on the iOS device is completely off.
+     
+     - airplayPlaybackMirroring: The screen of the iOS device is mirrored to the Airplay capable device.
+     The video content is rendered on *both* devices.
+     
+     - routeOff: Media routing is off. Video is playing on the iOS device.
+ */
 public enum MediaRouteState {
     case airplayPlayback
     case airplayPlaybackMirroring
     case routeOff
 }
 
+/**
+     This manager can be used as a standalone component in your project to observe 
+     and react to media route change events.
+ */
 public class MediaRouteManager: TinyLogging {
     
+    /* The single acess point of this component. */
     public static let sharedManager = MediaRouteManager()
     
+    /* Register as a delegate to receive MediaRouteManagerDelegate callbacks. */
     public weak var delegate: MediaRouteManagerDelegate?
     
-    public var onStateChangeClosure: ((MediaRouteState) -> Void)?
+    /* This closure is called whenever the route state is changed. */
+    public var onStateChangeClosure: ((_ routeState: MediaRouteState) -> Void)?
     
+    /* 
+        This closure is called whenever the availability of media routing is changed.
+        E.g. An Airplay capable device is deteced in the local network.
+     */
+    public var onAvailablityChangeClosure: ((_ available: Bool) -> Void)?
+    
+    /* */
     public var mediaRouteState: MediaRouteState = .routeOff {
         didSet {
             delegate?.mediaRouteStateHasChangedTo(state: self.mediaRouteState)
@@ -58,11 +83,14 @@ public class MediaRouteManager: TinyLogging {
                                                         }
 
                                                     } else {
+                                                        
                                                         newState = .routeOff
                                                         self.verboseLog("External playback deactivated!")
                                                     }
                                                 
                                                     self.delegate?.mediaRouteStateHasChangedTo(state: newState)
+                                                
+                                                    self.onStateChangeClosure?(newState)
                                                })
 
         NotificationCenter.default.addObserver(forName: NSNotification.Name.MPVolumeViewWirelessRoutesAvailableDidChange,
@@ -71,6 +99,8 @@ public class MediaRouteManager: TinyLogging {
                                                using: { [unowned self] notification in
                                                 
                                                     self.delegate?.wirelessRouteAvailabilityChanged(available: self.volumnView.areWirelessRoutesAvailable)
+                                                
+                                                    self.onAvailablityChangeClosure?(self.volumnView.areWirelessRoutesAvailable)
                                                })
     }
   
@@ -78,7 +108,10 @@ public class MediaRouteManager: TinyLogging {
         NotificationCenter.default.removeObserver(self)
     }
 
-    var isAirPlayConnected: Bool {
+    /**
+        This read-only variable tells generally wether the current media playback is routed via Airplay.
+     */
+    public var isAirPlayConnected: Bool {
         
         return volumnView.isWirelessRouteActive
     }
@@ -86,7 +119,7 @@ public class MediaRouteManager: TinyLogging {
     /** 
         This read-only variable tells wether the current media playback is routed wirelessly via mirroring mode.
      */
-    var isAirplayMirroringActive: Bool {
+    public var isAirplayMirroringActive: Bool {
         
         if isAirPlayConnected {
             
@@ -102,7 +135,7 @@ public class MediaRouteManager: TinyLogging {
     /**
         This read-only variable tells wether the current video stream is routed to an Airplay capable device.
      */
-    var isAirPlayPlaybackActive: Bool {
+    public var isAirPlayPlaybackActive: Bool {
         
         return isAirPlayConnected && !isAirplayMirroringActive
     }
@@ -110,7 +143,7 @@ public class MediaRouteManager: TinyLogging {
     /**
         This read-only variable tells wether the current video stream is routed via a HDMI cable.
      */
-    var isWiredPlaybackActive: Bool {
+    public var isWiredPlaybackActive: Bool {
         
         if isAirPlayPlaybackActive {
             return false
@@ -131,7 +164,7 @@ public protocol MediaRouteManagerDelegate: class {
     
     /**
         This delegate method is get called whenever the media route state is changed.
-        This can be a consequence of switching on/off Airplay or connect the device to a external display with HDMI cable.
+        This can be a consequence of switching on/off Airplay or connect to a external display with a HDMI cable.
      */
     func mediaRouteStateHasChangedTo(state: MediaRouteState)
     
