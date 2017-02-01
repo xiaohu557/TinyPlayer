@@ -1,0 +1,22 @@
+PODS:
+  - Nimble (5.1.1)
+  - Quick (1.0.0)
+  - TinyPlayer (1.0.0)
+
+DEPENDENCIES:
+  - Nimble (~> 5.1.1)
+  - Quick (~> 1.0.0)
+  - TinyPlayer (from `../`)
+
+EXTERNAL SOURCES:
+  TinyPlayer:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
+  Quick: 8024e4a47e6cc03a9d5245ef0948264fc6d27cff
+  TinyPlayer: 4c3eebf58f10d46f8d427033502ea8c0c2c33994
+
+PODFILE CHECKSUM: a92646d4189750d23b9a3e6e8749275c50227156
+
+COCOAPODS: 1.1.1

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Root View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="RootViewController" id="BYZ-38-t0r" userLabel="Root View Controller" customClass="RootViewController" customModule="TinyPlayerDemo" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zXi-yh-2D0">
+                                <rect key="frame" x="273.5" y="300" width="120" height="35"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="0.84999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="RhJ-1u-6E2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <state key="normal" title="Play">
+                                    <color key="titleColor" red="0.94941703680203049" green="0.94941703680203049" blue="0.94941703680203049" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="playButtonTappedWithButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FTs-6B-W6j"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fgn-dq-xru">
+                                <rect key="frame" x="418" y="300" width="70" height="35"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="0.84999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="PkV-P0-mWq"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <state key="normal" title="5s &gt;&gt;">
+                                    <color key="titleColor" red="0.9494170368" green="0.9494170368" blue="0.9494170368" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="seekForwardsButtonTappedWithButton:" destination="BYZ-38-t0r" eventType="touchDown" id="vnB-Iq-SiM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O3B-Nf-Arc">
+                                <rect key="frame" x="179" y="300" width="70" height="35"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="0.84999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="9em-oi-Pvd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <state key="normal" title="&lt;&lt; 5s">
+                                    <color key="titleColor" red="0.9494170368" green="0.9494170368" blue="0.9494170368" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="seekBackwardsButtonTappedWithButton:" destination="BYZ-38-t0r" eventType="touchDown" id="ApY-T2-RBZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Gw-0l-sX9">
+                                <rect key="frame" x="25" y="45" width="35" height="35"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="0.84999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="VRg-KO-bw7"/>
+                                    <constraint firstAttribute="height" constant="35" id="zSf-K1-3s8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <state key="normal" title="x">
+                                    <color key="titleColor" red="0.9494170368" green="0.9494170368" blue="0.9494170368" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real key="value" value="17.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="closeButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eiX-SC-gjR"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pWh-tb-osS">
+                                <rect key="frame" x="85" y="45" width="135" height="35"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="0.84999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="135" id="GgX-Ng-tyu"/>
+                                    <constraint firstAttribute="height" constant="35" id="NOu-1p-rEZ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <state key="normal" title="free memory">
+                                    <color key="titleColor" red="0.9494170368" green="0.9494170368" blue="0.9494170368" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real key="value" value="17.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="freePlayerItemResource:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4rn-43-w0i"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Gw-0l-sX9" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="25" id="1uj-Ws-7GM"/>
+                            <constraint firstItem="6Gw-0l-sX9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="25" id="4Pk-s6-XYS"/>
+                            <constraint firstItem="Fgn-dq-xru" firstAttribute="leading" secondItem="zXi-yh-2D0" secondAttribute="trailing" constant="24.5" id="5qs-wx-19T"/>
+                            <constraint firstItem="zXi-yh-2D0" firstAttribute="centerY" secondItem="O3B-Nf-Arc" secondAttribute="centerY" id="Jbd-60-H3M"/>
+                            <constraint firstItem="pWh-tb-osS" firstAttribute="centerY" secondItem="6Gw-0l-sX9" secondAttribute="centerY" id="PTX-ch-axB"/>
+                            <constraint firstItem="zXi-yh-2D0" firstAttribute="leading" secondItem="O3B-Nf-Arc" secondAttribute="trailing" constant="24.5" id="SK1-Lv-TBz"/>
+                            <constraint firstItem="Fgn-dq-xru" firstAttribute="centerY" secondItem="zXi-yh-2D0" secondAttribute="centerY" id="cg9-B2-JUd"/>
+                            <constraint firstItem="zXi-yh-2D0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="klt-wb-8mn"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="zXi-yh-2D0" secondAttribute="bottom" constant="40" id="ltl-dt-RfO"/>
+                            <constraint firstItem="pWh-tb-osS" firstAttribute="leading" secondItem="6Gw-0l-sX9" secondAttribute="trailing" constant="25" id="oxh-Pb-sB8"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="startButton" destination="zXi-yh-2D0" id="ghV-xR-inX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139.880059970015" y="127.2"/>
+        </scene>
+        <!--VideoPlayer View Controller-->
+        <scene sceneID="WFP-4o-EbZ">
+            <objects>
+                <viewController storyboardIdentifier="VideoPlayerViewController" id="wqK-eu-r2R" userLabel="VideoPlayer View Controller" customClass="VideoPlayerViewController" customModule="TinyPlayerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kTb-S6-Fx1"/>
+                        <viewControllerLayoutGuide type="bottom" id="heq-yy-kyz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zly-is-Gpb">
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IFI-nZ-yeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="861" y="126"/>
+        </scene>
+    </scenes>
+</document>

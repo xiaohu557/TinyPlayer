@@ -1,0 +1,22 @@
+{
+  "name": "TinyPlayer",
+  "version": "1.0.0",
+  "summary": "A short description of TinyPlayer.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/xiaohu557/TinyPlayer",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "xiaohu557": "kevinchen2005@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/xiaohu557/TinyPlayer.git",
+    "tag": "1.0.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "TinyPlayer/Classes/**/*"
+}
