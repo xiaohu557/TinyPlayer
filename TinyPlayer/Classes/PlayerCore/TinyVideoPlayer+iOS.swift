@@ -11,7 +11,8 @@
 import Foundation
 
 /**
- Support external media route management.
+     Support external media route management.
+     - Note: This extension is made for iOS!
  */
 extension TinyVideoPlayer: MediaRouteManagerDelegate {
     

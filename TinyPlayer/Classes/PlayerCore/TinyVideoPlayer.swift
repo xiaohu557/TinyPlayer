@@ -12,7 +12,7 @@ import UIKit
 import MediaPlayer
 
 /**
-    Constants that controls the player's interactive behavior.
+    This struct defines constants that controls the player's interactive behavior.
     Feel free to change these values to best suit your needs.
  */
 public struct TinyVideoPlayerConstants {
@@ -29,7 +29,7 @@ public struct TinyVideoPlayerConstants {
 
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
-    /* Feel free to set this value to .none to disable to logging behavior of TinyPlayer. */
+    /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
     public var loggingLevel: TinyLoggingLevel = .info
     
     public weak var delegate: TinyPlayerDelegate?
@@ -82,6 +82,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
     internal var currentVideoPlaybackEnded: Bool = false
     
+    /**
+        Indicates the elapsed playback time of the current playing item.
+        - Note: The playbackPosition is a relative value.
+        It's calculated in consideration of the startPosition and endPosition properties.
+     */
     public var playbackPosition: Float? {
         
         didSet {
@@ -107,6 +112,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
+    /**
+        Indicates the playback progress in terms of the whole video duration.
+        - Note: The playbackProgess is a relative value.
+          It's calculated in consideration of the startPosition and endPosition properties.
+     */
     public var playbackProgress: Float? {
         
         guard let duration = videoDuration else {
@@ -121,8 +131,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     public var bufferProgress: Float?
-
-    public var hidden: Bool = false
     
     public var enableAirplayMediaRoute: Bool {
         didSet {
@@ -132,11 +140,13 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
     /**
         Activate this switch will force the player to filter out less meaningful state transitions.
-        - For example, in a player's lifecycle, the normal state transition chain woule be:
+     
+        - When this toggle is deactivated, in a player's lifecycle, the normal state transition chain woule look like:
             unknown -> paused -> ready -> playing -> paused -> finished
-        - When this is activated, the redundant(sometimes unnecessary) paused state will be filtered out:
+        - When this toggle is activated, the redundant(sometimes unnecessary) paused state will be filtered out:
             unknown -> ready -> playing -> finished
-        Please switch this toggle on your own preference.
+     
+        Feel free to set this toggle on your own preference.
      */
     public var isPrettyfyingPauseStateTransation: Bool = true
 
@@ -152,6 +162,21 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
        This view can be inserted directly into the UI presentation structure.
     */
     public let playerView: TinyVideoPlayerView = TinyVideoPlayerView()
+    
+    /**
+        Use the hidden property to control whether to show the playing content or not.
+     */
+    public var hidden: Bool = false {
+        
+        didSet {
+            if hidden {
+                playerView.isHidden = true
+                
+            } else {
+                playerView.isHidden = false
+            }
+        }
+    }
 
     // MAKR: - Lifecycle
 
@@ -175,6 +200,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         #endif
     }
     
+    /**
+     
+     */
     convenience public init(resourceUrl: URL, mediaContext: MediaContext? = nil) {
 
         self.init()
@@ -199,8 +227,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        Setting up this value triggers the media initiation process.
-        Main entrance point of TinyVideoPlayer.
+        Call this method triggers the media initiation process.
+        
+        - parameter resourceUrl: The url to the resource you wish TinyVideoPlayer to load.
+        - parameter mediaContext: Specify additional metadata for the to be loaded media item.
+     
+        Use this method to switch content for TinyVideoPlayer.
      */
     public func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext? = nil) {
         
@@ -223,7 +255,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
-    public func setupPlayerWithLoadedAsset(asset: AVAsset) {
+    fileprivate func setupPlayerWithLoadedAsset(asset: AVAsset) {
         
         /* Load AVAsset keys asynchronized to optimizing the initial loading behavior (not block the UI). */
         var shouldCancel: Bool = false
@@ -269,15 +301,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         player.replaceCurrentItem(with: playerItem)
         
     }
-
   
     // MARK: - Key-Value Obsevation & Notification Center Obsevation
-  
   
     fileprivate var TinyVideoPlayerAVPlayerItemObservationContext = 0
     fileprivate var TinyVideoPlayerAVPlayerObservationContext = 0
 
-    
     fileprivate func detachObserversFrom(playerItem: AVPlayerItem) {
         
         playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
@@ -474,15 +503,16 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             } else if keyPath == #keyPath(AVPlayerItem.playbackLikelyToKeepUp) {
                 
                 if playerItem.isPlaybackLikelyToKeepUp {
-                    ///TODO: How to use this notification?
+                    ///TODO: Determin how to use this notification.
                 }
                 
             } else if keyPath == #keyPath(AVPlayerItem.playbackBufferEmpty) {
                 
                 /*
-                    There are two conditions that can lead to buffer empty:
-                    1. Buffer is running out for the current playing item
-                    2. Playback is finished
+                    Please note that there are two conditions that can trigger value changes for this property:
+                    - Buffer is running out for the current playing item
+                    - Playback for the current video is finished
+                    We need to filter out the second case.
                  */
                 if playerItem.isPlaybackBufferEmpty && player.rate > 0 {
                     updatePlaybackState(.waiting)
@@ -547,6 +577,10 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             return
         }
         
+        /* 
+            When the player has passed the .ready state once (move to waiting, playing, etc.), 
+            it should not go back to the .ready state, unless the resetPlayback() method is called.
+         */
         if newState == .ready && newState.rawValue <= playbackState.rawValue {
             return
         }
@@ -596,7 +630,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             }
         }
         
-        /* Jump the start point if there is any. */
+        /* Jump the start point if there is one present. */
         if startPosition > 0 {
             
             seekTo(position: 0.0, completion: followUpOperations)
@@ -637,8 +671,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     // MARK: - Player Controls
 
     /**
-        Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView will remain.
-        Call this method if you want to re-use the playerView to play another video wittout re-initializing the whole class at a later time.
+        Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
+        Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to 
+        play another video wittout re-initializing the whole class.
      */
     public func closeCurrentItem() {
         
@@ -654,6 +689,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         player.replaceCurrentItem(with: nil)
     }
 
+    /**
+        Play the currently loaded video content.
+     */
     public func play() {
         /*
             Please note set the rate to 1 doesn't garantee a instant playback.
@@ -670,14 +708,17 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         updatePlaybackState(.playing)
     }
 
+    /**
+        Pause the currently loaded video content.
+     */
     public func pause() {
         
         player.rate = 0.0
         
         if isPrettyfyingPauseStateTransation {
             /*
-             When the filter is turned on, we need to reply on the external command to determin state change.
-             Because the internal pause state change (using timeControlStatus) is disabled.
+                When the filter is turned on, we have to manually notify the state change.
+                Because that the internal pause state observation of the playerItem (with timeControlStatus) is disabled.
              */
             updatePlaybackState(.paused)
         }
@@ -693,7 +734,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        Use this function to let the player treats the current playerItem as freshly loaded. 
+        Reset all playback status.
+        Use this function to let the player consider the current playerItem as a freshly loaded one.
      */
     public func resetPlayback() {
         
@@ -707,7 +749,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     fileprivate var isSeeking: Bool = false
 
     /**
-        Please aware that after finish seeking, the completion closure will be excuted on main thread.
+        Seek to a certain position.
+     
+        - parameter position: Where the player should seek to.
+        - parameter completion: After seeking this closure will be excuted.
+     
+        - Note: After the seeking operation, the completion closure will be excuted on the main thread.
      */
     public func seekTo(position: Float, completion: (()-> Void)? = nil) {
         
@@ -715,6 +762,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         let timePoint: CMTime = CMTime(seconds: Double(startPosition + position), preferredTimescale: 1)
         
+        /* Validate the CMTime object. An invalid CMTime can cause crash when calling seek(to:) method. */
         if !CMTIME_IS_VALID(timePoint) {
             return
         }
@@ -727,7 +775,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
             if completed {
                 
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [unowned self]  in
                     self.isSeeking = false
                     completion?()
                 }
@@ -735,6 +783,14 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
+    /**
+        Seek forward in specific seconds.
+        
+        - parameter secs: In how far (secs) should the player perform the seek operation.
+        - parameter completion: This closure will be excuted in the Main thread after seeking.
+     
+        - Note: The seeking behaviour will only be performed inside the valid playable timespan.
+     */
     public func seekForward(secs: Float, completion: (()-> Void)? = nil) {
         
         guard let position = playbackPosition,
@@ -743,9 +799,17 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         let destination = max(min(position + secs, totalLength), 0.0)
         
-        seekTo(position: destination)
+        seekTo(position: destination, completion: completion)
     }
 
+    /**
+        Seek backwards in specific seconds.
+     
+        - parameter secs: In how far (secs) should the player perform the seek operation.
+        - parameter completion: This closure will be excuted in the Main thread after seeking.
+
+        - Note: The seeking behaviour will only be performed inside the valid playable timespan.
+     */
     public func seekBackward(secs: Float, completion: (()-> Void)? = nil) {
         
         guard let position = playbackPosition,
@@ -754,18 +818,23 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         let destination = max(min(position - secs, totalLength), 0.0)
         
-        seekTo(position: destination)
+        seekTo(position: destination, completion: completion)
     }
 }
 
+// MARK: - CommandCenter Info Updater
+
 /**
-    By default TinyPlayer is configured to support only play, pause, seek-forward and seek-backward commands in the CommandCenter.
-    Skip-forward and skip-backward is disabled before TinyPlayer doesn't know the context of the previous/next playerItems.
+    TinyVideoPlayer is configured to support the play, pause, seek-forward and seek-backward commands in the CommandCenter.
+    Skip-forward and skip-backward are disabled because TinyVideoPlayer doesn't have the context of the previous/next playerItems.
     Feel-free to enable more commandCenter features in your own app, e.g. the skip function, update video info, etc.
  */
 public extension TinyVideoPlayer {
     
-    func setupCommandCenterTriggers() {
+    /*
+        Only need to setup once at the initial phase of the TinyVideoPlayer.
+     */
+    public func setupCommandCenterTriggers() {
         
         let commandCenter = MPRemoteCommandCenter.shared()
         
@@ -848,7 +917,7 @@ public extension TinyVideoPlayer {
         updateCommandCenterInfo()
     }
 
-    func updateCommandCenterInfo() {
+    public func updateCommandCenterInfo() {
         
         var infoDict = [String: Any]()
         

@@ -31,7 +31,7 @@ public protocol TinyPlayerDelegate: class {
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer)
     func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error)
     
-    /* For AdPlayer, optional */
+    /* The following are for the upcoming AdPlayer, optional.*/
     func player(_ player: TinyPlayer, didReceivedAdInjectPositions positions: [Float])
     func player(_ player: TinyPlayer, didStartAdPlayback adObject: NSObjectProtocol)
     func player(_ player: TinyPlayer, didFinishedAdPlayback adObject: NSObjectProtocol)
@@ -40,7 +40,7 @@ public protocol TinyPlayerDelegate: class {
 /**
     Caution: The following three methods are not implemented yet!
     TODO: Add ads playback support.
-    Mark the following three methods to be optional.
+    Therefore we mark the following three methods to be optional.
  */
 public extension TinyPlayerDelegate {
     
@@ -50,9 +50,11 @@ public extension TinyPlayerDelegate {
 }
 
 /**
-    The purpose of this data structure is to provide extra context of the current media. It's also used to support displaying info on the CommandCenter.
+    The purpose of this data structure is to provide extra context of the current media. 
+    These will also be used to support displaying info on the CommandCenter.
 
-    - note: If startPosition and / or endPosition is set, the playbale video is shorter! The consequence to this is that the videoDuration, playbackPosition, playbackProgress will be affected.
+    - Note: When startPosition and / or endPosition is set, the valid playable timespan for the current video
+            will be shorter! And the videoDuration,  playbackPosition and playbackProgress will be affected.
  */
 public struct MediaContext {
     
@@ -64,14 +66,14 @@ public struct MediaContext {
         Can be used to jump over unwanted video intros.
      */
     var startPosition: Float?
+    
     /*
         Optional. It denotes the desired ending position of the current media.
         Can be used to cut unwanted video ending.
      */
     var endPosition: Float?
-    /*
-        Optional. If don't specify, the player will take the duration of the playItem.
-    */
+    
+    /* Optional. If don't specify, the player will take the duration of the playItem. */
     var thumbnailImage: UIImage?
     
     public init(videoTitle: String?, artistName: String?, startPosition: Float?,
@@ -91,9 +93,7 @@ public struct MediaContext {
 public protocol TinyPlayer: class {
     
     weak var delegate: TinyPlayerDelegate? { get set }
-    
     var playerView: TinyVideoPlayerView { get }
-    
     var playbackState: TinyPlayerState { get }
 
     var videoDuration: Float? { get }

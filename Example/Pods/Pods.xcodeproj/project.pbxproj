@@ -466,12 +466,12 @@
 		65F58306C9EF55185DCAAE47F78928F8 /* PlayerCore */ = {
 			isa = PBXGroup;
 			children = (
-				802862E4CD0FDD2A5D0719CD0BF40F8E /* MediaRouteManager.swift */,
 				F2B7117F9F3514FA9AC9E581B54A1559 /* TinyVideoPlayer.swift */,
 				9C1F0DF4E49F51FFD817E608711C6AFD /* TinyVideoPlayerDefinition.swift */,
 				01BD2F8B9CAC1163EC56CE49C2F42F80 /* TinyVideoPlayerView.swift */,
-				3EB4D59BB60BDC182689ECB4166CC4BB /* Resources */,
 				C71D8FE41E410156005E4B64 /* TinyVideoPlayer+iOS.swift */,
+				802862E4CD0FDD2A5D0719CD0BF40F8E /* MediaRouteManager.swift */,
+				3EB4D59BB60BDC182689ECB4166CC4BB /* Resources */,
 			);
 			path = PlayerCore;
 			sourceTree = "<group>";

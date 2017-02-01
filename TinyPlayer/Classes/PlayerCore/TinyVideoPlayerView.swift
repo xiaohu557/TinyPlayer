@@ -11,12 +11,13 @@ import AVFoundation
 import UIKit
 
 /**
- * - Note: Every TinyVideoPlayer contains a TinyVideoPlayerView.
- * The default backing layer of the TinyVideoPlayerView is a AVPlayerLayer. Change player object of this class to switch AVPlayer.
- * You should always create the TinyVideoPlayer first, before you access its playerView property.
- * This ensures that the video data get initialized first before it gets propergated to view.
- *
- * TinyVideoPlayer -> TinyVideoPlayerView
+    - Note: Every TinyVideoPlayer contains a TinyVideoPlayerView.
+ 
+    The default backing CALayer of the TinyVideoPlayerView is set to a AVPlayerLayer.
+    You should always create the TinyVideoPlayer first, before you can operate on its playerView property.
+    This ensures that the video object gets initialized and handled properly before it gets propergated to view.
+ 
+    TinyVideoPlayer -> TinyVideoPlayerView
 
  */
 public class TinyVideoPlayerView: UIView {
@@ -43,6 +44,9 @@ public class TinyVideoPlayerView: UIView {
         return AVPlayerLayer.self
     }
   
+    /**
+        Set fillMode to determine how you want the video content to be rendered within the playerView.
+     */
     public var fillMode: TinyPlayerContentFillMode {
         
         didSet {
@@ -74,7 +78,12 @@ public class TinyVideoPlayerView: UIView {
     }
 }
 
-
+/**
+    There are three predefined fill modes for displaying video content:
+    - resizeFill: Stretch the video content to fill the playerView's bounds.
+    - resizeAspect: Maintain the video's aspect ratio and fit it within the playerView's bounds.
+    - resizeAspect: Maintain the video's aspect ratio while expanding the content to fill the playerView's bounds.
+ */
 public enum TinyPlayerContentFillMode {
     case resizeFill
     case resizeAspect
