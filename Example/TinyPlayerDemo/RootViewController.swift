@@ -37,7 +37,6 @@ class RootViewController: UIViewController, DemoPlayerControlDelegate {
     
     // MARK: - Actions
     
-    
     @IBAction func playButtonTapped(button: UIButton) {
         
         videoPlayerVC?.playButtonTapped()
@@ -89,15 +88,15 @@ class RootViewController: UIViewController, DemoPlayerControlDelegate {
 
     // MARK: - UI Updates
     
-    var playButtonMode: PlayButtonMode = .playButton
+    var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
     
-    fileprivate func updatePlayButtonToMode(buttonMode: PlayButtonMode) {
+    fileprivate func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
         
-        guard playButtonMode != buttonMode else {
+        guard playButtonDisplayMode != buttonMode else {
             return
         }
         
-        playButtonMode = buttonMode
+        playButtonDisplayMode = buttonMode
         
         let designatedAlpha: CGFloat
         var buttonTitle: String?
@@ -129,12 +128,18 @@ class RootViewController: UIViewController, DemoPlayerControlDelegate {
     
 }
 
-enum PlayButtonMode {
+/**
+    Display modes of the play/pause button.
+ */
+enum PlayButtonDisplayMode {
     case playButton
     case pauseButton
     case hidden
 }
 
+/**
+    Callbacks from a VideoPlayerViewController class instance.
+ */
 protocol DemoPlayerControlDelegate: class {
     
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
