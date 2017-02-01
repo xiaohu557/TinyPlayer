@@ -11,20 +11,25 @@ import AVFoundation
 import UIKit
 import MediaPlayer
 
-
 /**
     Constants that controls the player's interactive behavior.
-    Change these values freely to best suit the needs.
+    Feel free to change these values to best suit your needs.
  */
 public struct TinyVideoPlayerConstants {
-    static var seekingInterval: Float = 10.0    // in secs
-    static var timeObservationInterval: Float = 0.01    // in secs
-    static var bufferSize: Float = 6.0      // in secs
+    
+    /* This defines how far the player will seek forwards/backwards when user interacts with buttons in command center. */
+    static let seekingInterval: Float = 10.0    // in secs
+    
+    /* This defines how frequently the playing time will be updated. */
+    static let timeObservationInterval: Float = 0.01    // in secs
+    
+    /* This defines how long the player should buffer the content before start playing. */
+    static let bufferSize: Float = 6.0      // in secs
 }
-
 
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
+    /* Feel free to set this value to .none to disable to logging behavior of TinyPlayer. */
     public var loggingLevel: TinyLoggingLevel = .info
     
     public weak var delegate: TinyPlayerDelegate?
@@ -34,14 +39,20 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     internal var internalUrl: URL?
 
     /**
-        Both of the following vriables have a initial value of 0 if there's no video loaded.
-        When a playerItem is intialized, these two will be assigned following two rules:
-        - If the corresponding properties in the MediaContext have been valued, these value will be mapped to them.
-        - If no specification in the MediaContext, then 0 will be assigned to 'startPosition', and the total duration of the video will be assigned to 'endPosition'.
+        After the playerItem initialization, this value will match the one set in the MediaContext.
+        If not present in the MediaContext, it will be set to 0.0.
      */
     internal var startPosition: Float = 0.0
+
+    /**
+        After the playerItem initialization, this value will match the one set in the MediaContext.
+        If not present in the MediaContext, it will be set to the total duration of the video.
+     */
     internal var endPosition: Float = 0.0
 
+    /**
+        The mediaContext object that are used to store context information for the loaded playerItem.
+     */
     public var mediaContext: MediaContext? {
         
         didSet {
@@ -58,6 +69,10 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
+    /**
+        The duration of the current loaded playerItem. 
+        It's calculated based on the startPosition and endPosition properties.
+     */
     public var videoDuration: Float? {
         
         didSet {
@@ -82,7 +97,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             delegate?.player(self, didUpdatePlaybackPosition: position, playbackProgress: progress)
             
             /* Set the current video to be completed if it matches the 'endPosition' tag.*/
-            if !self.currentVideoPlaybackEnded && position >= self.endPosition {
+            if !self.currentVideoPlaybackEnded && position >= self.endPosition - self.startPosition {
                 
                 self.currentVideoPlaybackEnded = true
 
@@ -123,7 +138,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             unknown -> ready -> playing -> finished
         Please switch this toggle on your own preference.
      */
-    public var isPrettyfingPauseStateTransation: Bool = true
+    public var isPrettyfyingPauseStateTransation: Bool = true
 
     public var playbackState: TinyPlayerState
 
@@ -136,7 +151,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     /**
        This view can be inserted directly into the UI presentation structure.
     */
-    public lazy var playerView: TinyVideoPlayerView = TinyVideoPlayerView()
+    public let playerView: TinyVideoPlayerView = TinyVideoPlayerView()
 
     // MAKR: - Lifecycle
 
@@ -407,7 +422,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                     switch player.timeControlStatus {
                         
                     case .paused:
-                        if isPrettyfingPauseStateTransation {
+                        if isPrettyfyingPauseStateTransation {
                             updatePauseStateWithFilteringOn()
                         } else {
                             updatePlaybackState(.paused)
@@ -513,9 +528,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        This function is used to provide supportance of the isPrettyfingPauseStateTransation toggle.
+        This function is used to provide supportance of the isPrettyfyingPauseStateTransation toggle.
      */
-    func updatePauseStateWithFilteringOn() {
+    fileprivate func updatePauseStateWithFilteringOn() {
         
         if playbackState == .unknown || playbackState == .playing {
             return
@@ -525,7 +540,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
     
-    func updatePlaybackState(_ newState: TinyPlayerState) {
+    
+    fileprivate func updatePlaybackState(_ newState: TinyPlayerState) {
         
         guard newState != playbackState else {
             return
@@ -554,7 +570,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     /**
         This method only get called once each time a new video is loaded.
      */
-    func playerItemIsReadyForPlaying(playerItem: AVPlayerItem) {
+    fileprivate func playerItemIsReadyForPlaying(playerItem: AVPlayerItem) {
         
         /* Link the initilized AVPlayer to the TinyVideoPlayerView. */
         playerView.player = player
@@ -594,11 +610,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         currentVideoPlaybackEnded = false
     }
 
-    func playerItemDidPlayToEndTime(_ notification: Notification? = nil) {
+    internal func playerItemDidPlayToEndTime(_ notification: Notification? = nil) {
         
-        if self.player.rate != 0.0 {
+        if player.rate != 0.0 {
             
-            self.player.rate = 0.0
+            player.rate = 0.0
         }
 
         updatePlaybackState(.finished)
@@ -606,12 +622,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         delegate?.playerHasFinishedPlayingVideo(self)
     }
 
-    func playerItemPlaybackStalled(_ notification: Notification) {
+    internal func playerItemPlaybackStalled(_ notification: Notification) {
         
         updatePlaybackState(.waiting)
     }
 
-    func failedToPrepareAssetForPlayback(error: Error) {
+    fileprivate func failedToPrepareAssetForPlayback(error: Error) {
         
         delegate?.player(self, didEncounterFailureWithError: error)
         
@@ -658,7 +674,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         player.rate = 0.0
         
-        if isPrettyfingPauseStateTransation {
+        if isPrettyfyingPauseStateTransation {
             /*
              When the filter is turned on, we need to reply on the external command to determin state change.
              Because the internal pause state change (using timeControlStatus) is disabled.

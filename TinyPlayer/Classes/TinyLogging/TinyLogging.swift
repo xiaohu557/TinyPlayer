@@ -14,6 +14,7 @@ public enum TinyLoggingLevel: Int {
     case info = 1
     case warning = 2
     case error = 3
+    case none = 4
 }
 
 
@@ -60,6 +61,8 @@ public extension TinyLogging {
                 levelStringRepresentation = "[warning]"
             case .error:
                 levelStringRepresentation = "[error]"
+            default:
+                levelStringRepresentation = ""
             }
             
             var fileName: String = ""
