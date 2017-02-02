@@ -1,13 +1,21 @@
 use_frameworks!
 
 target 'TinyPlayerDemo' do
-    
-  pod 'TinyPlayer', :path => '../'
+    workspace ‘TinyPlayerDemo+Benchmark’
+    project 'Demo/TinyPlayerDemo.xcodeproj’
 
-  target 'TinyPlayerDemo_Tests' do
-    inherit! :search_paths
-    pod 'Quick', '~> 1.0.0'
-    pod 'Nimble', '~> 5.1.1'
-  end
-  
+    pod 'TinyPlayer', :path => '../'
+
+    target 'TinyPlayerDemo_Tests' do
+        inherit! :search_paths
+        pod 'Quick', '~> 1.0.0'
+        pod 'Nimble', '~> 5.1.1'
+    end
+end
+
+target 'TinyPlayerBenchmark' do
+    workspace ‘TinyPlayerDemo+Benchmark’
+    project 'Benchmark/TinyPlayerBenchmark.xcodeproj’
+
+    pod 'TinyPlayer', :path => '../'
 end

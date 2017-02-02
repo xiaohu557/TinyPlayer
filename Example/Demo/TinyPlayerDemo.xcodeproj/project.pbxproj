@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21BAD5BDBFFF337BF4807444 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E63EA7BBED075EA05FD1E3 /* Pods_TinyPlayerDemo.framework */; };
-		484FA741A67D685FE76449C2 /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25220E5752C37509D0BF7CBD /* Pods_TinyPlayerDemo_Tests.framework */; };
+		2EF7ED7932B69DE2C6656B50 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		7CADD9171BE33496A2F3A49F /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */; };
 		C71D8F691E40A6D8005E4B64 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F661E40A6D8005E4B64 /* RootViewController.swift */; };
 		C71D8F6A1E40A6D8005E4B64 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */; };
 		C71D8F6B1E40A6D8005E4B64 /* VideoPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F681E40A6D8005E4B64 /* VideoPlayerViewModel.swift */; };
@@ -30,20 +30,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		07353828A7BDE8D42F8FDEC5 /* Pods-TinyPlayerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo.release.xcconfig"; sourceTree = "<group>"; };
+		0B95F0EA916D7F793BFFCDBB /* Pods-TinyPlayerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		1034B79EC94FE54880A63484 /* TinyPlayer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = TinyPlayer.podspec; path = ../TinyPlayer.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		25220E5752C37509D0BF7CBD /* Pods_TinyPlayerDemo_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA2E517AFBD214768312FF4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* TinyPlayerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyPlayerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACE51AFB9204008FA782 /* TinyPlayerDemo_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TinyPlayerDemo_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		62B5E871A6341410D80EBF66 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		7C9EAFBD94DD557265FC905C /* Pods-TinyPlayerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		A7E63EA7BBED075EA05FD1E3 /* Pods_TinyPlayerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AAA46D8C9F99ADF8CC8F9650 /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		C5A538A9BD363848318AE162 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		C71D8F651E40A6D7005E4B64 /* TinyPlayerDemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TinyPlayerDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		74B69584D02F8D3076EA8C5E /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		7F0A2127F4EE25DFCB42C905 /* Pods-TinyPlayerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo.release.xcconfig"; sourceTree = "<group>"; };
+		C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C71D8F661E40A6D8005E4B64 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootViewController.swift; path = TinyPlayerDemo/RootViewController.swift; sourceTree = "<group>"; };
 		C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VideoPlayerViewController.swift; path = TinyPlayerDemo/VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		C71D8F681E40A6D8005E4B64 /* VideoPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VideoPlayerViewModel.swift; path = TinyPlayerDemo/VideoPlayerViewModel.swift; sourceTree = "<group>"; };
@@ -52,6 +49,8 @@
 		C71D8F781E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71D8F7A1E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C71D8F8B1E40B052005E4B64 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TinyPlayerDemo/Info.plist; sourceTree = "<group>"; };
+		D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D90882D8D79492EA32FBF437 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21BAD5BDBFFF337BF4807444 /* Pods_TinyPlayerDemo.framework in Frameworks */,
+				2EF7ED7932B69DE2C6656B50 /* Pods_TinyPlayerDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,20 +66,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				484FA741A67D685FE76449C2 /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */,
+				7CADD9171BE33496A2F3A49F /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0031419234843EA9115416B8 /* Frameworks */ = {
+		1E2745623C192D44A953C297 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A7E63EA7BBED075EA05FD1E3 /* Pods_TinyPlayerDemo.framework */,
-				25220E5752C37509D0BF7CBD /* Pods_TinyPlayerDemo_Tests.framework */,
+				0B95F0EA916D7F793BFFCDBB /* Pods-TinyPlayerDemo.debug.xcconfig */,
+				7F0A2127F4EE25DFCB42C905 /* Pods-TinyPlayerDemo.release.xcconfig */,
+				74B69584D02F8D3076EA8C5E /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */,
+				D90882D8D79492EA32FBF437 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */,
 			);
-			name = Frameworks;
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -90,8 +91,8 @@
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
-				E2144514C940BC50FEC786EA /* Pods */,
-				0031419234843EA9115416B8 /* Frameworks */,
+				1E2745623C192D44A953C297 /* Pods */,
+				D2B4AA11524C64EE2F502DC9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -139,7 +140,6 @@
 				C71D8F661E40A6D8005E4B64 /* RootViewController.swift */,
 				C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */,
 				C71D8F681E40A6D8005E4B64 /* VideoPlayerViewModel.swift */,
-				C71D8F651E40A6D7005E4B64 /* TinyPlayerDemo-Bridging-Header.h */,
 				C71D8F771E40A71B005E4B64 /* LaunchScreen.storyboard */,
 				C71D8F791E40A71B005E4B64 /* Main.storyboard */,
 				C71D8F8B1E40B052005E4B64 /* Info.plist */,
@@ -147,15 +147,13 @@
 			name = TinyPlayerDemo;
 			sourceTree = "<group>";
 		};
-		E2144514C940BC50FEC786EA /* Pods */ = {
+		D2B4AA11524C64EE2F502DC9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7C9EAFBD94DD557265FC905C /* Pods-TinyPlayerDemo.debug.xcconfig */,
-				07353828A7BDE8D42F8FDEC5 /* Pods-TinyPlayerDemo.release.xcconfig */,
-				AAA46D8C9F99ADF8CC8F9650 /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */,
-				C5A538A9BD363848318AE162 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */,
+				C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */,
+				D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */,
 			);
-			name = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,12 +163,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TinyPlayerDemo" */;
 			buildPhases = (
-				746D3A1D6A4C3F927A8AD4C3 /* [CP] Check Pods Manifest.lock */,
+				93A532FE6E42C4DFADFE4485 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				BF8A58DCAB8DF87D7A9344EF /* [CP] Embed Pods Frameworks */,
-				C46C147C061F7A4F7CCA9236 /* [CP] Copy Pods Resources */,
+				9D0166593B96FF791BC7A497 /* [CP] Embed Pods Frameworks */,
+				82D0B20BEBAA96193FF4E7E7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -185,12 +183,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TinyPlayerDemo_Tests" */;
 			buildPhases = (
-				FDA4DC30106105390AE51D1D /* [CP] Check Pods Manifest.lock */,
+				F645B11E67117D6F04F17CEB /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				502B391EB98C7BA54F7B3E95 /* [CP] Embed Pods Frameworks */,
-				BF9DC3CF62F3ACFF079E1BAF /* [CP] Copy Pods Resources */,
+				33D77C5514144495F72FEB51 /* [CP] Embed Pods Frameworks */,
+				C61346C7F2033418FD06CC45 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -264,7 +262,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		502B391EB98C7BA54F7B3E95 /* [CP] Embed Pods Frameworks */ = {
+		33D77C5514144495F72FEB51 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -276,10 +274,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		746D3A1D6A4C3F927A8AD4C3 /* [CP] Check Pods Manifest.lock */ = {
+		82D0B20BEBAA96193FF4E7E7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		93A532FE6E42C4DFADFE4485 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -294,7 +307,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		BF8A58DCAB8DF87D7A9344EF /* [CP] Embed Pods Frameworks */ = {
+		9D0166593B96FF791BC7A497 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,10 +319,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BF9DC3CF62F3ACFF079E1BAF /* [CP] Copy Pods Resources */ = {
+		C61346C7F2033418FD06CC45 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -321,25 +334,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C46C147C061F7A4F7CCA9236 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FDA4DC30106105390AE51D1D /* [CP] Check Pods Manifest.lock */ = {
+		F645B11E67117D6F04F17CEB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -499,7 +497,7 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C9EAFBD94DD557265FC905C /* Pods-TinyPlayerDemo.debug.xcconfig */;
+			baseConfigurationReference = 0B95F0EA916D7F793BFFCDBB /* Pods-TinyPlayerDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -510,7 +508,6 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "TinyPlayerDemo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -519,7 +516,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 07353828A7BDE8D42F8FDEC5 /* Pods-TinyPlayerDemo.release.xcconfig */;
+			baseConfigurationReference = 7F0A2127F4EE25DFCB42C905 /* Pods-TinyPlayerDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -530,7 +527,6 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "TinyPlayerDemo-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -538,7 +534,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AAA46D8C9F99ADF8CC8F9650 /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */;
+			baseConfigurationReference = 74B69584D02F8D3076EA8C5E /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
@@ -556,7 +552,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5A538A9BD363848318AE162 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */;
+			baseConfigurationReference = D90882D8D79492EA32FBF437 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;

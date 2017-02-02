@@ -1,0 +1,399 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E43DBE0CD7050D34DE0C66E /* Pods_TinyPlayerBenchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29FD31FFB022FE6891D96F11 /* Pods_TinyPlayerBenchmark.framework */; };
+		C7F115FC1E1FEE6A003B89CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F115FB1E1FEE6A003B89CF /* AppDelegate.swift */; };
+		C7F115FE1E1FEE6A003B89CF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F115FD1E1FEE6A003B89CF /* RootViewController.swift */; };
+		C7F116011E1FEE6A003B89CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F115FF1E1FEE6A003B89CF /* Main.storyboard */; };
+		C7F116031E1FEE6A003B89CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7F116021E1FEE6A003B89CF /* Assets.xcassets */; };
+		C7F116061E1FEE6A003B89CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F116041E1FEE6A003B89CF /* LaunchScreen.storyboard */; };
+		C7F116361E1FF1F1003B89CF /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F116351E1FF1F0003B89CF /* VideoPlayerViewController.swift */; };
+		C7F116381E1FF359003B89CF /* VideoPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F116371E1FF359003B89CF /* VideoPlayerViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		29FD31FFB022FE6891D96F11 /* Pods_TinyPlayerBenchmark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerBenchmark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8629AB497E6F38EECCBE5657 /* Pods-TinyPlayerBenchmark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerBenchmark.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerBenchmark/Pods-TinyPlayerBenchmark.debug.xcconfig"; sourceTree = "<group>"; };
+		9A20178E2E0F1F2E72228DCC /* Pods-TinyPlayerBenchmark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerBenchmark.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerBenchmark/Pods-TinyPlayerBenchmark.release.xcconfig"; sourceTree = "<group>"; };
+		C7F115F81E1FEE6A003B89CF /* TinyPlayerBenchmark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyPlayerBenchmark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7F115FB1E1FEE6A003B89CF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C7F115FD1E1FEE6A003B89CF /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		C7F116001E1FEE6A003B89CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C7F116021E1FEE6A003B89CF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C7F116051E1FEE6A003B89CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C7F116071E1FEE6A003B89CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7F116351E1FF1F0003B89CF /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
+		C7F116371E1FF359003B89CF /* VideoPlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C7F115F51E1FEE6A003B89CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E43DBE0CD7050D34DE0C66E /* Pods_TinyPlayerBenchmark.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9E12EA8C5FA14DCBDBA611A5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8629AB497E6F38EECCBE5657 /* Pods-TinyPlayerBenchmark.debug.xcconfig */,
+				9A20178E2E0F1F2E72228DCC /* Pods-TinyPlayerBenchmark.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C147E7BCAA139964ECAB469F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29FD31FFB022FE6891D96F11 /* Pods_TinyPlayerBenchmark.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C7F115EF1E1FEE6A003B89CF = {
+			isa = PBXGroup;
+			children = (
+				C7F115FA1E1FEE6A003B89CF /* TinyPlayerBenchmark */,
+				C7F115F91E1FEE6A003B89CF /* Products */,
+				9E12EA8C5FA14DCBDBA611A5 /* Pods */,
+				C147E7BCAA139964ECAB469F /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C7F115F91E1FEE6A003B89CF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7F115F81E1FEE6A003B89CF /* TinyPlayerBenchmark.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7F115FA1E1FEE6A003B89CF /* TinyPlayerBenchmark */ = {
+			isa = PBXGroup;
+			children = (
+				C7F115FB1E1FEE6A003B89CF /* AppDelegate.swift */,
+				C7F115FD1E1FEE6A003B89CF /* RootViewController.swift */,
+				C7F116351E1FF1F0003B89CF /* VideoPlayerViewController.swift */,
+				C7F116371E1FF359003B89CF /* VideoPlayerViewModel.swift */,
+				C7F115FF1E1FEE6A003B89CF /* Main.storyboard */,
+				C7F116021E1FEE6A003B89CF /* Assets.xcassets */,
+				C7F116041E1FEE6A003B89CF /* LaunchScreen.storyboard */,
+				C7F116071E1FEE6A003B89CF /* Info.plist */,
+			);
+			path = TinyPlayerBenchmark;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C7F115F71E1FEE6A003B89CF /* TinyPlayerBenchmark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7F116201E1FEE6A003B89CF /* Build configuration list for PBXNativeTarget "TinyPlayerBenchmark" */;
+			buildPhases = (
+				5C8A23C252693D63F9A5A700 /* [CP] Check Pods Manifest.lock */,
+				C7F115F41E1FEE6A003B89CF /* Sources */,
+				C7F115F51E1FEE6A003B89CF /* Frameworks */,
+				C7F115F61E1FEE6A003B89CF /* Resources */,
+				4B67DBA2CFE951660D8605DC /* [CP] Embed Pods Frameworks */,
+				8F753DE45D1C2F8C3CF2DF63 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TinyPlayerBenchmark;
+			productName = TinyPlayerBenchmark;
+			productReference = C7F115F81E1FEE6A003B89CF /* TinyPlayerBenchmark.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7F115F01E1FEE6A003B89CF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Xi Chen";
+				TargetAttributes = {
+					C7F115F71E1FEE6A003B89CF = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 5FBYCQAVJQ;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C7F115F31E1FEE6A003B89CF /* Build configuration list for PBXProject "TinyPlayerBenchmark" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C7F115EF1E1FEE6A003B89CF;
+			productRefGroup = C7F115F91E1FEE6A003B89CF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C7F115F71E1FEE6A003B89CF /* TinyPlayerBenchmark */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C7F115F61E1FEE6A003B89CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7F116061E1FEE6A003B89CF /* LaunchScreen.storyboard in Resources */,
+				C7F116031E1FEE6A003B89CF /* Assets.xcassets in Resources */,
+				C7F116011E1FEE6A003B89CF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4B67DBA2CFE951660D8605DC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerBenchmark/Pods-TinyPlayerBenchmark-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5C8A23C252693D63F9A5A700 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8F753DE45D1C2F8C3CF2DF63 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-TinyPlayerBenchmark/Pods-TinyPlayerBenchmark-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C7F115F41E1FEE6A003B89CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7F115FE1E1FEE6A003B89CF /* RootViewController.swift in Sources */,
+				C7F115FC1E1FEE6A003B89CF /* AppDelegate.swift in Sources */,
+				C7F116361E1FF1F1003B89CF /* VideoPlayerViewController.swift in Sources */,
+				C7F116381E1FF359003B89CF /* VideoPlayerViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C7F115FF1E1FEE6A003B89CF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C7F116001E1FEE6A003B89CF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C7F116041E1FEE6A003B89CF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C7F116051E1FEE6A003B89CF /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C7F1161E1E1FEE6A003B89CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7F1161F1E1FEE6A003B89CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C7F116211E1FEE6A003B89CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8629AB497E6F38EECCBE5657 /* Pods-TinyPlayerBenchmark.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
+				INFOPLIST_FILE = TinyPlayerBenchmark/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.demo.TinyPlayerBenchmark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		C7F116221E1FEE6A003B89CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A20178E2E0F1F2E72228DCC /* Pods-TinyPlayerBenchmark.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
+				INFOPLIST_FILE = TinyPlayerBenchmark/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.demo.TinyPlayerBenchmark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7F115F31E1FEE6A003B89CF /* Build configuration list for PBXProject "TinyPlayerBenchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F1161E1E1FEE6A003B89CF /* Debug */,
+				C7F1161F1E1FEE6A003B89CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7F116201E1FEE6A003B89CF /* Build configuration list for PBXNativeTarget "TinyPlayerBenchmark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F116211E1FEE6A003B89CF /* Debug */,
+				C7F116221E1FEE6A003B89CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C7F115F01E1FEE6A003B89CF /* Project object */;
+}

@@ -1,6 +1,0 @@
-framework module TinyPlayer {
-  umbrella header "TinyPlayer-umbrella.h"
-
-  export *
-  module * { export * }
-}
