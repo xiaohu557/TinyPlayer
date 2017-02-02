@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/XiChen/Development/TinyPlayerSetup/TinyPlayer/Example/TinyPlayerDemo.xcodeproj">
+      location = "group:TinyPlayerDemo.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

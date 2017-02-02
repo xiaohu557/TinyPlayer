@@ -1,8 +1,8 @@
 {
   "name": "TinyPlayer",
-  "version": "1.0.0",
-  "summary": "A short description of TinyPlayer.",
-  "description": "TODO: Add long description of the pod here.",
+  "version": "0.9.0",
+  "summary": "TinyPlayer is simple, elegant and highly efficient  video player for iOS and tvOS. It is based on Apple’s AVFoundation framework.",
+  "description": "Served as the core player component of our Quazer[] app, we spent a lot of effort to build it up by following the industrial best practises in terms of maximal utilizing Apple’s AVFoundation framework. AVFoundation is powerful but unfortunately not easy to use. To unleash the most potential of it, an experienced developer will also spend quiet amount of time to set up everything correctly. We alleviate the burden of you by providing a easy-to-use player component which encapsulates all the complexities within.",
   "homepage": "https://github.com/xiaohu557/TinyPlayer",
   "license": {
     "type": "MIT",
@@ -13,10 +13,11 @@
   },
   "source": {
     "git": "https://github.com/xiaohu557/TinyPlayer.git",
-    "tag": "1.0.0"
+    "tag": "0.9.0"
   },
   "platforms": {
-    "ios": "9.0"
+    "ios": "9.0",
+    "tvos": "9.1"
   },
   "source_files": "TinyPlayer/Classes/**/*"
 }
