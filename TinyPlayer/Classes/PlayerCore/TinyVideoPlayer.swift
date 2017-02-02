@@ -244,6 +244,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
             self.mediaContext = mediaContext
             
+            player.rate = 0.0
+            
             let asset = AVURLAsset(url: resourceUrl)
             asset.loadValuesAsynchronously(forKeys: TinyVideoPlayer.assetKeysRequiredForOptimizedPlayback) {
                 DispatchQueue.main.async {
@@ -570,7 +572,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
     
-    
+    /**
+        Update playback state and decide whether to propagate the state change to it's delegate.
+      */
     fileprivate func updatePlaybackState(_ newState: TinyPlayerState) {
         
         guard newState != playbackState else {
@@ -592,7 +596,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         playbackState = newState
         
         if newState == .ready {
-
+            
             guard let playerItem = self.playerItem else {
                 return
             }
