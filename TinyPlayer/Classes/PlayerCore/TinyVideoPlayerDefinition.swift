@@ -108,9 +108,9 @@ public protocol TinyPlayer: class {
     func pause()
     func closeCurrentItem() /* Stop playing, release the current playing item from memeory. */
     func resetPlayback()
-    func seekTo(position: Float, completion: (()-> Void)?)
-    func seekForward(secs: Float, completion: (()-> Void)?)
-    func seekBackward(secs: Float, completion: (()-> Void)?)
+    func seekTo(position: Float, cancelPreviousSeeking: Bool, completion: ((Bool)-> Void)?)
+    func seekForward(secs: Float, completion: ((Bool)-> Void)?)
+    func seekBackward(secs: Float, completion: ((Bool)-> Void)?)
 }
 
 /**

@@ -214,9 +214,10 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
         player.pause()
         
+        detachTimeObserver()
+
         if let currentPlayerItem = playerItem {
             detachObserversFrom(playerItem: currentPlayerItem)
-            detachTimeObserver()
         }
         
         player.replaceCurrentItem(with: nil)
@@ -240,11 +241,19 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
             internalUrl = resourceUrl
             
+            self.mediaContext = mediaContext
+
+            closeCurrentItem()
+
             updatePlaybackState(.unknown)
             
-            self.mediaContext = mediaContext
-            
+            /*
             player.rate = 0.0
+            
+            currentVideoPlaybackEnded = true
+            
+            playbackPosition = 0.0
+            */
             
             let asset = AVURLAsset(url: resourceUrl)
             asset.loadValuesAsynchronously(forKeys: TinyVideoPlayer.assetKeysRequiredForOptimizedPlayback) {
@@ -301,7 +310,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         bufferProgress = 0.0
         player.replaceCurrentItem(with: playerItem)
-        
     }
   
     // MARK: - Key-Value Obsevation & Notification Center Obsevation
@@ -625,7 +633,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         delegate?.player(self, didUpdateSeekableRange: 0...videoDuration!)
         
         /* This closure will be executed on the main thread. */
-        let followUpOperations = {
+        let followUpOperations = { (succeed: Bool) in
             
             self.delegate?.playerIsReadyToPlay(self)
             
@@ -641,7 +649,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
         } else {
             
-            followUpOperations()
+            followUpOperations(true)
         }
         
         /* Reset the videoEnded flag. */
@@ -683,9 +691,14 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         player.pause()
         
+        detachTimeObserver()
+
+        currentVideoPlaybackEnded = true
+        
+        playbackPosition = 0.0
+ 
         if let currentPlayerItem = playerItem {
             detachObserversFrom(playerItem: currentPlayerItem)
-            detachTimeObserver()
         }
         
         playerItem = nil
@@ -750,21 +763,31 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         seekTo(position: startPosition)
     }
 
-    fileprivate var isSeeking: Bool = false
+    private var isSeeking: Bool = false
 
     /**
         Seek to a certain position.
      
         - parameter position: Where the player should seek to.
         - parameter completion: After seeking this closure will be excuted.
+        - parameter cancelPreviousSeeking: Force cancelling all the pending seeking actions. 
+          The completion block will be called by passing a **false** parameter.
      
         - Note: After the seeking operation, the completion closure will be excuted on the main thread.
      */
-    public func seekTo(position: Float, completion: (()-> Void)? = nil) {
+    public func seekTo(position: Float, cancelPreviousSeeking: Bool = true, completion: ((Bool)-> Void)? = nil) {
         
-        guard isSeeking == false else { return }
+        if cancelPreviousSeeking {
+            player.currentItem?.cancelPendingSeeks()
+            isSeeking = false
+        }
         
-        let timePoint: CMTime = CMTime(seconds: Double(startPosition + position), preferredTimescale: 1)
+        guard isSeeking == false else {
+            completion?(false)
+            return
+        }
+        
+        let timePoint: CMTime = CMTime(seconds: Double(startPosition + position), preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
         /* Validate the CMTime object. An invalid CMTime can cause crash when calling seek(to:) method. */
         if !CMTIME_IS_VALID(timePoint) {
@@ -773,16 +796,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
         isSeeking = true
         
-        player.currentItem?.cancelPendingSeeks()
-        
         player.seek(to: timePoint) { completed in
             
-            if completed {
-                
-                DispatchQueue.main.async { [unowned self]  in
-                    self.isSeeking = false
-                    completion?()
-                }
+            DispatchQueue.main.async { [unowned self]  in
+                self.isSeeking = false
+                completion?(completed)
             }
         }
     }
@@ -795,7 +813,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
      
         - Note: The seeking behaviour will only be performed inside the valid playable timespan.
      */
-    public func seekForward(secs: Float, completion: (()-> Void)? = nil) {
+    public func seekForward(secs: Float, completion: ((Bool)-> Void)? = nil) {
         
         guard let position = playbackPosition,
             let totalLength = videoDuration,
@@ -814,7 +832,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
         - Note: The seeking behaviour will only be performed inside the valid playable timespan.
      */
-    public func seekBackward(secs: Float, completion: (()-> Void)? = nil) {
+    public func seekBackward(secs: Float, completion: ((Bool)-> Void)? = nil) {
         
         guard let position = playbackPosition,
             let totalLength = videoDuration,
