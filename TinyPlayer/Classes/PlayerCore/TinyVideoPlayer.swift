@@ -17,13 +17,19 @@ import MediaPlayer
  */
 public struct TinyVideoPlayerConstants {
     
-    /* This defines how far the player will seek forwards/backwards when user interacts with buttons in command center. */
+    /** 
+        This defines how far the player will seek forwards/backwards when user interacts with buttons in command center. 
+     */
     static let seekingInterval: Float = 10.0    // in secs
     
-    /* This defines how frequently the playing time will be updated. */
+    /** 
+        This defines how frequently the playing time will be updated. 
+     */
     static let timeObservationInterval: Float = 0.01    // in secs
     
-    /* This defines how long the player should buffer the content before start playing. */
+    /** 
+        This defines how long the player should buffer the content before start playing. 
+     */
     static let bufferSize: Float = 6.0      // in secs
 }
 
@@ -33,7 +39,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     public var loggingLevel: TinyLoggingLevel = .info
     
     public weak var delegate: TinyPlayerDelegate?
-
     internal var player: AVPlayer
     internal var playerItem: AVPlayerItem?
     internal var internalUrl: URL?
@@ -159,8 +164,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     ]
 
     /**
-       This view can be inserted directly into the UI presentation structure.
-    */
+       Each TinyVideoPlayer owns a playerView for content drawing.
+       This view can be inserted directly into your UI presentation hierachy.
+     */
     public let playerView: TinyVideoPlayerView = TinyVideoPlayerView()
     
     /**
@@ -201,7 +207,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
     
     /**
-     
+        This is a convenience init method for quickly loading a media at the initialization phase.
      */
     convenience public init(resourceUrl: URL, mediaContext: MediaContext? = nil) {
 
@@ -228,9 +234,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        Call this method triggers the media initiation process.
+        Call this method triggers the initialization process of the media item at the specific url.
         
-        - parameter resourceUrl: The url to the resource you wish TinyVideoPlayer to load.
+        - parameter resourceUrl: The url to the media resource you wish TinyVideoPlayer to play.
         - parameter mediaContext: Specify additional metadata for the to be loaded media item.
      
         Use this method to switch content for TinyVideoPlayer.
@@ -246,14 +252,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             closeCurrentItem()
 
             updatePlaybackState(.unknown)
-            
-            /*
-            player.rate = 0.0
-            
-            currentVideoPlaybackEnded = true
-            
-            playbackPosition = 0.0
-            */
             
             let asset = AVURLAsset(url: resourceUrl)
             asset.loadValuesAsynchronously(forKeys: TinyVideoPlayer.assetKeysRequiredForOptimizedPlayback) {
@@ -513,7 +511,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             } else if keyPath == #keyPath(AVPlayerItem.playbackLikelyToKeepUp) {
                 
                 if playerItem.isPlaybackLikelyToKeepUp {
-                    ///TODO: Determin how to use this notification.
+                    delegate?.playerIsLikelyToKeepUpPlaying(self)
                 }
                 
             } else if keyPath == #keyPath(AVPlayerItem.playbackBufferEmpty) {
@@ -939,6 +937,9 @@ public extension TinyVideoPlayer {
         updateCommandCenterInfo()
     }
 
+    /**
+        This function can be called freely at anytime to update the current playing media info in the CommandCenter.
+     */
     public func updateCommandCenterInfo() {
         
         var infoDict = [String: Any]()

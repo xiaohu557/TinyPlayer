@@ -27,22 +27,43 @@ public protocol TinyPlayerDelegate: class {
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float)
     func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>)
     func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>)
-    func playerIsReadyToPlay(_ player: TinyPlayer)
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer)
     func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error)
-    
-    /* The following are for the upcoming AdPlayer, optional.*/
+
+    /**
+        This method gets called when the media asset is successfully initialized
+        and the player thinks it's ready for playback.
+        You can send the play() command to the player right away once you have received this callback.
+        - parameter player: The player that calls this delegate method.
+        - Note: At this stage, the player might still need to fill the buffer before starting playback.
+     */
+    func playerIsReadyToPlay(_ player: TinyPlayer)
+
+    /**
+        This delegate method is optional.
+        It gets called when the player thinks it has cached enough data
+        for a seemless playback.
+        - parameter player: The player that calls this delegate method.
+        - Note: You can determine whether to rely on this method or the playerIsReadyToPlay(:) method to trigger the staring playback behavior.
+     */
+    func playerIsLikelyToKeepUpPlaying(_ player: TinyPlayer)
+
+    /* 
+        The following three are planned for the upcoming AdPlayer component, optional.
+        Caution: These methods are not implemented yet!
+     */
     func player(_ player: TinyPlayer, didReceivedAdInjectPositions positions: [Float])
     func player(_ player: TinyPlayer, didStartAdPlayback adObject: NSObjectProtocol)
     func player(_ player: TinyPlayer, didFinishedAdPlayback adObject: NSObjectProtocol)
 }
 
+/// TODO: Add ads playback support.
+
 /**
-    Caution: The following three methods are not implemented yet!
-    TODO: Add ads playback support.
-    Therefore we mark the following three methods to be optional.
+    Optional methods in TinyPlayerDelegate.
  */
 public extension TinyPlayerDelegate {
+    func playerIsLikelyToKeepUpPlaying(_ player: TinyPlayer) { }
     
     func player(_ player: TinyPlayer, didReceivedAdInjectPositions positions: [Float]) { }
     func player(_ player: TinyPlayer, didStartAdPlayback adObject: NSObjectProtocol) { }
@@ -61,19 +82,21 @@ public struct MediaContext {
     var videoTitle: String?
     var artistName: String?
     
-    /*  
+    /**
         Optional. It denotes the desired starting position of the current media.
         Can be used to jump over unwanted video intros.
-     */
+      */
     var startPosition: Float?
     
-    /*
+    /**
         Optional. It denotes the desired ending position of the current media.
         Can be used to cut unwanted video ending.
-     */
+      */
     var endPosition: Float?
     
-    /* Optional. If don't specify, the player will take the duration of the playItem. */
+    /** 
+        Optional. If don't specify, the player will take the duration of the playItem.
+      */
     var thumbnailImage: UIImage?
     
     public init(videoTitle: String?, artistName: String?, startPosition: Float?,
