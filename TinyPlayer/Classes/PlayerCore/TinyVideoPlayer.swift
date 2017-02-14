@@ -85,12 +85,10 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
-    internal var currentVideoPlaybackEnded: Bool = false
-    
     /**
-        Indicates the elapsed playback time of the current playing item.
-        - Note: The playbackPosition is a relative value.
-        It's calculated in consideration of the startPosition and endPosition properties.
+     Indicates the elapsed playback time of the current playing item.
+     - Note: The playbackPosition is a relative value.
+     It's calculated in consideration of the startPosition and endPosition properties.
      */
     public var playbackPosition: Float? {
         
@@ -107,12 +105,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             delegate?.player(self, didUpdatePlaybackPosition: position, playbackProgress: progress)
             
             /* Set the current video to be completed if it matches the 'endPosition' tag.*/
-            if !self.currentVideoPlaybackEnded && position >= self.endPosition - self.startPosition {
+            if position >= self.endPosition - self.startPosition {
                 
-                self.currentVideoPlaybackEnded = true
-
                 self.playerItemDidPlayToEndTime(nil)
-
             }
         }
     }
@@ -654,16 +649,27 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         currentVideoPlaybackEnded = false
     }
 
+    /**
+     This property is used to make sure that one video only emits one .finished state.
+     */
+    internal var currentVideoPlaybackEnded: Bool = false
+    
     internal func playerItemDidPlayToEndTime(_ notification: Notification? = nil) {
+        
+        guard !currentVideoPlaybackEnded else {
+            return
+        }
         
         if player.rate != 0.0 {
             
             player.rate = 0.0
         }
-
+        
         updatePlaybackState(.finished)
         
         delegate?.playerHasFinishedPlayingVideo(self)
+        
+        self.currentVideoPlaybackEnded = true
     }
 
     internal func playerItemPlaybackStalled(_ notification: Notification) {
