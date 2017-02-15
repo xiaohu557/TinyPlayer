@@ -26,7 +26,7 @@ class PlayerTestObserver: TinyPlayerDelegate {
     
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
         
-        onVideoStateChanged?(newState)
+        onPlayerStateChanged?(newState)
     }
     
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
