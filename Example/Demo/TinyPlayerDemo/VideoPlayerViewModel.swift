@@ -24,13 +24,24 @@ let testHLSVideoUrl3 = "https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/m
 
 let testHLSVideoUrl4 = "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
 
+let testLocalVideo = Bundle.main.path(forResource: "unittest_video", ofType: "mp4")
+
 class VideoPlayerViewModel {
     
     let tinyPlayer: TinyVideoPlayer
     
     init() {
         
-        let url = URL(string: testVideoUrl)
+        /* We won't load the demo video when the app instance is hosting a XCTestCase. */
+        if ProcessInfo.processInfo.environment["RUNNING_TEST"] == "true" {
+            tinyPlayer = TinyVideoPlayer()
+            return
+        }
+        
+        guard let url = URL(string: testVideoUrl) else {
+            tinyPlayer = TinyVideoPlayer()
+            return
+        }
         
         let mediaContext = MediaContext(videoTitle: "Big Buck Bunny - A MP4 test video.",      /// Use the embedded video metatdata
                                         artistName: "TinyPlayerDemo",
@@ -38,6 +49,6 @@ class VideoPlayerViewModel {
                                         endPosition: 0.0,       /// To play to the end of the video
                                         thumbnailImage: UIImage(named: "DemoVideoThumbnail_MP4"))
         
-        tinyPlayer = TinyVideoPlayer(resourceUrl: url!, mediaContext: mediaContext)
+        tinyPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
     }
 }

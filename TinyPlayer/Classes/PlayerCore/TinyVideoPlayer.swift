@@ -179,7 +179,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
     }
 
-    // MAKR: - Lifecycle
+    // MAKR: - Lifecycle management
 
     public override init() {
         
@@ -240,11 +240,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         if resourceUrl != internalUrl {
             
-            internalUrl = resourceUrl
-            
-            self.mediaContext = mediaContext
-
             closeCurrentItem()
+
+            internalUrl = resourceUrl
+
+            self.mediaContext = mediaContext
 
             updatePlaybackState(.unknown)
             
@@ -305,6 +305,40 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         player.replaceCurrentItem(with: playerItem)
     }
   
+    /**
+     Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
+     Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to
+     play another video wittout re-initializing the whole class.
+     */
+    public func closeCurrentItem() {
+        
+        player.pause()
+        
+        detachTimeObserver()
+        
+        currentVideoPlaybackEnded = true
+        
+        playbackPosition = nil
+        
+        videoDuration = nil
+        
+        mediaContext = nil
+        
+        startPosition = 0.0
+        
+        endPosition = 0.0
+        
+        if let currentPlayerItem = playerItem {
+            detachObserversFrom(playerItem: currentPlayerItem)
+        }
+        
+        playerItem = nil
+        
+        player.replaceCurrentItem(with: nil)
+        
+        updatePlaybackState(.closed)
+    }
+    
     // MARK: - Key-Value Obsevation & Notification Center Obsevation
   
     fileprivate var TinyVideoPlayerAVPlayerItemObservationContext = 0
@@ -623,6 +657,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         /* Attach time observer immediately right after starting media preparation. */
         attachTimeObserver()
         
+        playbackPosition = 0.0
+        
         delegate?.player(self, didUpdateSeekableRange: 0...videoDuration!)
         
         /* This closure will be executed on the main thread. */
@@ -685,30 +721,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     // MARK: - Player Controls
-
-    /**
-        Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
-        Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to 
-        play another video wittout re-initializing the whole class.
-     */
-    public func closeCurrentItem() {
-        
-        player.pause()
-        
-        detachTimeObserver()
-
-        currentVideoPlaybackEnded = true
-        
-        playbackPosition = 0.0
- 
-        if let currentPlayerItem = playerItem {
-            detachObserversFrom(playerItem: currentPlayerItem)
-        }
-        
-        playerItem = nil
-        
-        player.replaceCurrentItem(with: nil)
-    }
 
     /**
         Play the currently loaded video content.
