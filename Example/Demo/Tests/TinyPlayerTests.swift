@@ -65,11 +65,11 @@ class TinyPlayerSpecs: QuickSpec {
                 }
             }
             
-            describe("can unload the loaded media item") {
+            fdescribe("can unload the loaded media item") {
 
                 var videoPlayer: TinyVideoPlayer!
 
-                    it("when unload") {
+                    fit("when unload") {
                         
                         let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
                         let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
@@ -77,8 +77,25 @@ class TinyPlayerSpecs: QuickSpec {
                         if let url = targetUrl {
                             
                             videoPlayer = TinyVideoPlayer(resourceUrl: url)
+                            let observer = PlayerTestObserver(player: videoPlayer)
 
-                            videoPlayer.closeCurrentItem()
+                            /* Wait until the player is ready. */
+                            waitUntil(timeout: 3.0) { done -> Void in
+                                observer.onPlayerReady = {
+                                    done()
+                                }
+                            }
+                            
+                            /* Initiate closing procedure and wait until the unloading process is done. */
+                            waitUntil(timeout: 5.0) { done -> Void in
+                                observer.onPlayerStateChanged = { state in
+                                    if state == TinyPlayerState.closed {
+                                        done()
+                                    }
+                                }
+
+                                videoPlayer.closeCurrentItem()
+                            }
                             
                             expect(videoPlayer.videoDuration).to(beNil())
                             expect(videoPlayer.startPosition).to(equal(0.0))
@@ -103,7 +120,7 @@ class TinyPlayerSpecs: QuickSpec {
                                                 endPosition: 15.0,
                                                 thumbnailImage: nil)
                 
-                fit("when specify start and end properties in mediaContext") {
+                it("when specify start and end properties in mediaContext") {
                     
                     let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
                     let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
