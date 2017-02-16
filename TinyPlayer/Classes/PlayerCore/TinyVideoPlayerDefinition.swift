@@ -124,7 +124,7 @@ public protocol TinyPlayer: class {
     var playbackProgress: Float? { get }
     var bufferProgress: Float? { get }
     var hidden: Bool { get set }
-    var isPrettyfyingPauseStateTransation: Bool { get set }
+    var willPrettifyPauseStateTransation: Bool { get set }
 
     func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext?)
     func play()

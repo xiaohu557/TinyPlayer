@@ -11,9 +11,11 @@ class TinyPlayerSpecs: QuickSpec {
         
         describe("TinyVideoPlayer") {
 
+            var videoPlayer: TinyVideoPlayer!
+            let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
+            let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
+
             describe("can be initialized correctly") {
-                
-                var videoPlayer: TinyVideoPlayer!
                 
                 it("when initialized with empty parameters") {
                 
@@ -36,10 +38,8 @@ class TinyPlayerSpecs: QuickSpec {
 
                 it("when initialized with a url") {
                     
-                    let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
-                    let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
-                    
                     if let url = targetUrl {
+                        
                         videoPlayer = TinyVideoPlayer(resourceUrl: url)
                         
                         expect(videoPlayer.playbackState).to(equal(TinyPlayerState.unknown))
@@ -65,14 +65,9 @@ class TinyPlayerSpecs: QuickSpec {
                 }
             }
             
-            fdescribe("can unload the loaded media item") {
+            describe("can unload the loaded media item") {
 
-                var videoPlayer: TinyVideoPlayer!
-
-                    fit("when unload") {
-                        
-                        let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
-                        let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
+                    it("when unload") {
                         
                         if let url = targetUrl {
                             
@@ -113,17 +108,13 @@ class TinyPlayerSpecs: QuickSpec {
             
             describe("can calculate start / end position correctly") {
 
-                var videoPlayer: TinyVideoPlayer!
-                let mediaContext = MediaContext(videoTitle: "Test Video",
-                                                artistName: "Test Artist",
+                let mediaContext = MediaContext(videoTitle: "Test Video with start and end settings",
+                                                artistName: "TinyPlayer Tester",
                                                 startPosition: 9.0,
                                                 endPosition: 15.0,
                                                 thumbnailImage: nil)
                 
                 it("when specify start and end properties in mediaContext") {
-                    
-                    let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
-                    let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
                     
                     if let url = targetUrl {
 
@@ -158,7 +149,138 @@ class TinyPlayerSpecs: QuickSpec {
             }
             
             describe("can update states correctly") {
+                
+                let mediaContext = MediaContext(videoTitle: "Test Video with start and end settings",
+                                                artistName: "TinyPlayer Tester",
+                                                startPosition: 3.0,
+                                                endPosition: 8.0,
+                                                thumbnailImage: nil)
+                
+                context("when call switch resource url with an already loaded item") {
+                    
+                    it("a closed event should be emitted first") {
+                        
+                        if let url = targetUrl {
+                            
+                            var stateChainFragment: [TinyPlayerState] = []
+                            
+                            videoPlayer = TinyVideoPlayer()
+                            let observer = PlayerTestObserver(player: videoPlayer)
+                            
+                            waitUntil(timeout: 10.0) { done -> Void in
+                                
+                                observer.onPlayerStateChanged = { state in
+                                    
+                                    /* Collect state changes one by one in an array. */
+                                    stateChainFragment.append(state)
+                                    
+                                    if state == .ready {
+                                        done()
+                                    }
+                                }
+                                
+                                /* Start player initialization now. */
+                                videoPlayer.switchResourceUrl(url, mediaContext: mediaContext)
+                            }
+                            
+                            expect(stateChainFragment).to(equal([
+                                TinyPlayerState.closed,
+                                TinyPlayerState.unknown,
+                                TinyPlayerState.ready,
+                            ]))
+                        }
+                    }
+                }
+                
+                context("when prettify filter on") {
+                    
+                    let idealPlaybackLifecycleStateChainWithPrettifyingOn = [
+                        TinyPlayerState.unknown,
+                        TinyPlayerState.ready,
+                        TinyPlayerState.waiting,
+                        TinyPlayerState.playing,
+                        TinyPlayerState.finished
+                    ]
+                    
+                    it("states are transited in a determinic way in a normal playback lifecycle") {
+                        
+                        if let url = targetUrl {
+                            
+                            var stateChain: [TinyPlayerState] = []
+                            
+                            videoPlayer = TinyVideoPlayer()
+                            let observer = PlayerTestObserver(player: videoPlayer)
+                            
+                            waitUntil(timeout: 10.0) { done -> Void in
+                                
+                                observer.onPlayerReady = { [weak videoPlayer] in
+                                    videoPlayer?.play()
+                                }
+                                
+                                observer.onPlayerStateChanged = { state in
+                                    
+                                    /* Collect state changes one by one in an array. */
+                                    stateChain.append(state)
+                                    
+                                    if state == .finished {
+                                        done()
+                                    }
+                                }
+                                
+                                /* Start player initialization now. */
+                                videoPlayer.switchResourceUrl(url, mediaContext: mediaContext)
+                            }
+                            
+                            expect(stateChain).to(equal(idealPlaybackLifecycleStateChainWithPrettifyingOn))
+                        }
+                    }
+                }
+                
+                context("when prettify filter off") {
+                    
+                    let idealPlaybackLifecycleStateChainWithPrettifyingOff = [
+                        TinyPlayerState.unknown,
+                        TinyPlayerState.ready,
+                        TinyPlayerState.waiting,
+                        TinyPlayerState.playing,
+                        TinyPlayerState.paused,
+                        TinyPlayerState.finished
+                    ]
+                    
+                    fit("states are transited in a determinic way in a normal playback lifecycle") {
+                        
+                        if let url = targetUrl {
+                            
+                            var stateChain: [TinyPlayerState] = []
+                            
+                            videoPlayer = TinyVideoPlayer()
+                            videoPlayer.willPrettifyPauseStateTransation = false
+                            let observer = PlayerTestObserver(player: videoPlayer)
+                            
+                            waitUntil(timeout: 30.0) { done -> Void in
+                                
+                                observer.onPlayerReady = { [weak videoPlayer] in
+                                    videoPlayer?.play()
+                                }
 
+                                observer.onPlayerStateChanged = { state in
+                                    
+                                    /* Collect state changes one by one in an array. */
+                                    stateChain.append(state)
+                                    
+                                    if state == .finished {
+                                        done()
+                                    }
+                                }
+
+                                /* Start player initialization now. */
+                                videoPlayer.switchResourceUrl(url, mediaContext: mediaContext)
+                            }
+                            
+                            expect(stateChain).to(equal(idealPlaybackLifecycleStateChainWithPrettifyingOff))
+                        }
+                    }
+                }
             }
             
             describe("can responed to player operations:") {

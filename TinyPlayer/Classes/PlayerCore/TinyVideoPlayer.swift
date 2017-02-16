@@ -139,16 +139,16 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        Activate this switch will force the player to filter out less meaningful state transitions.
+        Activate this switch will force the player to filter out less meaningful pause state transitions.
      
         - When this toggle is deactivated, in a player's lifecycle, the normal state transition chain woule look like:
-            unknown -> paused -> ready -> playing -> paused -> finished
+            unknown -> ready -> waiting -> playing -> paused -> finished
         - When this toggle is activated, the redundant(sometimes unnecessary) paused state will be filtered out:
-            unknown -> ready -> playing -> finished
+            unknown -> ready -> waiting -> playing -> finished
      
         Feel free to set this toggle on your own preference.
      */
-    public var isPrettyfyingPauseStateTransation: Bool = true
+    public var willPrettifyPauseStateTransation: Bool = true
 
     public var playbackState: TinyPlayerState
 
@@ -306,9 +306,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
   
     /**
-     Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
-     Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to
-     play another video wittout re-initializing the whole class.
+         Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
+         Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to
+         play another video wittout re-initializing the whole class.
      */
     public func closeCurrentItem() {
         
@@ -336,7 +336,17 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         player.replaceCurrentItem(with: nil)
         
-        updatePlaybackState(.closed)
+        /*
+            When there is already a loaded media item, it make sense to notify the delegate about the change.
+            Otherwise we make the state change silently.
+         */
+        let notifyDelegate = (playerItem != nil)
+        
+        if notifyDelegate {
+            updatePlaybackState(.closed)
+        } else {
+            playbackState = .closed
+        }
     }
     
     // MARK: - Key-Value Obsevation & Notification Center Obsevation
@@ -488,11 +498,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                     switch player.timeControlStatus {
                         
                     case .paused:
-                        if isPrettyfyingPauseStateTransation {
-                            updatePauseStateWithFilteringOn()
-                        } else {
-                            updatePlaybackState(.paused)
-                        }
+                        updatePauseStateWithFilteringFlag(willPrettifyPauseStateTransation)
                         
                     case .playing:
                         updatePlaybackState(.playing)
@@ -595,11 +601,16 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-        This function is used to provide supportance of the isPrettyfyingPauseStateTransation toggle.
+        This function is used to provide supportance for the willPrettifyPauseStateTransation toggle.
      */
-    fileprivate func updatePauseStateWithFilteringOn() {
+    fileprivate func updatePauseStateWithFilteringFlag(_ flagOn: Bool) {
         
-        if playbackState == .unknown || playbackState == .playing {
+        /* Filter out the very initial pause event when the first media item is loaded. */
+        if playbackState == .unknown {
+            return
+        }
+
+        if flagOn &&  playbackState == .playing {
             return
             
         } else {
@@ -748,11 +759,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         player.rate = 0.0
         
-        if isPrettyfyingPauseStateTransation {
-            /*
-                When the filter is turned on, we have to manually notify the state change.
-                Because that the internal pause state observation of the playerItem (with timeControlStatus) is disabled.
-             */
+        /*
+            When this filter is turned on, we have to manually notify the state change.
+            Because that the internal pause state observation of the playerItem (with timeControlStatus) is disabled.
+         */
+        if willPrettifyPauseStateTransation {
+
             updatePlaybackState(.paused)
         }
 
