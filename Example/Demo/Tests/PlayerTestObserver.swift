@@ -6,17 +6,20 @@
 //  Copyright © 2017 CocoaPods. All rights reserved.
 //
 
-@testable import TinyPlayer
+import TinyPlayer
 
-class PlayerTestObserver: TinyPlayerDelegate {
+public class PlayerTestObserver: TinyPlayerDelegate {
     
-    var videoPlayer: TinyVideoPlayer
+    private var videoPlayer: TinyVideoPlayer
     
-    var onPlayerStateChanged: ((TinyPlayerState) -> Void)?
-    var onPlaybackPositionUpdated: ((_ position: Float, _ progress: Float) -> Void)?
-    var onSeekableRangeUpdated: ((ClosedRange<Float>) -> Void)?
-    var onPlayerReady: (() -> Void)?
-    var onPlaybackFinished: (() -> Void)?
+    public var onPlayerStateChanged: ((TinyPlayerState) -> Void)?
+    public var onPlaybackPositionUpdated: ((_ position: Float, _ progress: Float) -> Void)?
+    public var onSeekableRangeUpdated: ((ClosedRange<Float>) -> Void)?
+    public var onPlayerReady: (() -> Void)?
+    public var onPlaybackFinished: (() -> Void)?
+    
+
+    public var onPlaybackHasOverThe3SecsMark: (() -> Void)?
     
     init(player: TinyVideoPlayer) {
         
@@ -24,22 +27,43 @@ class PlayerTestObserver: TinyPlayerDelegate {
         videoPlayer.delegate = self
     }
     
-    func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
+    // MARK: - Delegate Methods
+    
+    public func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
         
         onPlayerStateChanged?(newState)
     }
     
-    func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
+    private var positionOnceToken = 0x1
+    public func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
         
         onPlaybackPositionUpdated?((position, playbackProgress))
+        
+        if position > 3.0 && positionOnceToken > 0x0 {
+            onPlaybackHasOverThe3SecsMark?()
+            positionOnceToken = 0x0
+        }
+        
+        for (index, tpAction) in timepointActions.enumerated() {
+            
+            if !timepointActions[index].executed &&
+                tpAction.timepoint - position < 0.1 {
+                
+                tpAction.onTimepoint()
+                
+                print("Executed timepoint action at \(tpAction.timepoint)!")
+                
+                timepointActions[index].executed = true
+            }
+        }
     }
     
-    func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) {
+    public func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) {
         
         /* We won't monitor the buffer range here since AVPlayerItem won't buffer for local files. */
     }
     
-    func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) {
+    public func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) {
         
         onSeekableRangeUpdated?(range)
     }
@@ -47,13 +71,49 @@ class PlayerTestObserver: TinyPlayerDelegate {
     public func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error) {
     }
     
-    func playerIsReadyToPlay(_ player: TinyPlayer) {
+    public func playerIsReadyToPlay(_ player: TinyPlayer) {
         
         onPlayerReady?()
     }
     
-    func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
+    public func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
         
         onPlaybackFinished?()
     }
+    
+    // MARK: - Helper
+    
+    /**
+        This tuple can be intepreted as "at which timepoint, what operation need to be called".
+     */
+    public typealias TimepointAction = (timepoint: Float, onTimepoint: () -> Void)
+    
+    /**
+        A private property which extends the original tuple to support recording the execution state.
+     */
+    private typealias TimepointActionExtended = (timepoint: Float, onTimepoint: () -> Void, executed: Bool)
+    
+    /**
+        Used to maintain a group of timepoint-actions.
+     */
+    private var timepointActions: [TimepointActionExtended] = []
+    
+    /**
+        Add a new pair of timepoint-action to the repository which will be excuted at the specific time.
+     
+        - Note: Avoid to put the onPlaybackPositionUpdated closure inside Nimble's waitUntil(:) method.
+        Because onPlaybackPositionUpdated will be called multiple times per second.
+        Doing so will cause Nimble to throw the exception of calling done() too many times!
+     
+        - Parameter timepointAction: A TimepointAction tuple that represents the timepoint and the wanted action.
+     */
+    public func registerActionOnTimepoint(_ timepointAction: TimepointAction) {
+        
+        timepointActions.append(TimepointActionExtended(timepoint: timepointAction.timepoint,
+                                                        onTimepoint: timepointAction.onTimepoint,
+                                                        executed: false
+                                                        ))
+    }
+    
+    ///TODO: Write a factory for timepoint actions!
 }

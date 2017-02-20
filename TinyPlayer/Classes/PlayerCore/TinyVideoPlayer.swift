@@ -25,7 +25,7 @@ public struct TinyVideoPlayerConstants {
     /** 
         This defines how frequently the playing time will be updated. 
      */
-    static let timeObservationInterval: Float = 0.01    // in secs
+    static let timeObservationInterval: Float = 1.0/60    // in secs, 60fps
     
     /** 
         This defines how long the player should buffer the content before start playing. 
@@ -36,7 +36,7 @@ public struct TinyVideoPlayerConstants {
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
     /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
-    public var loggingLevel: TinyLoggingLevel = .info
+    public var loggingLevel: TinyLoggingLevel = .verbose
     
     public weak var delegate: TinyPlayerDelegate?
     internal var player: AVPlayer
@@ -256,6 +256,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             }
             
             infoLog("TinyVideoPlayer has started to load media at url: \(resourceUrl.absoluteString)")
+            
+        } else {
+            
+            verboseLog("TinyVideoPlayer has detected an identical url loading request. Reset the current playing item.")
+            
+            resetPlayback()
         }
     }
 
@@ -332,15 +338,15 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             detachObserversFrom(playerItem: currentPlayerItem)
         }
         
+        /*
+         When there is already a loaded media item, it make sense to notify the delegate about the change.
+         Otherwise we make the state change silently.
+         */
+        let notifyDelegate = (playerItem != nil)
+
         playerItem = nil
         
         player.replaceCurrentItem(with: nil)
-        
-        /*
-            When there is already a loaded media item, it make sense to notify the delegate about the change.
-            Otherwise we make the state change silently.
-         */
-        let notifyDelegate = (playerItem != nil)
         
         if notifyDelegate {
             updatePlaybackState(.closed)
@@ -610,7 +616,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             return
         }
 
-        if flagOn &&  playbackState == .playing {
+        if flagOn && (playbackState == .playing ||
+                      playbackState == .waiting ||
+                      playbackState == .ready) {
             return
             
         } else {
@@ -638,6 +646,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         updateCommandCenterInfo()
         
         delegate?.player(self, didChangePlaybackStateFromState: playbackState, toState: newState)
+        
+        verboseLog("Player state changed: \(playbackState) -> \(newState)")
         
         playbackState = newState
         
@@ -760,22 +770,21 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         player.rate = 0.0
         
         /*
-            When this filter is turned on, we have to manually notify the state change.
-            Because that the internal pause state observation of the playerItem (with timeControlStatus) is disabled.
-         */
-        if willPrettifyPauseStateTransation {
-
-            updatePlaybackState(.paused)
-        }
-
-        /*
             Prefer to use the timeControlStatus property to accurately retrieve player state.
          */
         if #available(iOS 10.0, tvOS 10.0, *) {
-            return
+            /*
+                When this filter is turned on, we have to manually notify the state change.
+                Because the internal pause state observation of the playerItem (with
+                timeControlStatus property) is disabled.
+             */
+            if willPrettifyPauseStateTransation {
+                updatePlaybackState(.paused)
+            }
+            
+        } else {
+            updatePlaybackState(.paused)
         }
-
-        updatePlaybackState(.paused)
     }
 
     /**
@@ -783,6 +792,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         Use this function to let the player consider the current playerItem as a freshly loaded one.
      */
     public func resetPlayback() {
+        
+        player.pause()
+        
+        /* This is a trick that makes the player switching back to the .ready state possible. */
+        playbackState = .unknown
         
         updatePlaybackState(.ready)
         
