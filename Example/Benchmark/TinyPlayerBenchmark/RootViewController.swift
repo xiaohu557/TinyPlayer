@@ -12,20 +12,21 @@ class RootViewController: UIViewController {
     
     @IBOutlet var addMoreButton: UIButton!
     
-    var videoPlayerArray: Array<VideoPlayerViewController> = []
+    /**
+        The density tier of on-screen players.
+        It can also be understandable as the index of the playerDensityTierList array.
+     */
+    fileprivate var playerDensityTier: Int = 0
     
     /**
-        This matches the tier corresponds to the tierCountList property. 
-        It can also be understandable as the index of that array.
+        The pre-defined count number of on-screen videoPlayers that matches the density tier.
      */
-    var playerCountTier: Int = 0
+    private let playerDensityTierList: Array<Int> = [0, 1, 2, 4, 6, 8, 9, 12, 16]
     
     /**
-        The pre-defined tiers of the number of on-screen videoPlayers.
+        A in-memory reference store for all on-screen players.
      */
-    let playerCountTierList: Array<Int> = [0, 1, 2, 4, 6, 8, 9, 12, 16]
-    
-    var videoPlayerViewInstances: Array<UIViewController> = []
+    private var videoPlayerViewInstances: Array<UIViewController> = []
 
     override func viewDidLoad() {
         
@@ -33,19 +34,27 @@ class RootViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.black
         
-        addMorePlayersOnScreenToMatchTier(1)
+        increasePlayerCountOnScreenToMatchTier(1)
     }
     
-    func addMorePlayersOnScreenToMatchTier(_ newTier: Int) {
+    override func didReceiveMemoryWarning() {
         
-        guard playerCountTier < newTier && newTier < playerCountTierList.count else {
+        super.didReceiveMemoryWarning()
+    }
+    
+    /**
+        Add more video players on screen to match the specified density tier.
+     */
+    func increasePlayerCountOnScreenToMatchTier(_ newTier: Int) {
+        
+        guard playerDensityTier < newTier && newTier < playerDensityTierList.count else {
             return
         }
         
-        let playerCount = playerCountTierList[playerCountTier]
-        let nextPlayerCount = playerCountTierList[newTier]
+        let playerCount = playerDensityTierList[playerDensityTier]
+        let nextPlayerCount = playerDensityTierList[newTier]
         
-        playerCountTier = newTier
+        playerDensityTier = newTier
             
         for _ in 0 ..< nextPlayerCount - playerCount {
         
@@ -57,6 +66,7 @@ class RootViewController: UIViewController {
                                               y: 0.0,
                                               width: 10.0,
                                               height: 10.0)
+            videoPlayerVC.view.alpha = 0.0
             
             videoPlayerViewInstances.append(videoPlayerVC)
         }
@@ -64,16 +74,19 @@ class RootViewController: UIViewController {
         layoutOnScreenPlayers()
     }
     
-    func reducePlayerCountOnScreenForTier(_ newTier: Int) {
+    /**
+        Remove and deallocate video players on screen to match the specified density tier.
+     */
+    func decreasePlayerCountOnScreenToMatchTier(_ newTier: Int) {
         
-        guard playerCountTier > newTier && newTier >= 0 else {
+        guard playerDensityTier > newTier && newTier >= 0 else {
             return
         }
         
-        let playerCount = playerCountTierList[playerCountTier]
-        let nextPlayerCount = playerCountTierList[newTier]
+        let playerCount = playerDensityTierList[playerDensityTier]
+        let nextPlayerCount = playerDensityTierList[newTier]
         
-        playerCountTier = newTier
+        playerDensityTier = newTier
         
         for _ in 0 ..< abs(nextPlayerCount - playerCount) {
             
@@ -96,14 +109,12 @@ class RootViewController: UIViewController {
         layoutOnScreenPlayers()
     }
     
-    override func didReceiveMemoryWarning() {
+    /**
+        Re-calculate and animate player frames according to the on-screen player count.
+     */
+    private func layoutOnScreenPlayers() {
         
-        super.didReceiveMemoryWarning()
-    }
-    
-    func layoutOnScreenPlayers() {
-        
-        let playerCount = playerCountTierList[playerCountTier]
+        let playerCount = playerDensityTierList[playerDensityTier]
         
         guard playerCount > 0 else {
             return
@@ -130,18 +141,24 @@ class RootViewController: UIViewController {
             UIView.animate(withDuration: 0.4, animations: {
                 
                 playerVC.view.frame = CGRect(x: x, y: y, width: playerWidth, height: playerHeight)
+                playerVC.view.alpha = 1.0
             })
         }
     }
+}
+
+// MARK: - Interactions
+
+extension RootViewController {
     
     @IBAction func plusButtonTapped(_ sender: Any) {
         
-        addMorePlayersOnScreenToMatchTier(playerCountTier + 1)
+        increasePlayerCountOnScreenToMatchTier(playerDensityTier + 1)
     }
     
     @IBAction func minusButtonTapped(_ sender: Any) {
         
-        reducePlayerCountOnScreenForTier(playerCountTier - 1)
+        decreasePlayerCountOnScreenToMatchTier(playerDensityTier - 1)
     }
 }
 

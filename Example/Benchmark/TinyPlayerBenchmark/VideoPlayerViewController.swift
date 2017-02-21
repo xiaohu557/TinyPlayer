@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 import TinyPlayer
 
-class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLogging {
+class VideoPlayerViewController: UIViewController, TinyLogging {
     
-    let viewModel: VideoPlayerViewModel = VideoPlayerViewModel()
-    
-    var loggingLevel: TinyLoggingLevel = .info
-    
+    /* Required property for the TinyLogging service. */
+    internal var loggingLevel: TinyLoggingLevel = .info
+
+    fileprivate let viewModel: VideoPlayerViewModel = VideoPlayerViewModel()
     
     required init?(coder aDecoder: NSCoder) {
 
@@ -24,14 +24,12 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         viewModel.tinyPlayer.delegate = self
     }
     
-    
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
 
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         viewModel.tinyPlayer.delegate = self
     }
-    
     
     deinit {
         
@@ -40,25 +38,20 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         infoLog("Player view controller is dealloced.")
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
         
-        /*
-        let playerView = TinyVideoPlayerView(frame: .zero)
-        self.view.addSubview(playerView)
-        self.view.backgroundColor = UIColor.clear
-        playerView.player = viewModel.videoPlayer.player
-        */
-        
+        /* Fetch the view from TinyVideoPlayer and add it to the current view hierarchy. */
         let playerView = viewModel.tinyPlayer.playerView
+        playerView.alpha = 0.2
+        playerView.fillMode = .resizeAspectFill
+        
+        let hueValue = CGFloat(arc4random() % 256) / 255.0
+        playerView.backgroundColor = UIColor.init(hue: hueValue, saturation: 0.16, brightness: 0.2, alpha: 1.0)
+        
         self.view.addSubview(playerView)
         self.view.backgroundColor = UIColor.clear
-        
-        playerView.fillMode = .resizeAspectFill
-        let hueValue = CGFloat(arc4random() % 256) / 255.0
-        playerView.backgroundColor = UIColor.init(hue: hueValue, saturation: 0.16, brightness: 0.8, alpha: 1.0)
         
         /* 
             Setup player view constrains. 
@@ -70,10 +63,12 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         playerView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
         playerView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
     }
-    
-    
-    // MARK: - TinyPlayer Delegates
-    
+}
+
+// MARK: - TinyPlayer Delegates
+
+extension VideoPlayerViewController: TinyPlayerDelegate {
+
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
         
         infoLog("Tiny player has changed state: \(oldState) >> \(newState)")
@@ -81,7 +76,7 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
     
     
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
-    
+        
         verboseLog("Tiny player has updated playing position: \(position), progress: \(playbackProgress)")
     }
     
@@ -102,9 +97,13 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         
         errorLog("Tiny player has encountered an error: \(error)")
     }
-
+    
     
     func playerIsReadyToPlay(_ player: TinyPlayer) {
+        
+        UIView.animate(withDuration: 0.4) {
+            self.viewModel.tinyPlayer.playerView.alpha = 1.0
+        }
         
         viewModel.tinyPlayer.play()
     }
@@ -116,7 +115,7 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         
         viewModel.tinyPlayer.play()
     }
-
+    
     
     func freePlayerItemResource() {
         

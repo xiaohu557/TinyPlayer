@@ -14,7 +14,7 @@ import TinyPlayer
     A group of testing videos found in Apple's trailer repository.
     Only for testing! Please don't use them for commercial purpose.
  */
-let testVideoUrls = [
+private let testVideoUrls = [
                      "http://movietrailers.apple.com/movies/independent/patriots-day/patriots-day-featurette_h720p.mov",
                      "http://movietrailers.apple.com/movies/paramount/monstertrucks/monster-trucks-trailer-2_h720p.mov",
                      "http://movietrailers.apple.com/movies/paramount/rings/rings-trailer-2_h720p.mov",
@@ -26,7 +26,7 @@ let testVideoUrls = [
 
 struct VideoPlayerViewModel {
     
-    let tinyPlayer: TinyVideoPlayer
+    internal let tinyPlayer: TinyVideoPlayer
 
     init() {
         
@@ -34,6 +34,10 @@ struct VideoPlayerViewModel {
         
         let videoUrl = URL(string: testVideoUrls[randomIndex])
         
+        /*
+            For each test video item, we at a seek operation to a random position 
+            to increase the performance impact.
+         */
         let mediaContext = MediaContext(videoTitle: "This is a test video.",
                                          artistName: "TinyPlayerBenchmark",
                                          startPosition: Float(arc4random()%10),
