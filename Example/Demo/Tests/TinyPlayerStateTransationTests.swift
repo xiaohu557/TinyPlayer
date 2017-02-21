@@ -444,14 +444,14 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                             }
                         }
                         
-                        /* Seek Forward 48.0 secs at the 2.0 secs position. */
+                        /* Seek forward 48.0 secs at the 2.0 secs position. */
                         let actionAt2Secs = { [weak videoPlayer] in
                             videoPlayer?.seekForward(secs: 48.0)
                             return
                         }
                         spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
                         
-                        /* Seek back to 2.0 at the 52.0 secs position. */
+                        /* Then seek backward to 2.0 at the 52.0 secs position. */
                         let actionAt52Secs = { [weak videoPlayer] in
                             videoPlayer?.seekBackward(secs: 50.0)
                             return
