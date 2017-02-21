@@ -9,11 +9,11 @@
 import UIKit
 import TinyPlayer
 
-class RootViewController: UIViewController, DemoPlayerControlDelegate {
+class RootViewController: UIViewController {
 
     @IBOutlet weak var startButton: UIButton!
     
-    var videoPlayerVC: VideoPlayerViewController?
+    fileprivate var videoPlayerVC: VideoPlayerViewController?
     
     // MARK: - Lifecycle 
     
@@ -35,60 +35,9 @@ class RootViewController: UIViewController, DemoPlayerControlDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    // MARK: - Actions
-    
-    @IBAction func playButtonTapped(button: UIButton) {
-        
-        videoPlayerVC?.playButtonTapped()
-    }
-    
-    @IBAction func seekBackwardsButtonTapped(button: UIButton) {
-        
-        videoPlayerVC?.seekBackwardsFor5Secs()
-    }
-    
-    @IBAction func seekForwardsButtonTapped(button: UIButton) {
-        
-        videoPlayerVC?.seekForwardsFor5Secs()
-    }
-    
-    @IBAction func closeButtonTapped(_ sender: Any) {
-        
-        videoPlayerVC?.freePlayerItemResource()
-        
-        if let vc = videoPlayerVC {
-            
-            vc.view.removeFromSuperview()
-            vc.removeFromParentViewController()
-            videoPlayerVC = nil
-        }
-    }
-    
-    @IBAction func freePlayerItemResource(_ sender: Any) {
-        
-        videoPlayerVC?.freePlayerItemResource()
-    }
-    
-    // MARK: - DemoPlayerControlDelegate
-
-    func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool) {
-        
-        updatePlayButtonToMode(buttonMode: .playButton)
-    }
-    
-    func demoPlayerHasUpdatedState(state: TinyPlayerState) {
-        
-        if state == .playing {
-            updatePlayButtonToMode(buttonMode: .pauseButton)
-            
-        } else if state == .paused {
-            updatePlayButtonToMode(buttonMode: .playButton)
-        }
-    }
-
     // MARK: - UI Updates
     
-    var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
+    fileprivate var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
     
     fileprivate func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
         
@@ -125,13 +74,69 @@ class RootViewController: UIViewController, DemoPlayerControlDelegate {
                             
                           }, completion: nil)
     }
+}
+
+// MARK: - DemoPlayerControlDelegate
+
+extension RootViewController: DemoPlayerControlDelegate {
     
+    func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool) {
+        
+        updatePlayButtonToMode(buttonMode: .playButton)
+    }
+    
+    func demoPlayerHasUpdatedState(state: TinyPlayerState) {
+        
+        if state == .playing {
+            updatePlayButtonToMode(buttonMode: .pauseButton)
+            
+        } else if state == .paused {
+            updatePlayButtonToMode(buttonMode: .playButton)
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension RootViewController {
+    
+    @IBAction func playButtonTapped(button: UIButton) {
+        
+        videoPlayerVC?.playButtonTapped()
+    }
+    
+    @IBAction func seekBackwardsButtonTapped(button: UIButton) {
+        
+        videoPlayerVC?.seekBackwardsFor5Secs()
+    }
+    
+    @IBAction func seekForwardsButtonTapped(button: UIButton) {
+        
+        videoPlayerVC?.seekForwardsFor5Secs()
+    }
+    
+    @IBAction func closeButtonTapped(_ sender: Any) {
+        
+        videoPlayerVC?.freePlayerItemResource()
+        
+        if let vc = videoPlayerVC {
+            
+            vc.view.removeFromSuperview()
+            vc.removeFromParentViewController()
+            videoPlayerVC = nil
+        }
+    }
+    
+    @IBAction func freePlayerItemResource(_ sender: Any) {
+        
+        videoPlayerVC?.freePlayerItemResource()
+    }
 }
 
 /**
     Display modes of the play/pause button.
  */
-enum PlayButtonDisplayMode {
+fileprivate enum PlayButtonDisplayMode {
     case playButton
     case pauseButton
     case hidden
@@ -140,7 +145,7 @@ enum PlayButtonDisplayMode {
 /**
     Callbacks from a VideoPlayerViewController class instance.
  */
-protocol DemoPlayerControlDelegate: class {
+internal protocol DemoPlayerControlDelegate: class {
     
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
     func demoPlayerHasUpdatedState(state: TinyPlayerState)
