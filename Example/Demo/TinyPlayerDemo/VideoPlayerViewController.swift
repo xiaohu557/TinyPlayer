@@ -10,13 +10,14 @@ import Foundation
 import UIKit
 import TinyPlayer
 
-class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLogging {
+class VideoPlayerViewController: UIViewController, TinyLogging {
     
-    let viewModel: VideoPlayerViewModel
-    
-    weak var delegate: DemoPlayerControlDelegate?
-    
+    /* Required property from the TinyLogging protocol. */
     var loggingLevel: TinyLoggingLevel = .info
+
+    fileprivate let viewModel: VideoPlayerViewModel
+    
+    internal weak var delegate: DemoPlayerControlDelegate?
     
     required init?(coder aDecoder: NSCoder) {
 
@@ -52,13 +53,20 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
          */
         viewModel.tinyPlayer.playerView.translatesAutoresizingMaskIntoConstraints = false
         
-        viewModel.tinyPlayer.playerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
+        viewModel.tinyPlayer.playerView.topAnchor
+            .constraint(equalTo: self.view.topAnchor, constant: 0.0).isActive = true
+        viewModel.tinyPlayer.playerView.bottomAnchor
+            .constraint(equalTo: self.view.bottomAnchor, constant: 0.0).isActive = true
+        viewModel.tinyPlayer.playerView.leftAnchor
+            .constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
+        viewModel.tinyPlayer.playerView.rightAnchor
+            .constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
     }
-    
-    // MARK: - TinyPlayer Delegates
+}
+
+// MARK: - TinyPlayer Delegates
+
+extension VideoPlayerViewController: TinyPlayerDelegate {
     
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
         
@@ -68,7 +76,7 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
     }
     
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
-    
+        
         verboseLog("Tiny player has updated playing position: \(position), progress: \(playbackProgress)")
     }
     
@@ -96,14 +104,17 @@ class VideoPlayerViewController: UIViewController, TinyPlayerDelegate, TinyLoggi
         
         delegate?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
+}
 
-    // MARK: - Player controls
+// MARK: - Interactions
+
+extension VideoPlayerViewController {
     
     func playButtonTapped() {
         
         if viewModel.tinyPlayer.playbackState == .paused ||
-           viewModel.tinyPlayer.playbackState == .ready ||
-           viewModel.tinyPlayer.playbackState == .finished {
+            viewModel.tinyPlayer.playbackState == .ready ||
+            viewModel.tinyPlayer.playbackState == .finished {
             
             viewModel.tinyPlayer.play()
             
