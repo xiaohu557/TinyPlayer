@@ -263,7 +263,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                             }
                         }
                         
-                        /* Pause at 2.0 secs position and resume after 3.0 sec. */
+                        /* Pause at the 2.0 secs position and resume after the 3.0 sec. */
                         let actionAt2Secs = { [weak videoPlayer] in
                             videoPlayer?.pause()
                             Thread.sleep(forTimeInterval: 3.0)
@@ -330,16 +330,145 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0)
                 }
                 
+                /**
+                    To make the player lightweighted we don't have a seek state, therefore we expect the player
+                    to report the .playing state directly before and after the seeking.
+                 */
+                
+                let idealSeekingStateRecords = [
+                    TinyPlayerState.ready,
+                    TinyPlayerState.waiting,
+                    TinyPlayerState.playing
+                ]
+                
                 it("seek to") {
                     
+                    var stateRecordsFragment: [TinyPlayerState] = []
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 15.0) { done -> Void in
+                        
+                        spy.onPlayerReady = {  [weak videoPlayer] in
+                            videoPlayer?.play()
+                        }
+                        
+                        spy.onPlayerStateChanged = { state in
+                            
+                            /* Record the state changes after .ready. */
+                            if state.rawValue >= TinyPlayerState.ready.rawValue {
+                                stateRecordsFragment.append(state)
+                            }
+                        }
+                        
+                        /* Seek to 30.0 secs at the 2.0 secs position. */
+                        let actionAt2Secs = { [weak videoPlayer] in
+                            videoPlayer?.seekTo(position: 30.0)
+                            return
+                        }
+                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
+                        
+                        /* Finish test after the 32.0 secs position. */
+                        let actionAt32Secs = {
+                            done()
+                        }
+                        spy.registerAction(action: actionAt32Secs, onTimepoint: 32.0)
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(stateRecordsFragment).to(equal(idealSeekingStateRecords))
                 }
                 
                 it("seek forwards") {
                     
+                    var stateRecordsFragment: [TinyPlayerState] = []
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 15.0) { done -> Void in
+                        
+                        spy.onPlayerReady = {  [weak videoPlayer] in
+                            videoPlayer?.play()
+                        }
+                        
+                        spy.onPlayerStateChanged = { state in
+                            
+                            /* Record the state changes after .ready. */
+                            if state.rawValue >= TinyPlayerState.ready.rawValue {
+                                stateRecordsFragment.append(state)
+                            }
+                        }
+                        
+                        /* Seek Forward 48.0 secs at the 2.0 secs position. */
+                        let actionAt2Secs = { [weak videoPlayer] in
+                            videoPlayer?.seekForward(secs: 48.0)
+                            return
+                        }
+                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
+                        
+                        /* Finish test after the 52.0 secs position. */
+                        let actionAt52Secs = {
+                            done()
+                        }
+                        spy.registerAction(action: actionAt52Secs, onTimepoint: 52.0)
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(stateRecordsFragment).to(equal(idealSeekingStateRecords))
                 }
                 
                 it("seek backwards") {
                     
+                    var stateRecordsFragment: [TinyPlayerState] = []
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 15.0) { done -> Void in
+                        
+                        spy.onPlayerReady = {  [weak videoPlayer] in
+                            videoPlayer?.play()
+                        }
+                        
+                        spy.onPlayerStateChanged = { state in
+                            
+                            /* Record the state changes after .ready. */
+                            if state.rawValue >= TinyPlayerState.ready.rawValue {
+                                stateRecordsFragment.append(state)
+                            }
+                        }
+                        
+                        /* Seek Forward 48.0 secs at the 2.0 secs position. */
+                        let actionAt2Secs = { [weak videoPlayer] in
+                            videoPlayer?.seekForward(secs: 48.0)
+                            return
+                        }
+                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
+                        
+                        /* Seek back to 2.0 at the 52.0 secs position. */
+                        let actionAt52Secs = { [weak videoPlayer] in
+                            videoPlayer?.seekBackward(secs: 50.0)
+                            return
+                        }
+                        spy.registerAction(action: actionAt52Secs, onTimepoint: 52.0)
+                        
+                        /* Finish test after the 4.0 secs position. */
+                        let actionAt4Secs = {
+                            done()
+                        }
+                        spy.registerAction(action: actionAt4Secs, onTimepoint: 4.0)
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(stateRecordsFragment).to(equal(idealSeekingStateRecords))
                 }
             }
         }
