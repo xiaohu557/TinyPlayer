@@ -269,18 +269,13 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                             Thread.sleep(forTimeInterval: 3.0)
                             videoPlayer?.play()
                         }
-                        let pointActionAt2Secs: PlayerTestObserver.TimepointAction = (timepoint: 2.0,
-                                                                                      onTimepoint: actionAt2Secs)
-                        spy.registerActionOnTimepoint(pointActionAt2Secs)
-                        
+                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
                         
                         /* Finish test after 4.0 secs position. */
                         let actionAt4Secs = {
                             done()
                         }
-                        let pointActionAt4Secs: PlayerTestObserver.TimepointAction = (timepoint: 4.0,
-                                                                                      onTimepoint: actionAt4Secs)
-                        spy.registerActionOnTimepoint(pointActionAt4Secs)
+                        spy.registerAction(action: actionAt4Secs, onTimepoint: 4.0)
                         
                         /* Start player initialization now. */
                         videoPlayer.switchResourceUrl(url)
@@ -326,9 +321,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                             videoPlayer?.resetPlayback()
                             done()
                         }
-                        let pointActionAt2Secs: PlayerTestObserver.TimepointAction = (timepoint: 3.0,
-                                                                                      onTimepoint: actionAt3Secs)
-                        spy.registerActionOnTimepoint(pointActionAt2Secs)
+                        spy.registerAction(action: actionAt3Secs, onTimepoint: 3.0)
 
                         /* Start player initialization now. */
                         videoPlayer.switchResourceUrl(url)

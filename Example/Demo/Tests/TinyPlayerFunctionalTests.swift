@@ -72,7 +72,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 }
             }
             
-            describe("can unload the loaded media item") {
+            describe("can unload a loaded media item") {
 
                     it("when unload") {
                         
@@ -80,11 +80,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         let spy = PlayerTestObserver(player: videoPlayer)
 
                         /* Wait until the player is ready. */
-                        waitUntil(timeout: 3.0) { done -> Void in
-                            spy.onPlayerReady = {
-                                done()
-                            }
-                        }
+                        waitUntilPlayerIsReady(withSpy: spy)
                         
                         /* Initiate closing procedure and wait until the unloading process is done. */
                         waitUntil(timeout: 5.0) { done -> Void in
@@ -127,11 +123,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.endPosition).toEventually(equal(15.0), timeout: 2.0)
                     
                     /* Wait until the player receives the ready signal. */
-                    waitUntil(timeout: 5.0) { done -> Void in
-                        spy.onPlayerReady = {
-                            done()
-                        }
-                    }
+                    waitUntilPlayerIsReady(withSpy: spy)
                     
                     videoPlayer.play()
 
@@ -161,24 +153,26 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 
                 it("reset playback") {
                     
-                    videoPlayer = TinyVideoPlayer(resourceUrl: url)
+                    videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    /* Wait until the player receives the ready signal. */
                     waitUntil(timeout: 15.0) { done -> Void in
                         
+                        /* Wait until the player receives the ready signal then start playing. */
+                        var onceToken = 0x1
                         spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                        }
-                        
-                        spy.onPlaybackPositionUpdated = { [weak videoPlayer] (position, progress) in
-                            
-                            /* Reset playback at 3.0 secs position. */
-                            if fabs(position - 3.0) < 0.01 {
-                                videoPlayer?.resetPlayback()
-                                done()
+                            if onceToken > 0x0 {
+                                videoPlayer?.play()
+                                onceToken = 0x0
                             }
                         }
+                        
+                        let actionAt3Secs = { [weak videoPlayer] in
+                            videoPlayer?.resetPlayback()
+                            done()
+                        }
+                        spy.registerAction(action: actionAt3Secs, onTimepoint: 3.0)
+                        
                         
                         /* Start player initialization now. */
                         videoPlayer.switchResourceUrl(url)

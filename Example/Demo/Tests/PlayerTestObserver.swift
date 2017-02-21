@@ -18,9 +18,6 @@ public class PlayerTestObserver: TinyPlayerDelegate {
     public var onPlayerReady: (() -> Void)?
     public var onPlaybackFinished: (() -> Void)?
     
-
-    public var onPlaybackHasOverThe3SecsMark: (() -> Void)?
-    
     init(player: TinyVideoPlayer) {
         
         videoPlayer = player
@@ -34,26 +31,20 @@ public class PlayerTestObserver: TinyPlayerDelegate {
         onPlayerStateChanged?(newState)
     }
     
-    private var positionOnceToken = 0x1
     public func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
         
         onPlaybackPositionUpdated?((position, playbackProgress))
         
-        if position > 3.0 && positionOnceToken > 0x0 {
-            onPlaybackHasOverThe3SecsMark?()
-            positionOnceToken = 0x0
-        }
-        
-        for (index, tpAction) in timepointActions.enumerated() {
+        for (index, tpAction) in timepointActionRepository.enumerated() {
             
-            if !timepointActions[index].executed &&
+            if !timepointActionRepository[index].executed &&
                 tpAction.timepoint - position < 0.1 {
                 
                 tpAction.onTimepoint()
                 
                 print("Executed timepoint action at \(tpAction.timepoint)!")
                 
-                timepointActions[index].executed = true
+                timepointActionRepository[index].executed = true
             }
         }
     }
@@ -85,35 +76,33 @@ public class PlayerTestObserver: TinyPlayerDelegate {
     
     /**
         This tuple can be intepreted as "at which timepoint, what operation need to be called".
+        The last property of the tuple is used to support recording the execution state.
      */
-    public typealias TimepointAction = (timepoint: Float, onTimepoint: () -> Void)
-    
-    /**
-        A private property which extends the original tuple to support recording the execution state.
-     */
-    private typealias TimepointActionExtended = (timepoint: Float, onTimepoint: () -> Void, executed: Bool)
+    private typealias TimepointAction = (timepoint: Float, onTimepoint: () -> Void, executed: Bool)
     
     /**
         Used to maintain a group of timepoint-actions.
      */
-    private var timepointActions: [TimepointActionExtended] = []
+    private var timepointActionRepository: [TimepointAction] = []
     
     /**
-        Add a new pair of timepoint-action to the repository which will be excuted at the specific time.
+        Add an action closure to the repository that will get excuted at the specific time.
+        The action closure only gets executed once(!) when the playback position is approaching the specified
+        timepoint with a 0.1 sec tolerance.
      
-        - Note: Avoid to put the onPlaybackPositionUpdated closure inside Nimble's waitUntil(:) method.
-        Because onPlaybackPositionUpdated will be called multiple times per second.
-        Doing so will cause Nimble to throw the exception of calling done() too many times!
+        - Note: Avoid to put the onPlaybackPositionUpdated closure inside Nimble's waitUntil(:) closure!
+        The reason is that onPlaybackPositionUpdated will get called at a 60fps rate, this causes issue when 
+        unblocking the mainthread after the done() declaration within Nimble. Doing so will potentially cause 
+        Nimble to throw an exception about calling done() too many times.
      
-        - Parameter timepointAction: A TimepointAction tuple that represents the timepoint and the wanted action.
+        - Parameter action: A closure that contains to be excuted commands on the specific timepoint.
+        - Parameter timepoint: A timepoint at which the action closure get executed.
      */
-    public func registerActionOnTimepoint(_ timepointAction: TimepointAction) {
+    public func registerAction(action: @escaping () -> Void, onTimepoint timepoint: Float) {
         
-        timepointActions.append(TimepointActionExtended(timepoint: timepointAction.timepoint,
-                                                        onTimepoint: timepointAction.onTimepoint,
-                                                        executed: false
-                                                        ))
+        let timpepointAction: TimepointAction = TimepointAction(timepoint: timepoint,
+                                            onTimepoint: action,
+                                            executed: false)
+        timepointActionRepository.append(timpepointAction)
     }
-    
-    ///TODO: Write a factory for timepoint actions!
 }
