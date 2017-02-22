@@ -1,6 +1,0 @@
-framework module Pods_TinyPlayerDemo {
-  umbrella header "Pods-TinyPlayerDemo-umbrella.h"
-
-  export *
-  module * { export * }
-}
