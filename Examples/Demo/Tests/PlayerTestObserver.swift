@@ -10,7 +10,7 @@ import TinyPlayer
 
 public class PlayerTestObserver: TinyPlayerDelegate {
     
-    private var videoPlayer: TinyVideoPlayer
+    private weak var videoPlayer: TinyVideoPlayer?
     
     public var onPlayerStateChanged: ((TinyPlayerState) -> Void)?
     public var onPlaybackPositionUpdated: ((_ position: Float, _ progress: Float) -> Void)?
@@ -18,10 +18,23 @@ public class PlayerTestObserver: TinyPlayerDelegate {
     public var onPlayerReady: (() -> Void)?
     public var onPlaybackFinished: (() -> Void)?
     
-    init(player: TinyVideoPlayer) {
+    init(player: TinyVideoPlayer?) {
+        
+        if let player = player {
+            attachToPlayer(player: player)
+        }
+    }
+
+    /**
+        Attach the observer to a TinyVideoPlayer instance in order to redirect 
+        TinyPlayer delegate method calls to the pre-defined callback closures.
+        
+        - Parameter player: The target TinyVideoPlayer instance.
+     */
+    public func attachToPlayer(player: TinyVideoPlayer) {
         
         videoPlayer = player
-        videoPlayer.delegate = self
+        videoPlayer?.delegate = self
     }
     
     // MARK: - Delegate Methods

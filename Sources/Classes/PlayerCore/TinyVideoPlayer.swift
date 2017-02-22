@@ -342,8 +342,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         }
         
         /*
-         When there is already a loaded media item, it make sense to notify the delegate about the change.
-         Otherwise we make the state change silently.
+            When there is already a loaded media item, it make sense to notify the delegate about the change.
+            Otherwise we make the state change silently.
          */
         let notifyDelegate = (playerItem != nil)
 

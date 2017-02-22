@@ -23,6 +23,7 @@
 		C7B559CD1E5B403900BDE78F /* unittest_video_alternative.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7B559CC1E5B403900BDE78F /* unittest_video_alternative.mp4 */; };
 		C7B559CF1E5C3FD900BDE78F /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */; };
 		C7EE50971E44D9AD00D17127 /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
+		C7F1FB3D1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */; };
 		D496CBB24D6A1F792F3C2103 /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26CE0BF2C9CA74514A185E82 /* Pods_TinyPlayerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		C7B559CC1E5B403900BDE78F /* unittest_video_alternative.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video_alternative.mp4; sourceTree = "<group>"; };
 		C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video.mp4; sourceTree = "<group>"; };
+		C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyPlayerPlaybackCommandsTests.swift; sourceTree = "<group>"; };
 		D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D90882D8D79492EA32FBF437 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,6 +130,7 @@
 			children = (
 				607FACEB1AFB9204008FA782 /* TinyPlayerFunctionalTests.swift */,
 				C701D9471E55E8E7000A226A /* TinyPlayerStateTransationTests.swift */,
+				C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */,
 				C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */,
 				C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -400,6 +403,7 @@
 				C701D9481E55E8E7000A226A /* TinyPlayerStateTransationTests.swift in Sources */,
 				C7A4A19E1E54C43C0049EFFA /* PlayerTestObserver.swift in Sources */,
 				C7980C8C1E44F8C60002BEFB /* TinyPlayerFunctionalTests.swift in Sources */,
+				C7F1FB3D1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift in Sources */,
 				C7B559CF1E5C3FD900BDE78F /* TestHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

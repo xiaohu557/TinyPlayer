@@ -7,6 +7,7 @@
 
 import Quick
 import Nimble
+import AVFoundation
 @testable import TinyPlayer
 
 
@@ -16,7 +17,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
         
         describe("TinyVideoPlayer") {
 
-            var videoPlayer: TinyVideoPlayer!
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
 
@@ -25,11 +25,11 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 return
             }
 
-            describe("can be initialized correctly") {
+            describe("can be initialized") {
                 
-                it("when initialized with empty parameters") {
+                it("with empty parameters") {
                 
-                    videoPlayer = TinyVideoPlayer()
+                    let videoPlayer = TinyVideoPlayer()
                 
                     expect(videoPlayer.playbackState).to(equal(TinyPlayerState.unknown))
                     expect(videoPlayer.player).toNot(beNil())
@@ -46,9 +46,9 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.hidden).to(beFalse())
                 }
 
-                it("when initialized with a url") {
+                it("with a url") {
                     
-                    videoPlayer = TinyVideoPlayer(resourceUrl: url)
+                    let videoPlayer = TinyVideoPlayer(resourceUrl: url)
                     
                     expect(videoPlayer.playbackState).to(equal(TinyPlayerState.unknown))
                     expect(videoPlayer.player).toNot(beNil())
@@ -68,6 +68,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     /* The endPosition should be set to the whole video length if it's not previously set. */
                     expect(videoPlayer.endPosition).toEventually(equal(videoPlayer.videoDuration))
                     
+                    expect(videoPlayer.playerView).toNot(beNil())
                     expect(videoPlayer.hidden).to(beFalse())
                 }
             }
@@ -76,7 +77,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
 
                     it("when unload") {
                         
-                        videoPlayer = TinyVideoPlayer(resourceUrl: url)
+                        let videoPlayer = TinyVideoPlayer(resourceUrl: url)
                         let spy = PlayerTestObserver(player: videoPlayer)
 
                         /* Wait until the player is ready. */
@@ -106,17 +107,17 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     }
             }
             
-            describe("can calculate start / end position correctly") {
+            describe("can load mediaContext correctly") {
 
                 let mediaContext = MediaContext(videoTitle: "Test Video with start and end settings",
                                                 artistName: "TinyPlayer Tester",
                                                 startPosition: 9.0,
                                                 endPosition: 15.0,
-                                                thumbnailImage: nil)
+                                                thumbnailImage: UIImage())
                 
                 it("when specify start and end properties in mediaContext") {
                     
-                    videoPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
+                    let videoPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
                     expect(videoPlayer.startPosition).toEventually(equal(9.0), timeout: 2.0)
@@ -141,182 +142,38 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 }
             }
             
-            describe("can responed to player operations:") {
+            describe("can hide itself") {
                 
-                it("play") {
-                    
-                    videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
-                    
-                    waitUntil(timeout: 10.0) { done -> Void in
-                        
-                        /* Wait until the player receives the ready signal then start playing. */
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                            done()
-                        }
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
-                    
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.playing))
-                }
-                
-                it("pause then resume") {
+                it("when hide") {
                     
                     let videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
-                    
-                    /* Wait until the player receives the ready signal. */
-                    waitUntil(timeout: 15.0) { done -> Void in
-                        
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                        }
-                        
-                        /* Pause at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.pause()
-                            done()
-                        }
-                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
-                    
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.paused))
-                    
-                    videoPlayer.play()
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.playing), timeout: 3.0)
+                    videoPlayer.hidden = true
+                    expect(videoPlayer.playerView.isHidden) == true
                 }
+                
+                it("when unhide") {
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    videoPlayer.hidden = false
+                    expect(videoPlayer.playerView.isHidden) == false
+                }
+            }
             
-                it("reset playback") {
-                    
-                    videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
-                    
-                    waitUntil(timeout: 15.0) { done -> Void in
-                        
-                        /* Wait until the player receives the ready signal then start playing. */
-                        var onceToken = 0x1
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            if onceToken > 0x0 {
-                                videoPlayer?.play()
-                                onceToken = 0x0
-                            }
-                        }
-                        
-                        let actionAt3Secs = { [weak videoPlayer] in
-                            videoPlayer?.resetPlayback()
-                            done()
-                        }
-                        spy.registerAction(action: actionAt3Secs, onTimepoint: 3.0)
-                        
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
-                    
-                    expect(videoPlayer.playbackState).to(equal(TinyPlayerState.ready))
-                }
+            describe("can set content fill mode") {
                 
-                it("seek to") {
+                it("when switch between fill modes") {
                     
                     let videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    waitUntil(timeout: 15.0) { done -> Void in
-                        
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                        }
-                        
-                        /* Seek to 30.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekTo(position: 30.0)
-                            done()
-                            return
-                        }
-                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
+                    videoPlayer.playerView.fillMode = .resizeFill
+                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResize
+
+                    videoPlayer.playerView.fillMode = .resizeAspect
+                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResizeAspect
                     
-                    /* The player is playing from 30.0 secs. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(29.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(31.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(32.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(33.0, within: 0.2))
-                }
-                
-                it("seek forwards") {
-                    
-                    let videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
-                    
-                    waitUntil(timeout: 15.0) { done -> Void in
-                        
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                        }
-                        
-                        /* Seek forward 20.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekForward(secs: 20.0)
-                            done()
-                            return
-                        }
-                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
-                    
-                    /* The player is playing from 22.0 secs. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(3.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(22.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(23.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(24.0, within: 0.2))
-                }
-                
-                it("seek backwards") {
-                    
-                    let videoPlayer = TinyVideoPlayer()
-                    let spy = PlayerTestObserver(player: videoPlayer)
-                    
-                    waitUntil(timeout: 15.0) { done -> Void in
-                        
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
-                        }
-                        
-                        /* Seek forward 48.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekForward(secs: 48.0)
-                            return
-                        }
-                        spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
-                        
-                        /* Then seek backward to 6.0 at the 52.0 secs position. */
-                        let actionAt52Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekBackward(secs: 46.0)
-                            done()
-                            return
-                        }
-                        spy.registerAction(action: actionAt52Secs, onTimepoint: 52.0)
-                        
-                        /* Start player initialization now. */
-                        videoPlayer.switchResourceUrl(url)
-                    }
-                    
-                    /* The player is playing from 6.0 secs. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(52.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(6.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(7.0, within: 0.2))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(8.0, within: 0.2))
+                    videoPlayer.playerView.fillMode = .resizeAspectFill
+                    expect(videoPlayer.playerView.playerLayer.videoGravity)
+                        == AVLayerVideoGravityResizeAspectFill
                 }
             }
             
@@ -324,22 +181,118 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 
                 it("can call delegate when playerState changed") {
                     
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    var delegateCalled = false
+
+                    waitUntil(timeout: 10.0) { done -> Void in
+                        
+                        var onceToken = 0x1
+                        spy.onPlayerStateChanged = { _ in
+                            if onceToken > 0x0 {
+                                delegateCalled = true
+                                onceToken = 0x0
+                                done()
+                            }
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(delegateCalled) == true
                 }
                 
                 it("can call delegate when playback position updated") {
                     
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    var delegateCalled = false
+                    
+                    waitUntil(timeout: 10.0) { done -> Void in
+                        
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
+                        }
+                        
+                        /* We will use the helper method to test the delegate hit.*/
+                        let playbackPositionChangeAction = {
+                            delegateCalled = true
+                            done()
+                        }
+                        spy.registerAction(action: playbackPositionChangeAction, onTimepoint: 3.0)
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(delegateCalled) == true
                 }
                 
                 it("can call delegate when seekable range updated") {
                     
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    var delegateCalled = false
+                    
+                    waitUntil(timeout: 10.0) { done -> Void in
+                        
+                        spy.onSeekableRangeUpdated = { _ in
+                            delegateCalled = true
+                            done()
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(delegateCalled) == true
                 }
-                
+            
                 it("can call delegate when player is ready") {
                     
-                }
-                
-                it("can call delegate when playback finished") {
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    var delegateCalled = false
                     
+                    waitUntil(timeout: 10.0) { done -> Void in
+                        
+                        spy.onPlayerReady = {
+                            delegateCalled = true
+                            done()
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(delegateCalled) == true
+                }
+            
+                it("can call delegate when playback finished") {
+
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    var delegateCalled = false
+                    
+                    waitUntil(timeout: 10.0) { done -> Void in
+                        
+                        spy.onPlaybackFinished = {
+                            delegateCalled = true
+                            done()
+                        }
+                        
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
+                            /* Seek to the near ending position. */
+                            videoPlayer.seekTo(position: 59.0)
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    expect(delegateCalled) == true
                 }
             }
         }

@@ -37,7 +37,6 @@ public class TinyVideoPlayerView: UIView {
         
         return layer as! AVPlayerLayer
     }
-
     
     override public class var layerClass: AnyClass {
         
