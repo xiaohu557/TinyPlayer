@@ -30,7 +30,7 @@ the complexities within.
   s.homepage         = 'https://github.com/xiaohu557/TinyPlayer'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'xiaohu557' => 'kevinchen2005@gmail.com' }
+  s.author           = { 'xiaohu557' => 'kevinchen@me.com' }
   s.source           = { :git => 'https://github.com/xiaohu557/TinyPlayer.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
@@ -39,9 +39,9 @@ the complexities within.
 
   s.source_files = 'Sources/Classes/**/*'
 
-  # s.resource_bundles = {
-  #   'TinyPlayer' => ['TinyPlayer/Assets/*.png']
-  # }
+  s.resource_bundles = {
+     'TinyPlayer' => ['Sources/Assets/*.*']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
