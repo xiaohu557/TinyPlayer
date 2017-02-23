@@ -21,6 +21,36 @@ public enum TinyPlayerState: Int {
     case error = -1
 }
 
+
+/**
+    This protocol defines the public APIs of the TinyVideoPlayer.
+ */
+public protocol TinyPlayer: class {
+    
+    weak var delegate: TinyPlayerDelegate? { get set }
+    var playerView: TinyVideoPlayerView { get }
+    var playbackState: TinyPlayerState { get }
+    
+    var videoDuration: Float? { get }
+    var playbackPosition: Float? { get }
+    var playbackProgress: Float? { get }
+    var bufferProgress: Float? { get }
+    var hidden: Bool { get set }
+    var willPrettifyPauseStateTransation: Bool { get set }
+    
+    func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext?)
+    func play()
+    func pause()
+    func closeCurrentItem() /* Stop playing, release the current playing item from memeory. */
+    func resetPlayback()
+    func seekTo(position: Float, cancelPreviousSeeking: Bool, completion: ((Bool)-> Void)?)
+    func seekForward(secs: Float, completion: ((Bool)-> Void)?)
+    func seekBackward(secs: Float, completion: ((Bool)-> Void)?)
+}
+
+/**
+    This protocol defines the public delegate methods that TinyPlayer will call in certain conditions.
+ */
 public protocol TinyPlayerDelegate: class {
     
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState)
@@ -50,7 +80,7 @@ public protocol TinyPlayerDelegate: class {
 
     /* 
         The following three are planned for the upcoming AdPlayer component, optional.
-        Caution: These methods are not implemented yet!
+        Caution: These methods are not implemented yet, please don't use them!
      */
     func player(_ player: TinyPlayer, didReceivedAdInjectPositions positions: [Float])
     func player(_ player: TinyPlayer, didStartAdPlayback adObject: NSObjectProtocol)
@@ -108,32 +138,6 @@ public struct MediaContext {
                     self.endPosition = endPosition
                     self.thumbnailImage = thumbnailImage
                 }
-}
-
-/**
-    This protocol defines the public APIs of the TinyVideoPlayer.
- */
-public protocol TinyPlayer: class {
-    
-    weak var delegate: TinyPlayerDelegate? { get set }
-    var playerView: TinyVideoPlayerView { get }
-    var playbackState: TinyPlayerState { get }
-
-    var videoDuration: Float? { get }
-    var playbackPosition: Float? { get }
-    var playbackProgress: Float? { get }
-    var bufferProgress: Float? { get }
-    var hidden: Bool { get set }
-    var willPrettifyPauseStateTransation: Bool { get set }
-
-    func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext?)
-    func play()
-    func pause()
-    func closeCurrentItem() /* Stop playing, release the current playing item from memeory. */
-    func resetPlayback()
-    func seekTo(position: Float, cancelPreviousSeeking: Bool, completion: ((Bool)-> Void)?)
-    func seekForward(secs: Float, completion: ((Bool)-> Void)?)
-    func seekBackward(secs: Float, completion: ((Bool)-> Void)?)
 }
 
 /**
