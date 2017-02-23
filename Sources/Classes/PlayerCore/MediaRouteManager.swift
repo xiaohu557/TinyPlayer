@@ -163,11 +163,15 @@ public protocol MediaRouteManagerDelegate: class {
     var mediaRouteManager: MediaRouteManager { get }
     
     /**
-        This delegate method is get called whenever the media route state is changed.
+        This delegate method gets called whenever the media route state is changed.
         This can be a consequence of switching on/off Airplay or connect to a external display with a HDMI cable.
      */
     func mediaRouteStateHasChangedTo(state: MediaRouteState)
     
+    /**
+        This delegate methods gets called when the system detects that there is an external
+        playback device (Bluetooth, Airplay) becomes available/unavailable in the local connectivity.
+     */
     func wirelessRouteAvailabilityChanged(available: Bool)
 }
 

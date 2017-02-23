@@ -7,7 +7,7 @@
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+To run the example project, clone the repo, and run `pod install` from the Examples directory first.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ pod "TinyPlayer"
 
 ## Author
 
-xiaohu557, kevinchen@me.com
+Xi Chen(xiaohu557), kevinchen@me.com
 
 ## License
 
