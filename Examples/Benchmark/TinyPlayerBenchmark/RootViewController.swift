@@ -20,6 +20,7 @@ class RootViewController: UIViewController {
     
     /**
         The pre-defined count number of on-screen videoPlayers that matches the density tier.
+        Moderen devices can support up to 16 players simultaneously playing on screen.
      */
     private let playerDensityTierList: Array<Int> = [0, 1, 2, 4, 6, 8, 9, 12, 16]
     
