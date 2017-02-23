@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TinyPlayer'
-  s.version          = '0.9.0'
+  s.version          = '0.9.1'
   s.summary          = 'TinyPlayer is simple, elegant and highly efficient video player for iOS
   and tvOS. It is based on Apple’s AVFoundation framework. '
 
