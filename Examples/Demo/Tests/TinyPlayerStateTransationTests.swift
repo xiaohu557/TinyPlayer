@@ -14,7 +14,9 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
     
     override func spec() {
         
-        describe("TinyVideoPlayer") {
+        Nimble.AsyncDefaults.Timeout = 10.0 * tm
+
+        fdescribe("TinyVideoPlayer") {
             
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
@@ -43,10 +45,10 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         
                         /* First we load a video, then wait until it's ready. */
                         videoPlayer.switchResourceUrl(url)
-                        expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 5.0)
+                        expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 5.0 * tm)
                         
                         /* Load the second video and check state changes. */
-                        waitUntil(timeout: 10.0) { done -> Void in
+                        waitUntil(timeout: 10.0 * tm) { done -> Void in
                             
                             spy.onPlayerReady = nil
                             
@@ -78,10 +80,10 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         
                         /* First we load a video, then wait until it's ready. */
                         videoPlayer.switchResourceUrl(url)
-                        expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 5.0)
+                        expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 5.0 * tm)
                         
                         /* Load the second video and check state changes. */
-                        waitUntil(timeout: 10.0) { done -> Void in
+                        waitUntil(timeout: 10.0 * tm) { done -> Void in
                             
                             spy.onPlayerReady = nil
                             
@@ -134,7 +136,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         let videoPlayer = TinyVideoPlayer()
                         let spy = PlayerTestObserver(player: videoPlayer)
                         
-                        waitUntil(timeout: 12.0) { done -> Void in
+                        waitUntil(timeout: 12.0 * tm) { done -> Void in
                             
                             spy.onPlayerReady = { [weak videoPlayer] in
                                 videoPlayer?.play()
@@ -177,7 +179,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         videoPlayer.willPrettifyPauseStateTransation = false
                         let spy = PlayerTestObserver(player: videoPlayer)
                         
-                        waitUntil(timeout: 10.0) { done -> Void in
+                        waitUntil(timeout: 10.0 * tm) { done -> Void in
                             
                             spy.onPlayerReady = { [weak videoPlayer] in
                                 videoPlayer?.play()
@@ -212,7 +214,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
                     /* Wait until the player receives the ready signal. */
-                    waitUntil(timeout: 5.0) { done -> Void in
+                    waitUntil(timeout: 5.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {  [weak videoPlayer] in
                             videoPlayer?.play()
@@ -249,7 +251,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
                     /* Wait until the player receives the ready signal. */
-                    waitUntil(timeout: 15.0) { done -> Void in
+                    waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {  [weak videoPlayer] in
                             videoPlayer?.play()
@@ -298,7 +300,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    waitUntil(timeout: 15.0) { done -> Void in
+                    waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
                         /* Wait until the player receives the ready signal then start playing. */
                         var onceToken = 0x1
@@ -327,7 +329,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         videoPlayer.switchResourceUrl(url)
                     }
                     
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0)
+                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0 * tm)
                 }
                 
                 /**
@@ -348,7 +350,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    waitUntil(timeout: 15.0) { done -> Void in
+                    waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {  [weak videoPlayer] in
                             videoPlayer?.play()
@@ -389,7 +391,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    waitUntil(timeout: 15.0) { done -> Void in
+                    waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {  [weak videoPlayer] in
                             videoPlayer?.play()
@@ -430,7 +432,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    waitUntil(timeout: 15.0) { done -> Void in
+                    waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {  [weak videoPlayer] in
                             videoPlayer?.play()

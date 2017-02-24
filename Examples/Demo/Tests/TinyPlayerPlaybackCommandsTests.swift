@@ -14,6 +14,8 @@ class TinyPlayerPlaybackCommandsSpecs: QuickSpec {
     
     override func spec() {
         
+        Nimble.AsyncDefaults.Timeout = 10.0
+
         describe("TinyVideoPlayer can respond to player commands:") {
             
             var videoPlayer: TinyVideoPlayer!
