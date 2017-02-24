@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2EF7ED7932B69DE2C6656B50 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */; };
-		7CADD9171BE33496A2F3A49F /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */; };
 		C701D9481E55E8E7000A226A /* TinyPlayerStateTransationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C701D9471E55E8E7000A226A /* TinyPlayerStateTransationTests.swift */; };
 		C71D8F691E40A6D8005E4B64 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F661E40A6D8005E4B64 /* RootViewController.swift */; };
 		C71D8F6A1E40A6D8005E4B64 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */; };
@@ -83,7 +82,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CADD9171BE33496A2F3A49F /* Pods_TinyPlayerDemo_Tests.framework in Frameworks */,
 				D496CBB24D6A1F792F3C2103 /* Pods_TinyPlayerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +476,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -520,7 +518,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -538,6 +536,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				INFOPLIST_FILE = TinyPlayerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -557,6 +556,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				INFOPLIST_FILE = TinyPlayerDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -578,6 +578,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -593,6 +594,7 @@
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

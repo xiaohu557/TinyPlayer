@@ -35,7 +35,7 @@ There are currently two executable projects inside the workspace:
 
 ## Requirements
 
-The minimum system requirement of TinyPlayer is iOS 9.1 and tvOS 9.1 due to the lack of some API support in the previous system releases.
+The minimum system requirement of TinyPlayer is **iOS 9.1+** and **tvOS 9.1+** due to the lack of some API support in the previous system releases. The whole project is built with **Swift 3**.
 
 ## Installation
 
@@ -142,12 +142,18 @@ func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
 }
 ```
 
-## Features upcoming
+## Next Steps
+
+The intention is to keep the project lightweight and lean. 
 
 - Ads playback support
 - VAST standards support
 - Offline video content caching
-- …
+- API Reference
+
+## Contributing
+
+Any contributing and pull requests are warmly welcome! I would be appreciated if you could open a discussion first, before you start to implement new features or try to fix an uncertain issue.
 
 ## Author
 
