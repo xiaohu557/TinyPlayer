@@ -16,7 +16,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
         
         Nimble.AsyncDefaults.Timeout = 10.0 * tm
 
-        fdescribe("TinyVideoPlayer") {
+        describe("TinyVideoPlayer") {
             
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }

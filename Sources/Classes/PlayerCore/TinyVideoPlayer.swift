@@ -36,7 +36,8 @@ public struct TinyVideoPlayerDefaults {
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
     /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
-    public var loggingLevel: TinyLoggingLevel = .info
+    /// CST
+    public var loggingLevel: TinyLoggingLevel = .verbose
     
     public weak var delegate: TinyPlayerDelegate?
     internal var player: AVPlayer

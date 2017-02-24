@@ -17,11 +17,12 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
         
         Nimble.AsyncDefaults.Timeout = 10.0
         
-        describe("TinyVideoPlayer") {
+        fdescribe("TinyVideoPlayer") {
 
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
-
+            print("[FunctionalTest]: media file url: \(targetUrl)") /// CST
+            
             guard let url = targetUrl else {
                 XCTFail("Error encountered at loading test video.")
                 return
@@ -83,10 +84,16 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         let spy = PlayerTestObserver(player: videoPlayer)
 
                         /* Wait until the player is ready. */
-                        waitUntilPlayerIsReady(withSpy: spy)
+                        //waitUntilPlayerIsReady(withSpy: spy)
+                        /// CST
+                        self.waitExpectation(timeout: 5.0*tm) { done -> Void in
+                            spy.onPlayerReady = {
+                                done()
+                            }
+                        }
                         
                         /* Initiate closing procedure and wait until the unloading process is done. */
-                        waitUntil(timeout: 5.0) { done -> Void in
+                        self.waitExpectation(timeout: 5.0*tm) { done -> Void in
                             spy.onPlayerStateChanged = { state in
                                 if state == TinyPlayerState.closed {
                                     done()
