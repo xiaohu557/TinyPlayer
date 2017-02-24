@@ -15,6 +15,8 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
     
     override func spec() {
         
+        Nimble.AsyncDefaults.Timeout = 10.0
+        
         describe("TinyVideoPlayer") {
 
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
