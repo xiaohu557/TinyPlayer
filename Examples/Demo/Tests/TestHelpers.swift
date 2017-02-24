@@ -8,6 +8,7 @@
 
 import TinyPlayer
 import Nimble
+import XCTest
 
 /**
     This magnifier is used to extend the timeout settings for all tests.
@@ -33,4 +34,25 @@ public func waitUntilPlayerIsReady(withSpy spy: PlayerTestObserver) {
     }
 }
 
+/**
+    A solution posted on https://github.com/Quick/Nimble/issues/216 to workaround
+    the Nimble waitUntil(:) timed out issue.
+ */
+extension XCTestCase {
+    
+    func waitExpectation(timeout: TimeInterval = 3.0, caller: String = #function, action: (@escaping () -> Void) -> Void) {
+        
+        let exp = expectation(description: caller)
+
+        action { done in
+            exp.fulfill()
+        }
+        
+        waitForExpectations(timeout: timeout) { (error) -> Void in
+            if let error = error {
+                print("Failed fulfilling expectation: \(error)")
+            }
+        }
+    }
+}
 
