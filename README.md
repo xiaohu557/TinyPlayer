@@ -144,7 +144,7 @@ func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
 
 ## Next Steps
 
-The intention is to keep the project lightweight and lean. 
+The intention is to keep the project lightweight and lean. Therefore I will continue focusing on the player functionality layer rather than putting too much efforts on the presentation layer.
 
 - Ads playback support
 - VAST standards support
