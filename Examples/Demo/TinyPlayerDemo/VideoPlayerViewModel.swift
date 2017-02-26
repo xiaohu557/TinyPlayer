@@ -21,14 +21,19 @@ fileprivate let testHLSVideoUrl = "http://cdn-fms.rbs.com.br/hls-vod/sample1_150
 fileprivate let testHLSVideoUrl2 = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
 
 fileprivate let testHLSVideoUrl3 = "https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8"
-
 fileprivate let testHLSVideoUrl4 = "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
 
 fileprivate let testLocalVideo = Bundle.main.path(forResource: "unittest_video", ofType: "mp4")
 
-class VideoPlayerViewModel {
+class VideoPlayerViewModel: TinyLogging {
+    
+    /* Required property from the TinyLogging protocol. */
+    var loggingLevel: TinyLoggingLevel = .info
     
     internal let tinyPlayer: TinyVideoPlayer
+    
+    /* A observer to receive updates from a VideoPlayerViewModel instance. */
+    internal weak var viewModelObserver: PlayerViewModelObserver?
     
     init() {
         
@@ -53,5 +58,93 @@ class VideoPlayerViewModel {
                                         thumbnailImage: UIImage(named: "DemoVideoThumbnail_MP4"))
         
         tinyPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
+        
+        tinyPlayer.delegate = self
     }
+}
+
+// MARK: - TinyPlayerDelegates
+
+extension VideoPlayerViewModel: TinyPlayerDelegate {
+    
+    func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
+        
+        infoLog("Tiny player has changed state: \(oldState) >> \(newState)")
+        
+        viewModelObserver?.demoPlayerHasUpdatedState(state: newState)
+    }
+    
+    func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
+        
+        verboseLog("Tiny player has updated playing position: \(position), progress: \(playbackProgress)")
+    }
+    
+    func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) {
+        
+        verboseLog("Tiny player has updated buffered time range: \(range.lowerBound) - \(range.upperBound)")
+    }
+    
+    func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) {
+        
+        infoLog("Tiny player has updated seekable time range: \(range.lowerBound) - \(range.upperBound)")
+    }
+    
+    public func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error) {
+        
+        infoLog("Tiny player has encountered an error: \(error)")
+    }
+    
+    func playerIsReadyToPlay(_ player: TinyPlayer) {
+        
+        viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
+    }
+    
+    func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
+        
+        viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
+    }
+}
+
+// MARK: - Process commands from RootViewModel
+
+extension VideoPlayerViewModel: RootViewModelCommandReceiver {
+    
+    func playButtonTapped() {
+        
+        if tinyPlayer.playbackState == .paused ||
+           tinyPlayer.playbackState == .ready ||
+           tinyPlayer.playbackState == .finished {
+            
+            tinyPlayer.play()
+            
+        } else if tinyPlayer.playbackState == .playing {
+            
+            tinyPlayer.pause()
+        }
+    }
+    
+    func seekBackwardsFor5Secs() {
+        
+        tinyPlayer.seekBackward(secs: 5.0)
+    }
+    
+    func seekForwardsFor5Secs() {
+        
+        tinyPlayer.seekForward(secs: 5.0)
+    }
+    
+    func freePlayerItemResource() {
+        
+        tinyPlayer.closeCurrentItem()
+    }
+}
+
+
+/**
+    This protocol defines the communication link from a VideoPlayerViewModel to a RootViewModel.
+ */
+internal protocol PlayerViewModelObserver: class {
+    
+    func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
+    func demoPlayerHasUpdatedState(state: TinyPlayerState)
 }

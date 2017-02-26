@@ -15,26 +15,16 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
     /* Required property from the TinyLogging protocol. */
     var loggingLevel: TinyLoggingLevel = .info
 
-    fileprivate let viewModel: VideoPlayerViewModel
-    
-    internal weak var delegate: DemoPlayerControlDelegate?
+    internal var viewModel: VideoPlayerViewModel!
     
     required init?(coder aDecoder: NSCoder) {
 
-        viewModel = VideoPlayerViewModel()
-        
         super.init(coder: aDecoder)
-
-        viewModel.tinyPlayer.delegate = self
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
 
-        viewModel = VideoPlayerViewModel()
-        
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        viewModel.tinyPlayer.delegate = self
     }
     
     deinit {
@@ -61,81 +51,5 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
             .constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
         viewModel.tinyPlayer.playerView.rightAnchor
             .constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
-    }
-}
-
-// MARK: - TinyPlayer Delegates
-
-extension VideoPlayerViewController: TinyPlayerDelegate {
-    
-    func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
-        
-        infoLog("Tiny player has changed state: \(oldState) >> \(newState)")
-        
-        delegate?.demoPlayerHasUpdatedState(state: newState)
-    }
-    
-    func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
-        
-        verboseLog("Tiny player has updated playing position: \(position), progress: \(playbackProgress)")
-    }
-    
-    func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) {
-        
-        verboseLog("Tiny player has updated buffered time range: \(range.lowerBound) - \(range.upperBound)")
-    }
-    
-    func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) {
-        
-        infoLog("Tiny player has updated seekable time range: \(range.lowerBound) - \(range.upperBound)")
-    }
-    
-    public func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error) {
-        
-        infoLog("Tiny player has encountered an error: \(error)")
-    }
-    
-    func playerIsReadyToPlay(_ player: TinyPlayer) {
-        
-        delegate?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
-    }
-    
-    func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
-        
-        delegate?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
-    }
-}
-
-// MARK: - Interactions
-
-extension VideoPlayerViewController {
-    
-    func playButtonTapped() {
-        
-        if viewModel.tinyPlayer.playbackState == .paused ||
-            viewModel.tinyPlayer.playbackState == .ready ||
-            viewModel.tinyPlayer.playbackState == .finished {
-            
-            viewModel.tinyPlayer.play()
-            
-        } else if viewModel.tinyPlayer.playbackState == .playing {
-            
-            viewModel.tinyPlayer.pause()
-        }
-    }
-    
-    func seekBackwardsFor5Secs() {
-        
-        viewModel.tinyPlayer.seekBackward(secs: 5.0)
-    }
-    
-    func seekForwardsFor5Secs() {
-        
-        viewModel.tinyPlayer.seekForward(secs: 5.0)
-    }
-    
-    func freePlayerItemResource() {
-        
-        viewModel.tinyPlayer.closeCurrentItem()
     }
 }

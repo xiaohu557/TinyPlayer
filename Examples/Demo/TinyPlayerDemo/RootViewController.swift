@@ -13,18 +13,29 @@ class RootViewController: UIViewController {
 
     @IBOutlet weak var startButton: UIButton!
     
+    fileprivate var viewModel: RootViewModel!
+    
     fileprivate var videoPlayerVC: VideoPlayerViewController?
     
-    // MARK: - Lifecycle 
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        viewModel = RootViewModel(viewDelegate: self)
+        
         videoPlayerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController
-        videoPlayerVC?.delegate = self
         
         if let videoPlayerVC = videoPlayerVC {
+            
+            /* Link video models between the parent view controller and the child view controller. */
+            let playerViewModel = VideoPlayerViewModel()
+            videoPlayerVC.viewModel = playerViewModel
+
+            viewModel.commandReceiver = playerViewModel
+            playerViewModel.viewModelObserver = viewModel
+            
             self.addChildViewController(videoPlayerVC)
             self.view.insertSubview(videoPlayerVC.view, belowSubview: startButton)
         }
@@ -34,18 +45,13 @@ class RootViewController: UIViewController {
         
         super.didReceiveMemoryWarning()
     }
+}
+
+// MARK: - Root view update delegate
+
+extension RootViewController: RootViewUpdateDelegate {
     
-    // MARK: - UI Updates
-    
-    fileprivate var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
-    
-    fileprivate func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
-        
-        guard playButtonDisplayMode != buttonMode else {
-            return
-        }
-        
-        playButtonDisplayMode = buttonMode
+    internal func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
         
         let designatedAlpha: CGFloat
         var buttonTitle: String?
@@ -66,33 +72,13 @@ class RootViewController: UIViewController {
                           options: .transitionCrossDissolve,
                           animations: {
                             
-                              self.startButton.alpha = designatedAlpha
+                            self.startButton.alpha = designatedAlpha
                             
-                              if let title = buttonTitle {
-                                  self.startButton.setTitle(title, for: .normal)
-                              }
+                            if let title = buttonTitle {
+                                self.startButton.setTitle(title, for: .normal)
+                            }
                             
-                          }, completion: nil)
-    }
-}
-
-// MARK: - DemoPlayerControlDelegate
-
-extension RootViewController: DemoPlayerControlDelegate {
-    
-    func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool) {
-        
-        updatePlayButtonToMode(buttonMode: .playButton)
-    }
-    
-    func demoPlayerHasUpdatedState(state: TinyPlayerState) {
-        
-        if state == .playing {
-            updatePlayButtonToMode(buttonMode: .pauseButton)
-            
-        } else if state == .paused {
-            updatePlayButtonToMode(buttonMode: .playButton)
-        }
+        }, completion: nil)
     }
 }
 
@@ -102,22 +88,22 @@ extension RootViewController {
     
     @IBAction func playButtonTapped(button: UIButton) {
         
-        videoPlayerVC?.playButtonTapped()
+        viewModel.playButtonTapped()
     }
     
     @IBAction func seekBackwardsButtonTapped(button: UIButton) {
         
-        videoPlayerVC?.seekBackwardsFor5Secs()
+        viewModel.seekBackwardsFor5Secs()
     }
     
     @IBAction func seekForwardsButtonTapped(button: UIButton) {
         
-        videoPlayerVC?.seekForwardsFor5Secs()
+        viewModel.seekForwardsFor5Secs()
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
         
-        videoPlayerVC?.freePlayerItemResource()
+        viewModel.freePlayerItemResource()
         
         if let vc = videoPlayerVC {
             
@@ -129,24 +115,7 @@ extension RootViewController {
     
     @IBAction func freePlayerItemResource(_ sender: Any) {
         
-        videoPlayerVC?.freePlayerItemResource()
+        viewModel.freePlayerItemResource()
     }
 }
 
-/**
-    Display modes of the play/pause button.
- */
-fileprivate enum PlayButtonDisplayMode {
-    case playButton
-    case pauseButton
-    case hidden
-}
-
-/**
-    Callbacks from a VideoPlayerViewController class instance.
- */
-internal protocol DemoPlayerControlDelegate: class {
-    
-    func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
-    func demoPlayerHasUpdatedState(state: TinyPlayerState)
-}
