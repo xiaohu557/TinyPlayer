@@ -18,8 +18,6 @@
 		C71D8F741E40A6FC005E4B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F6E1E40A6FC005E4B64 /* Assets.xcassets */; };
 		C71D8F7B1E40A71B005E4B64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F771E40A71B005E4B64 /* LaunchScreen.storyboard */; };
 		C71D8F7C1E40A71B005E4B64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F791E40A71B005E4B64 /* Main.storyboard */; };
-		C766ADF21E645D6100E87D95 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */; };
-		C766ADF41E645D6600E87D95 /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */; };
 		C7980C8C1E44F8C60002BEFB /* TinyPlayerFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* TinyPlayerFunctionalTests.swift */; };
 		C7A4A19C1E54B02B0049EFFA /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
 		C7A4A19E1E54C43C0049EFFA /* PlayerTestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */; };
@@ -80,7 +78,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C766ADF21E645D6100E87D95 /* Pods_TinyPlayerDemo.framework in Frameworks */,
 				8CF5D79BF3AE52D8263A2B38 /* Pods_TinyPlayerDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,7 +86,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C766ADF41E645D6600E87D95 /* Pods_TinyPlayerTests.framework in Frameworks */,
 				22E8F51002485A0804EC2F63 /* Pods_TinyPlayerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

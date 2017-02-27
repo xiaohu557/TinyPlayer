@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A7853B46FF19E0497448D55E /* Pods_TinyPlayerBenchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29FD31FFB022FE6891D96F11 /* Pods_TinyPlayerBenchmark.framework */; };
 		C766ADF61E645D7000E87D95 /* Pods_TinyPlayerBenchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C766ADF51E645D7000E87D95 /* Pods_TinyPlayerBenchmark.framework */; };
 		C7F115FC1E1FEE6A003B89CF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F115FB1E1FEE6A003B89CF /* AppDelegate.swift */; };
 		C7F115FE1E1FEE6A003B89CF /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F115FD1E1FEE6A003B89CF /* RootViewController.swift */; };
@@ -40,7 +39,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C766ADF61E645D7000E87D95 /* Pods_TinyPlayerBenchmark.framework in Frameworks */,
-				A7853B46FF19E0497448D55E /* Pods_TinyPlayerBenchmark.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
