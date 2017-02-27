@@ -21,7 +21,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
 
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
-            print("[FunctionalTest]: media file url: \(targetUrl)") /// CST
             
             guard let url = targetUrl else {
                 XCTFail("Error encountered at loading test video.")
@@ -85,7 +84,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
 
                         /* Wait until the player is ready. */
                         //waitUntilPlayerIsReady(withSpy: spy)
-                        /// CST
                         self.waitExpectation(timeout: 5.0 * tm) { done -> Void in
                             spy.onPlayerReady = {
                                 done()
@@ -133,7 +131,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.endPosition).toEventually(equal(15.0), timeout: 2.0 * tm)
                     
                     /* Wait until the player receives the ready signal. */
-                    /// CST
                     self.waitExpectation(timeout: 5.0*tm) { done -> Void in
                         spy.onPlayerReady = {
                             done()
@@ -200,7 +197,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
 
-                    ///CST
                     self.waitExpectation(timeout: 10.0 * tm) { done -> Void in
                         
                         var onceToken = 0x1
@@ -225,7 +221,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    ///CST
                     self.waitExpectation(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {
@@ -252,7 +247,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    ///CST
                     self.waitExpectation(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onSeekableRangeUpdated = { _ in
@@ -273,7 +267,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    ///CST
                     self.waitExpectation(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {
@@ -294,7 +287,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    ///CST
                     self.waitExpectation(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlaybackFinished = {

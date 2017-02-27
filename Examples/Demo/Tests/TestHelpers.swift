@@ -17,7 +17,7 @@ import XCTest
 private let _testTimeoutMagnifier = 3.0
 
 /**
-    This is just an alias to the testTimeoutMagnifier variable.
+    An alias to the hidden testTimeoutMagnifier variable for code readability.
  */
 internal let tm = _testTimeoutMagnifier
 
@@ -36,7 +36,7 @@ public func waitUntilPlayerIsReady(withSpy spy: PlayerTestObserver) {
 
 /**
     A solution posted on https://github.com/Quick/Nimble/issues/216 to workaround
-    the Nimble waitUntil(:) timed out issue.
+    the Nimble waitUntil(:) timed out issue on TravisCI.
  */
 extension XCTestCase {
     
