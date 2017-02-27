@@ -30,11 +30,11 @@ To run the example project, clone the repo, and run `pod install` from the `Exam
 
 There are currently two executable schemes inside the workspace:
 
-- `TinyPlayerDemo`: A simple demonstration on how to link the player to a UIViewController using a MVVM-pattern based setup. To avoid extra dependencies we didn't use the binding mechanism here to establish the updating link between the view controller and the view model. Instead we have used the delegate pattern which should be familiar to most of the iOS developers. However this approach increases the structure complexity a bit. In a real-life project, we strongly suggest to take advantage of one of binding frameworks like [SwiftBond](https://github.com/ReactiveKit/Bond]) or [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa). The following sketch illustrates the class relationships inside of the project.
+- `TinyPlayerDemo`: A simple demonstration on how to link the player to a UIViewController by using a MVVM based setup. To avoid extra dependencies we didn't use the binding mechanism here to establish the UI-updating link between the view controller and the view model. Instead we have used the delegate pattern which should be familiar to most of the iOS developers. However this approach increases the structure complexity a bit. In a real-life project, we strongly suggest to take advantage of one of binding frameworks like [SwiftBond](https://github.com/ReactiveKit/Bond]) or [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa). The following sketch illustrates the class relationships inside of the project.
 
 ![Class relations in TinyPlayerDemo](https://raw.githubusercontent.com/xiaohu557/TinyPlayer/master/Images/TinyPlayerDemo_Class_Relations.png)
 
-- `TinyPlayerBenchmark`: This project demonstrates how efficiently TinyPlayer can run based on a typical MVC setup. Our latest test shows that iPhone 6s can handle up to 16 players simultaneously on screen  while all of them are playing 720p contents. And this only consumes 7.2 MB of memory in total! Try it for yourself. 😉
+- `TinyPlayerBenchmark`: This project demonstrates how efficiently TinyPlayer can run and it's based on a typical MVC setup. Our latest test shows that iPhone 6s can handle up to 16 players simultaneously on screen  while all of them are playing 720p contents. And this only consumes 7.2 MB of memory in total! Try it for yourself. 😉
 
 ## Requirements
 
@@ -158,9 +158,9 @@ The intention is to keep the project lightweight and lean. Therefore I will cont
 
 Any contributing and pull requests are warmly welcome! I would be appreciated if you could open a discussion first, before you start to implement new features or try to fix an uncertain issue.
 
-## Author
+## Maintainers
 
-Xi Chen(xiaohu557), kevinchen@me.com
+Xi Chen(xiaohu557), xi.chen@quazer.com
 
 ## License
 
