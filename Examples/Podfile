@@ -5,12 +5,16 @@ target 'TinyPlayerDemo' do
     project 'Demo/TinyPlayerDemo.xcodeproj'
 
     pod 'TinyPlayer', :path => '../'
+end
 
-    target 'TinyPlayerTests' do
-        inherit! :search_paths
-        pod 'Quick', '~> 1.0.0'
-        pod 'Nimble', '~> 5.1.1'
-    end
+target 'TinyPlayerTests' do
+    #inherit! :search_paths
+    workspace 'TinyPlayerDemo+Benchmark'
+    project 'Demo/TinyPlayerDemo.xcodeproj'
+
+    pod 'TinyPlayer', :path => '../'
+    pod 'Quick', '~> 1.0.0'
+    pod 'Nimble', '~> 5.1.1'
 end
 
 target 'TinyPlayerBenchmark' do

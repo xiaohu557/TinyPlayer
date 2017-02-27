@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		15132F291E6346FC00910453 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15132F281E6346FC00910453 /* RootViewModel.swift */; };
-		2EF7ED7932B69DE2C6656B50 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */; };
+		22E8F51002485A0804EC2F63 /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26CE0BF2C9CA74514A185E82 /* Pods_TinyPlayerTests.framework */; };
+		8CF5D79BF3AE52D8263A2B38 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */; };
 		C701D9481E55E8E7000A226A /* TinyPlayerStateTransationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C701D9471E55E8E7000A226A /* TinyPlayerStateTransationTests.swift */; };
 		C71D8F691E40A6D8005E4B64 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F661E40A6D8005E4B64 /* RootViewController.swift */; };
 		C71D8F6A1E40A6D8005E4B64 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */; };
@@ -17,6 +18,8 @@
 		C71D8F741E40A6FC005E4B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F6E1E40A6FC005E4B64 /* Assets.xcassets */; };
 		C71D8F7B1E40A71B005E4B64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F771E40A71B005E4B64 /* LaunchScreen.storyboard */; };
 		C71D8F7C1E40A71B005E4B64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F791E40A71B005E4B64 /* Main.storyboard */; };
+		C766ADF21E645D6100E87D95 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */; };
+		C766ADF41E645D6600E87D95 /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */; };
 		C7980C8C1E44F8C60002BEFB /* TinyPlayerFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* TinyPlayerFunctionalTests.swift */; };
 		C7A4A19C1E54B02B0049EFFA /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
 		C7A4A19E1E54C43C0049EFFA /* PlayerTestObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */; };
@@ -24,7 +27,6 @@
 		C7B559CF1E5C3FD900BDE78F /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */; };
 		C7EE50971E44D9AD00D17127 /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
 		C7F1FB3D1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */; };
-		D496CBB24D6A1F792F3C2103 /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26CE0BF2C9CA74514A185E82 /* Pods_TinyPlayerTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		C71D8F781E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71D8F7A1E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C71D8F8B1E40B052005E4B64 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TinyPlayerDemo/Info.plist; sourceTree = "<group>"; };
+		C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_TinyPlayerDemo.framework; path = "/Users/XiChen/Development/TinyPlayerSetup/TinyPlayer/Examples/Pods/../build/Debug-iphoneos/Pods_TinyPlayerDemo.framework"; sourceTree = "<absolute>"; };
+		C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_TinyPlayerTests.framework; path = "/Users/XiChen/Development/TinyPlayerSetup/TinyPlayer/Examples/Pods/../build/Debug-iphoneos/Pods_TinyPlayerTests.framework"; sourceTree = "<absolute>"; };
 		C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTestObserver.swift; sourceTree = "<group>"; };
 		C7B559CC1E5B403900BDE78F /* unittest_video_alternative.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video_alternative.mp4; sourceTree = "<group>"; };
 		C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
@@ -76,7 +80,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EF7ED7932B69DE2C6656B50 /* Pods_TinyPlayerDemo.framework in Frameworks */,
+				C766ADF21E645D6100E87D95 /* Pods_TinyPlayerDemo.framework in Frameworks */,
+				8CF5D79BF3AE52D8263A2B38 /* Pods_TinyPlayerDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D496CBB24D6A1F792F3C2103 /* Pods_TinyPlayerTests.framework in Frameworks */,
+				C766ADF41E645D6600E87D95 /* Pods_TinyPlayerTests.framework in Frameworks */,
+				22E8F51002485A0804EC2F63 /* Pods_TinyPlayerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +183,8 @@
 		D2B4AA11524C64EE2F502DC9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */,
+				C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */,
 				C189E3DA341AD5D08895602F /* Pods_TinyPlayerDemo.framework */,
 				D0BAF33EDE0B232A65DEE349 /* Pods_TinyPlayerDemo_Tests.framework */,
 				26CE0BF2C9CA74514A185E82 /* Pods_TinyPlayerTests.framework */,
@@ -480,7 +488,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -522,7 +530,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -540,7 +548,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				INFOPLIST_FILE = TinyPlayerDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -560,7 +568,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				INFOPLIST_FILE = TinyPlayerDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -582,7 +590,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -598,7 +606,7 @@
 				DEVELOPMENT_TEAM = 5FBYCQAVJQ;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
