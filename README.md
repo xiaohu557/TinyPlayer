@@ -1,9 +1,9 @@
 # TinyPlayer
 
-[![CI Status](http://img.shields.io/travis/xiaohu557/TinyPlayer.svg?style=flat)](https://travis-ci.org/xiaohu557/TinyPlayer)
 [![Version](https://img.shields.io/cocoapods/v/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
 [![License](https://img.shields.io/cocoapods/l/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
 [![Platform](https://img.shields.io/cocoapods/p/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
+[![CI Status](http://img.shields.io/travis/xiaohu557/TinyPlayer.svg?style=flat)](https://travis-ci.org/xiaohu557/TinyPlayer)
 
 TinyPlayer is simple, elegant and highly efficient  video player for iOS and tvOS. It is based on Apple’s AVFoundation framework.
 
@@ -24,14 +24,17 @@ Served as the core player component of our Quazer[http://apple.co/2blYuqq] app, 
 - **Airplay**
 - **CommandCenter**
 
-## Example
+## Examples
 
-To run the example project, clone the repo, and run `pod install` from the `Examples` directory first. Open the `TinyPlayerDemo+Benchmark.xcworkspace` and select a building theme to run.
+To run the example project, clone the repo, and run `pod install` from the `Examples` directory first. Open the `TinyPlayerDemo+Benchmark.xcworkspace` and select a building scheme to run.
 
-There are currently two executable projects inside the workspace:
+There are currently two executable schemes inside the workspace:
 
-- `TinyPlayerDemo`: A very simple demonstration on how to link the player to a UIViewController.
-- `TinyPlayerBenchmark`: This project demonstrates how efficiently TinyPlayer can run. The latest test shows that iPhone 6s can handle up to 16 players simultaneously on screen  while all of them are playing 720p contents. And this only consumes 7.2 MB of memory in total! Try it for yourself. 😉
+- `TinyPlayerDemo`: A simple demonstration on how to link the player to a UIViewController using a MVVM-pattern based setup. To avoid extra dependencies we didn't use the binding mechanism here to establish the updating link between the view controller and the view model. Instead we have used the delegate pattern which should be familiar to most of the iOS developers. However this approach increases the structure complexity a bit. In a real-life project, we strongly suggest to take advantage of one of binding frameworks like [SwiftBond](https://github.com/ReactiveKit/Bond]) or [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa). The following sketch illustrates the class relationships inside of the project.
+
+![Class relations in TinyPlayerDemo](https://raw.githubusercontent.com/xiaohu557/TinyPlayer/master/Images/TinyPlayerDemo_Class_Relations.png)
+
+- `TinyPlayerBenchmark`: This project demonstrates how efficiently TinyPlayer can run based on a typical MVC setup. Our latest test shows that iPhone 6s can handle up to 16 players simultaneously on screen  while all of them are playing 720p contents. And this only consumes 7.2 MB of memory in total! Try it for yourself. 😉
 
 ## Requirements
 
@@ -48,7 +51,7 @@ pod "TinyPlayer"
 
 ## Usage
 
-TinyPlayer can be understand as a data modal manager that exposes an inter-connected view instance to the outside world to provide an easy integration into your existing view hierarchy. States handling and business logics are encapsulated inside to avoid complexities. You can interact with it using the exposed interfaces defined in the TinyPlayer protocol.
+TinyPlayer can be understand as a data modal manager that exposes an inter-connected view instance to the outside world to provide an easy integration into your existing view hierarchy. States handling and business logics are encapsulated inside to avoid complexities. You can interact with it using the exposed interfaces defined in the `TinyPlayer` protocol.
 
 You may initiate it with a url:
 
