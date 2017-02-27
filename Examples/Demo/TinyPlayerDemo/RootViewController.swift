@@ -29,11 +29,14 @@ class RootViewController: UIViewController {
         
         if let videoPlayerVC = videoPlayerVC {
             
-            /* Link video models between the parent view controller and the child view controller. */
+            /* Link the video model to the child view controller. */
             let playerViewModel = VideoPlayerViewModel()
             videoPlayerVC.viewModel = playerViewModel
 
+            /* A command downlink between view models: RootViewModel -> VideoPlayerViewModel */
             viewModel.commandReceiver = playerViewModel
+            
+            /* A callback uplink between view models: VideoPlayerViewModel -> RootViewModel */
             playerViewModel.viewModelObserver = viewModel
             
             self.addChildViewController(videoPlayerVC)
@@ -47,7 +50,7 @@ class RootViewController: UIViewController {
     }
 }
 
-// MARK: - Root view update delegate
+// MARK: - Update UI based on view model changes.
 
 extension RootViewController: RootViewUpdateDelegate {
     
@@ -82,7 +85,7 @@ extension RootViewController: RootViewUpdateDelegate {
     }
 }
 
-// MARK: - Actions
+// MARK: - UI Actions
 
 extension RootViewController {
     

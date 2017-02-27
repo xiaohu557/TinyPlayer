@@ -16,7 +16,7 @@ class RootViewModel {
     
     internal var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
     
-    /* 
+    /**
         A command receiver will take commands from this view model.
      */
     internal weak var commandReceiver: RootViewModelCommandReceiver?
@@ -96,17 +96,16 @@ internal enum PlayButtonDisplayMode {
     case hidden
 }
 
-// MARK: - RootViewUpdateDelegate definition
-
+/**
+    This protocol defines the UI update commands that the coorespond view needs to implement.
+ */
 internal protocol RootViewUpdateDelegate: class {
     
     func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode)
 }
 
-// MARK: - RootViewModelCommandReceiver definition
-
 /**
-    This protocol defines all the commands that a CommandReceiver can respond.
+    This protocol defines all the commands that a CommandReceiver can take as input.
     In our case, a CommandReceiver will be a VideoPlayerViewModel instance.
  */
 internal protocol RootViewModelCommandReceiver: class {

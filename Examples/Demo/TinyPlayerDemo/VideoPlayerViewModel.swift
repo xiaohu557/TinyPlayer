@@ -21,6 +21,7 @@ fileprivate let testHLSVideoUrl = "http://cdn-fms.rbs.com.br/hls-vod/sample1_150
 fileprivate let testHLSVideoUrl2 = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
 
 fileprivate let testHLSVideoUrl3 = "https://tungsten.aaplimg.com/VOD/bipbop_adv_example_v2/master.m3u8"
+
 fileprivate let testHLSVideoUrl4 = "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
 
 fileprivate let testLocalVideo = Bundle.main.path(forResource: "unittest_video", ofType: "mp4")
@@ -51,7 +52,7 @@ class VideoPlayerViewModel: TinyLogging {
             return
         }
         
-        let mediaContext = MediaContext(videoTitle: "Big Buck Bunny - A MP4 test video.",      /// Use the embedded video metatdata
+        let mediaContext = MediaContext(videoTitle: "Big Buck Bunny - A MP4 test video.",
                                         artistName: "TinyPlayerDemo",
                                         startPosition: 5.0,
                                         endPosition: 0.0,       /// To play to the end of the video
@@ -141,7 +142,8 @@ extension VideoPlayerViewModel: RootViewModelCommandReceiver {
 
 
 /**
-    This protocol defines the communication link from a VideoPlayerViewModel to a RootViewModel.
+    This protocol defines the callbacks from a viewModel observer. 
+    In our case it describes the communication uplink from a VideoPlayerViewModel to a RootViewModel.
  */
 internal protocol PlayerViewModelObserver: class {
     
