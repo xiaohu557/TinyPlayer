@@ -15,7 +15,7 @@ import MediaPlayer
      For iOS devices, TinyVideoPlayer can detect three media routing modes:
      
      - airplayPlayback: Media is routed to an Airplay capable device. The video content is *only* rendered on
-     this device, and rendering on the iOS device is completely off.
+     this device, and video rendering on the iOS device is completely off.
      
      - airplayPlaybackMirroring: The screen of the iOS device is mirrored to the Airplay capable device.
      The video content is rendered on *both* devices.

@@ -15,22 +15,22 @@ import MediaPlayer
     This struct defines constants that controls the player's interactive behavior.
     Feel free to change these values to best suit your needs.
  */
-public struct TinyVideoPlayerConstants {
+public struct TinyVideoPlayerDefaults {
     
     /** 
         This defines how far the player will seek forwards/backwards when user interacts with buttons in command center. 
      */
-    static let seekingInterval: Float = 10.0    // in secs
+    static var seekingInterval: Float = 10.0    // in secs
     
     /** 
         This defines how frequently the playing time will be updated. 
      */
-    static let timeObservationInterval: Float = 1.0/60    // in secs, 60fps
+    static var timeObservationInterval: Float = 1.0/30    // in secs, 30fps
     
     /** 
         This defines how long the player should buffer the content before start playing. 
      */
-    static let bufferSize: Float = 6.0      // in secs
+    static var bufferSize: Float = 6.0      // in secs
 }
 
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
@@ -303,7 +303,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
         /* iOS 10 optimization for preventing stall at the beginning. */
         if #available(iOS 10.0, tvOS 10.0, *) {
-            playerItem!.preferredForwardBufferDuration = TimeInterval(TinyVideoPlayerConstants.bufferSize)
+            playerItem!.preferredForwardBufferDuration = TimeInterval(TinyVideoPlayerDefaults.bufferSize)
         }
         
         /* Re-attach necessary obsevers. */
@@ -447,7 +447,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     
     fileprivate func attachTimeObserver() {
         
-        let interval = CMTimeMakeWithSeconds(Float64(TinyVideoPlayerConstants.timeObservationInterval), CMTimeScale(NSEC_PER_SEC))
+        let interval = CMTimeMakeWithSeconds(Float64(TinyVideoPlayerDefaults.timeObservationInterval), CMTimeScale(NSEC_PER_SEC))
         
         if !CMTIME_IS_VALID(interval) {
             return
@@ -594,7 +594,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                     if currentPosition >= start {
                         let catchedSecs = end - currentPosition
                         if catchedSecs >= 0 {
-                            bufferProgress = catchedSecs / TinyVideoPlayerConstants.bufferSize
+                            bufferProgress = catchedSecs / TinyVideoPlayerDefaults.bufferSize
                             
                             if bufferProgress! <= Float(2.0) {
                                 infoLog("Buffering progress: \(bufferProgress! * 100)%")
@@ -922,7 +922,7 @@ public extension TinyVideoPlayer {
                 return .commandFailed
             }
             
-            self.seekTo(position: position + TinyVideoPlayerConstants.seekingInterval)
+            self.seekTo(position: position + TinyVideoPlayerDefaults.seekingInterval)
             return .success
         }
         
@@ -943,7 +943,7 @@ public extension TinyVideoPlayer {
                 return .commandFailed
             }
 
-            self.seekTo(position: position + TinyVideoPlayerConstants.seekingInterval)
+            self.seekTo(position: position + TinyVideoPlayerDefaults.seekingInterval)
             return .success
         }
         
