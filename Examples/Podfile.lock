@@ -1,7 +1,7 @@
 PODS:
   - Nimble (5.1.1)
   - Quick (1.0.0)
-  - TinyPlayer (0.9.0)
+  - TinyPlayer (0.9.1)
 
 DEPENDENCIES:
   - Nimble (~> 5.1.1)
@@ -15,7 +15,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Nimble: 415e3aa3267e7bc2c96b05fa814ddea7bb686a29
   Quick: 8024e4a47e6cc03a9d5245ef0948264fc6d27cff
-  TinyPlayer: 652a6b01c7ed901b8e826ad73509d7f4eb1c7af4
+  TinyPlayer: cb382269c6a010b616469046d8d88820faea05ad
 
 PODFILE CHECKSUM: 4e0a59a343b5f7372d5bb76c2947535e5c4be93a
 
