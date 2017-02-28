@@ -83,12 +83,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         let spy = PlayerTestObserver(player: videoPlayer)
 
                         /* Wait until the player is ready. */
-                        //waitUntilPlayerIsReady(withSpy: spy)
-                        self.waitExpectation(timeout: 5.0 * tm) { done -> Void in
-                            spy.onPlayerReady = {
-                                done()
-                            }
-                        }
+                        waitUntilPlayerIsReady(withSpy: spy)
                         
                         /* Initiate closing procedure and wait until the unloading process is done. */
                         self.waitExpectation(timeout: 5.0 * tm) { done -> Void in
@@ -131,25 +126,20 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.endPosition).toEventually(equal(15.0), timeout: 2.0 * tm)
                     
                     /* Wait until the player receives the ready signal. */
-                    self.waitExpectation(timeout: 5.0*tm) { done -> Void in
-                        spy.onPlayerReady = {
-                            done()
-                        }
-                    }
-                    //waitUntilPlayerIsReady(withSpy: spy)
+                    waitUntilPlayerIsReady(withSpy: spy)
                     
                     videoPlayer.play()
 
                     /* Test if the player start at the 0.0 (absolute: 9.0) position, 
                        and ends at the 6.0 (absolute: 15.0) position;. */
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.playing), timeout: 5.0 * tm)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.01), timeout: 5.0 * tm)
+                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.04), timeout: 5.0 * tm)
                     expect(videoPlayer.playbackPosition).toEventually(beCloseTo(1.0, within: 0.1), timeout: 5.0 * tm)
                     expect(videoPlayer.playbackPosition).toEventually(beCloseTo(2.0, within: 0.1), timeout: 5.0 * tm)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(6.0, within: 0.01), timeout: 5.0 * tm)
+                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(6.0, within: 0.04), timeout: 5.0 * tm)
                     
                     /* Test the player ends before the 7.0 position. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(7.0, within: 0.01), timeout: 8.0 * tm)
+                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(7.0, within: 0.04), timeout: 8.0 * tm)
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.finished), timeout: 8.0 * tm)
                 }
             }

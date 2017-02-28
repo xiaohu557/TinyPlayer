@@ -14,7 +14,7 @@ import XCTest
     This magnifier is used to extend the timeout settings for all tests.
     It's very useful when running tests on a slower maschine or in CI environment.
  */
-private let _testTimeoutMagnifier = 3.0
+private let _testTimeoutMagnifier = 1.0
 
 /**
     An alias to the hidden testTimeoutMagnifier variable for code readability.
@@ -27,7 +27,7 @@ internal let tm = _testTimeoutMagnifier
  */
 public func waitUntilPlayerIsReady(withSpy spy: PlayerTestObserver) {
 
-    waitUntil(timeout: 5.0) { done -> Void in
+    waitUntil(timeout: 5.0 * tm) { done -> Void in
         spy.onPlayerReady = {
             done()
         }
