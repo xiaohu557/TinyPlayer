@@ -17,7 +17,7 @@ import XCTest
 private let _testTimeoutMagnifier = 1.0
 
 /**
-    An alias to the hidden testTimeoutMagnifier variable for code readability.
+    An alias to the testTimeoutMagnifier property for code readability.
  */
 internal let tm = _testTimeoutMagnifier
 
