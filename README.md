@@ -5,7 +5,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
 [![CI Status](http://img.shields.io/travis/xiaohu557/TinyPlayer.svg?style=flat)](https://travis-ci.org/xiaohu557/TinyPlayer)
 
-TinyPlayer is simple, elegant and highly efficient  video player for iOS and tvOS. It is based on Apple’s AVFoundation framework.
+TinyPlayer is simple, elegant and highly efficient video player for iOS and tvOS. It is based on Apple’s AVFoundation framework.
 
 ## Why?
 
@@ -156,11 +156,11 @@ The intention is to keep the project lightweight and lean. Therefore I will cont
 
 ## Contributing
 
-Any contributing and pull requests are warmly welcome! I would be appreciated if you could open a discussion first, before you start to implement new features or try to fix an uncertain issue.
+Any contributing and pull requests are warmly welcome! We would be appreciated if you could open a discussion first, before you start to implement new features or try to fix an uncertain issue.
 
 ## Maintainers
 
-Xi Chen(xiaohu557), xi.chen@quazer.com
+Xi Chen(xiaohu557), kevinchen@me.com
 
 ## License
 
