@@ -36,7 +36,7 @@ public struct TinyVideoPlayerDefaults {
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
     /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
-    public var loggingLevel: TinyLoggingLevel = .info
+    public var loggingLevel: TinyLoggingLevel = .verbose
     
     public weak var delegate: TinyPlayerDelegate?
     internal var player: AVPlayer
@@ -86,9 +86,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-     Indicates the elapsed playback time of the current playing item.
-     - Note: The playbackPosition is a relative value.
-     It's calculated in consideration of the startPosition and endPosition properties.
+        Indicates the elapsed playback time of the current playing item.
+        - Note: The playbackPosition is a relative value.
+        It's calculated in consideration of the startPosition and endPosition properties.
      */
     public var playbackPosition: Float? {
         
@@ -115,7 +115,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     /**
         Indicates the playback progress in terms of the whole video duration.
         - Note: The playbackProgess is a relative value.
-          It's calculated in consideration of the startPosition and endPosition properties.
+        It's calculated in consideration of the startPosition and endPosition properties.
      */
     public var playbackProgress: Float? {
         
