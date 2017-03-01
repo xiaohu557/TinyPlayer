@@ -102,6 +102,7 @@ class TinyPlayerPlaybackCommandsSpecs: QuickSpec {
                 }
                 
                 expect(videoPlayer.playbackState).to(equal(TinyPlayerState.ready))
+                expect(videoPlayer.playbackPosition).to(beCloseTo(0.0, within: 0.2))
             }
             
             it("seek to") {

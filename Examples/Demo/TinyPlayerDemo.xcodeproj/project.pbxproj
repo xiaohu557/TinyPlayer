@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		15132F291E6346FC00910453 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15132F281E6346FC00910453 /* RootViewModel.swift */; };
+		8E75E115066623F212A23311 /* Pods_TinyPlayerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FBFD797DBFB883DBFB9AA67 /* Pods_TinyPlayerDemo.framework */; };
 		C701D9481E55E8E7000A226A /* TinyPlayerStateTransationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C701D9471E55E8E7000A226A /* TinyPlayerStateTransationTests.swift */; };
 		C71D8F691E40A6D8005E4B64 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F661E40A6D8005E4B64 /* RootViewController.swift */; };
 		C71D8F6A1E40A6D8005E4B64 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */; };
@@ -23,6 +24,7 @@
 		C7B559CF1E5C3FD900BDE78F /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */; };
 		C7EE50971E44D9AD00D17127 /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
 		C7F1FB3D1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */; };
+		FAD4AEB6FE404C2332E67AEA /* Pods_TinyPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE37D1D5765255A13D343601 /* Pods_TinyPlayerTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,7 @@
 		6C7B527360AAAFE8BB91F625 /* Pods-TinyPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerTests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerTests/Pods-TinyPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
 		74B69584D02F8D3076EA8C5E /* Pods-TinyPlayerDemo_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		7F0A2127F4EE25DFCB42C905 /* Pods-TinyPlayerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo/Pods-TinyPlayerDemo.release.xcconfig"; sourceTree = "<group>"; };
+		8FBFD797DBFB883DBFB9AA67 /* Pods_TinyPlayerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C701D9471E55E8E7000A226A /* TinyPlayerStateTransationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyPlayerStateTransationTests.swift; sourceTree = "<group>"; };
 		C71D8F661E40A6D8005E4B64 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootViewController.swift; path = TinyPlayerDemo/RootViewController.swift; sourceTree = "<group>"; };
 		C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VideoPlayerViewController.swift; path = TinyPlayerDemo/VideoPlayerViewController.swift; sourceTree = "<group>"; };
@@ -58,13 +61,12 @@
 		C71D8F781E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71D8F7A1E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C71D8F8B1E40B052005E4B64 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TinyPlayerDemo/Info.plist; sourceTree = "<group>"; };
-		C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_TinyPlayerDemo.framework; path = "/Users/XiChen/Development/TinyPlayerSetup/TinyPlayer/Examples/Pods/../build/Debug-iphoneos/Pods_TinyPlayerDemo.framework"; sourceTree = "<absolute>"; };
-		C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_TinyPlayerTests.framework; path = "/Users/XiChen/Development/TinyPlayerSetup/TinyPlayer/Examples/Pods/../build/Debug-iphoneos/Pods_TinyPlayerTests.framework"; sourceTree = "<absolute>"; };
 		C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTestObserver.swift; sourceTree = "<group>"; };
 		C7B559CC1E5B403900BDE78F /* unittest_video_alternative.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video_alternative.mp4; sourceTree = "<group>"; };
 		C7B559CE1E5C3FD900BDE78F /* TestHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video.mp4; sourceTree = "<group>"; };
 		C7F1FB3C1E5DD55D00257896 /* TinyPlayerPlaybackCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TinyPlayerPlaybackCommandsTests.swift; sourceTree = "<group>"; };
+		CE37D1D5765255A13D343601 /* Pods_TinyPlayerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPlayerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D90882D8D79492EA32FBF437 /* Pods-TinyPlayerDemo_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPlayerDemo_Tests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-TinyPlayerDemo_Tests/Pods-TinyPlayerDemo_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E75E115066623F212A23311 /* Pods_TinyPlayerDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAD4AEB6FE404C2332E67AEA /* Pods_TinyPlayerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,8 +176,8 @@
 		D2B4AA11524C64EE2F502DC9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C766ADF31E645D6600E87D95 /* Pods_TinyPlayerTests.framework */,
-				C766ADF11E645D6100E87D95 /* Pods_TinyPlayerDemo.framework */,
+				8FBFD797DBFB883DBFB9AA67 /* Pods_TinyPlayerDemo.framework */,
+				CE37D1D5765255A13D343601 /* Pods_TinyPlayerTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

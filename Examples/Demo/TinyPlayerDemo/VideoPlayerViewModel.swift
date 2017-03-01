@@ -55,7 +55,7 @@ class VideoPlayerViewModel: TinyLogging {
         let mediaContext = MediaContext(videoTitle: "Big Buck Bunny - A MP4 test video.",
                                         artistName: "TinyPlayerDemo",
                                         startPosition: 9.0,
-                                        endPosition: 15.0,       /// To play to the end of the video
+                                        endPosition: 0.0,       /// To play to the end of the video
                                         thumbnailImage: UIImage(named: "DemoVideoThumbnail_MP4"))
         
         tinyPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
@@ -102,6 +102,7 @@ extension VideoPlayerViewModel: TinyPlayerDelegate {
     
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
         
+        tinyPlayer.resetPlayback()
         viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
 }

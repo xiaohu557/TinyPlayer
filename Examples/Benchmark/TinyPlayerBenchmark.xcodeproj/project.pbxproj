@@ -15,6 +15,7 @@
 		C7F116061E1FEE6A003B89CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C7F116041E1FEE6A003B89CF /* LaunchScreen.storyboard */; };
 		C7F116361E1FF1F1003B89CF /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F116351E1FF1F0003B89CF /* VideoPlayerViewController.swift */; };
 		C7F116381E1FF359003B89CF /* VideoPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7F116371E1FF359003B89CF /* VideoPlayerViewModel.swift */; };
+		F541B4AFBB0EDBAA76EE98BB /* Pods_TinyPlayerBenchmark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29FD31FFB022FE6891D96F11 /* Pods_TinyPlayerBenchmark.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C766ADF61E645D7000E87D95 /* Pods_TinyPlayerBenchmark.framework in Frameworks */,
+				F541B4AFBB0EDBAA76EE98BB /* Pods_TinyPlayerBenchmark.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
