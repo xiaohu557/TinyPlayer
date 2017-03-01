@@ -160,7 +160,7 @@ Any contributing and pull requests are warmly welcome! We would be appreciated i
 
 ## Maintainers
 
-Xi Chen(xiaohu557), kevinchen@me.com
+Xi (Kevin) Chen [xiaohu557], kevinchen@me.com
 
 ## License
 
