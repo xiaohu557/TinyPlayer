@@ -36,7 +36,7 @@ public struct TinyVideoPlayerDefaults {
 public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
   
     /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
-    public var loggingLevel: TinyLoggingLevel = .verbose
+    public var loggingLevel: TinyLoggingLevel = .info
     
     public weak var delegate: TinyPlayerDelegate?
     internal var player: AVPlayer
@@ -805,7 +805,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         currentVideoPlaybackEnded = false
         
-        seekTo(position: startPosition)
+        seekTo(position: 0.0)
     }
 
     private var isSeeking: Bool = false
