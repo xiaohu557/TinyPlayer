@@ -122,7 +122,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    var secondsRecorded: [Float] = []
+                    var secondsRecorded = Set<Float>()
                     
                     /* Wait until the player receives the ready signal and play. */
                     waitUntil(timeout: 10.0 * tm) { done -> Void in
@@ -131,8 +131,9 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                             videoPlayer.play()
                         }
                         
+                        /* Record secs updated by the player delegate method. */
                         spy.onPlaybackPositionUpdated = { secs, _ in
-                            secondsRecorded.append(secs)
+                            secondsRecorded.insert(floor(secs))
                         }
                         
                         spy.onPlaybackFinished = {
@@ -145,11 +146,11 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
 
                     /* Test if the player start at the 0.0 (absolute: 9.0) position,
                        and ends at the 6.0 (absolute: 15.0) position;. */
-                    expect(secondsRecorded.first).to(beCloseTo(0.0, within: 0.04))
-                    expect(secondsRecorded.last).to(beCloseTo(6.0, within: 0.04))
+                    expect(secondsRecorded).to(contain(0.0))
+                    expect(secondsRecorded).to(contain(6.0))
                     
                     /* Test the player ends before the 7.0 position. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(7.0, within: 0.04), timeout: 8.0 * tm)
+                    expect(secondsRecorded).toNot(contain(7.0))
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.finished), timeout: 8.0 * tm)
                     
                     /* Start and End should be correctly set. */
