@@ -14,8 +14,6 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
     
     override func spec() {
         
-        Nimble.AsyncDefaults.Timeout = 10.0 * tm
-
         describe("TinyVideoPlayer") {
             
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
@@ -138,8 +136,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         
                         waitUntil(timeout: 12.0 * tm) { done -> Void in
                             
-                            spy.onPlayerReady = { [weak videoPlayer] in
-                                videoPlayer?.play()
+                            spy.onPlayerReady = {
+                                videoPlayer.play()
                             }
                             
                             spy.onPlayerStateChanged = { state in
@@ -181,8 +179,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         
                         waitUntil(timeout: 10.0 * tm) { done -> Void in
                             
-                            spy.onPlayerReady = { [weak videoPlayer] in
-                                videoPlayer?.play()
+                            spy.onPlayerReady = {
+                                videoPlayer.play()
                             }
                             
                             spy.onPlayerStateChanged = { state in
@@ -216,8 +214,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     /* Wait until the player receives the ready signal. */
                     waitUntil(timeout: 5.0 * tm) { done -> Void in
                         
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
                         }
                         
                         spy.onPlayerStateChanged = { state in
@@ -253,8 +251,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     /* Wait until the player receives the ready signal. */
                     waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
                         }
                         
                         spy.onPlayerStateChanged = { state in
@@ -266,10 +264,10 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         }
                         
                         /* Pause at the 2.0 secs position and resume after the 3.0 sec. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.pause()
+                        let actionAt2Secs = {
+                            videoPlayer.pause()
                             Thread.sleep(forTimeInterval: 3.0)
-                            videoPlayer?.play()
+                            videoPlayer.play()
                         }
                         spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
                         
@@ -304,9 +302,9 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         
                         /* Wait until the player receives the ready signal then start playing. */
                         var onceToken = 0x1
-                        spy.onPlayerReady = {  [weak videoPlayer] in
+                        spy.onPlayerReady = {
                             if onceToken > 0x0 {
-                                videoPlayer?.play()
+                                videoPlayer.play()
                                 onceToken = 0x0
                             }
                         }
@@ -319,8 +317,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                             }
                         }
                         
-                        let actionAt3Secs = { [weak videoPlayer] in
-                            videoPlayer?.resetPlayback()
+                        let actionAt3Secs = {
+                            videoPlayer.resetPlayback()
                             done()
                         }
                         spy.registerAction(action: actionAt3Secs, onTimepoint: 3.0)
@@ -352,8 +350,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     
                     waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
                         }
                         
                         spy.onPlayerStateChanged = { state in
@@ -365,8 +363,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         }
                         
                         /* Seek to 30.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekTo(position: 30.0)
+                        let actionAt2Secs = {
+                            videoPlayer.seekTo(position: 30.0)
                             return
                         }
                         spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
@@ -393,8 +391,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     
                     waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
                         }
                         
                         spy.onPlayerStateChanged = { state in
@@ -406,8 +404,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         }
                         
                         /* Seek Forward 48.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekForward(secs: 48.0)
+                        let actionAt2Secs = {
+                            videoPlayer.seekForward(secs: 48.0)
                             return
                         }
                         spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
@@ -434,8 +432,8 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     
                     waitUntil(timeout: 15.0 * tm) { done -> Void in
                         
-                        spy.onPlayerReady = {  [weak videoPlayer] in
-                            videoPlayer?.play()
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
                         }
                         
                         spy.onPlayerStateChanged = { state in
@@ -447,15 +445,15 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                         }
                         
                         /* Seek forward 48.0 secs at the 2.0 secs position. */
-                        let actionAt2Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekForward(secs: 48.0)
+                        let actionAt2Secs = {
+                            videoPlayer.seekForward(secs: 48.0)
                             return
                         }
                         spy.registerAction(action: actionAt2Secs, onTimepoint: 2.0)
                         
                         /* Then seek backward to 2.0 at the 52.0 secs position. */
-                        let actionAt52Secs = { [weak videoPlayer] in
-                            videoPlayer?.seekBackward(secs: 50.0)
+                        let actionAt52Secs = {
+                            videoPlayer.seekBackward(secs: 50.0)
                             return
                         }
                         spy.registerAction(action: actionAt52Secs, onTimepoint: 52.0)

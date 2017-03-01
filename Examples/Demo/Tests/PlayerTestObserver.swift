@@ -50,8 +50,9 @@ public class PlayerTestObserver: TinyPlayerDelegate {
         
         for (index, tpAction) in timepointActionRepository.enumerated() {
             
+            let delta =  tpAction.timepoint - position
             if !timepointActionRepository[index].executed &&
-                tpAction.timepoint - position < 0.1 {
+               delta < 0.1 && delta >= 0 {
                 
                 tpAction.onTimepoint()
                 
