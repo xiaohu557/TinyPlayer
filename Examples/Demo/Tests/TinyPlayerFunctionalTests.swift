@@ -15,11 +15,13 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
     
     override func spec() {
         
+        Nimble.AsyncDefaults.Timeout = 10.0 * tm
+        
         describe("TinyVideoPlayer") {
 
             let urlPath = Bundle(for: type(of: self)).path(forResource: "unittest_video", ofType: "mp4")
             let targetUrl = urlPath.flatMap { URL(fileURLWithPath: $0) }
-
+            
             guard let url = targetUrl else {
                 XCTFail("Error encountered at loading test video.")
                 return
@@ -56,12 +58,12 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.playerView).toNot(beNil())
 
                     /* The video which the url points to should be eventually loaded. */
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0)
+                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0 * tm)
                     expect(videoPlayer.playerItem).toEventuallyNot(beNil())
 
                     /* PlaybackPosition and the duration should be correctly initialized. */
                     expect(videoPlayer.videoDuration).toEventually(beGreaterThan(59.99))
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.5), timeout: 3.0)
+                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.2), timeout: 3.0 * tm)
                     expect(videoPlayer.playbackProgress).toEventually(equal(0.0))
                     expect(videoPlayer.startPosition).toEventually(equal(0.0))
                     
@@ -84,7 +86,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         waitUntilPlayerIsReady(withSpy: spy)
                         
                         /* Initiate closing procedure and wait until the unloading process is done. */
-                        waitUntil(timeout: 5.0) { done -> Void in
+                        waitUntil(timeout: 5.0 * tm) { done -> Void in
                             spy.onPlayerStateChanged = { state in
                                 if state == TinyPlayerState.closed {
                                     done()
@@ -117,28 +119,43 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 
                 it("when specify start and end properties in mediaContext") {
                     
-                    let videoPlayer = TinyVideoPlayer(resourceUrl: url, mediaContext: mediaContext)
+                    let videoPlayer = TinyVideoPlayer()
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
-                    expect(videoPlayer.startPosition).toEventually(equal(9.0), timeout: 2.0)
-                    expect(videoPlayer.endPosition).toEventually(equal(15.0), timeout: 2.0)
+                    var secondsRecorded = Set<Float>()
                     
-                    /* Wait until the player receives the ready signal. */
-                    waitUntilPlayerIsReady(withSpy: spy)
-                    
-                    videoPlayer.play()
+                    /* Wait until the player receives the ready signal and play. */
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
+                        
+                        spy.onPlayerReady = {
+                            videoPlayer.play()
+                        }
+                        
+                        /* Record secs updated by the player delegate method. */
+                        spy.onPlaybackPositionUpdated = { secs, _ in
+                            secondsRecorded.insert(floor(secs))
+                        }
+                        
+                        spy.onPlaybackFinished = {
+                            done()
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url, mediaContext: mediaContext)
+                    }
 
-                    /* Test if the player start at the 0.0 (absolute: 9.0) position, 
+                    /* Test if the player start at the 0.0 (absolute: 9.0) position,
                        and ends at the 6.0 (absolute: 15.0) position;. */
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.playing), timeout: 5.0)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.01), timeout: 5.0)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(1.0, within: 0.1), timeout: 5.0)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(2.0, within: 0.1), timeout: 5.0)
-                    expect(videoPlayer.playbackPosition).toEventually(beCloseTo(6.0, within: 0.01), timeout: 5.0)
+                    expect(secondsRecorded).to(contain(0.0))
+                    expect(secondsRecorded).to(contain(6.0))
                     
                     /* Test the player ends before the 7.0 position. */
-                    expect(videoPlayer.playbackPosition).toEventuallyNot(beCloseTo(7.0, within: 0.01), timeout: 8.0)
-                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.finished), timeout: 8.0)
+                    expect(secondsRecorded).toNot(contain(7.0))
+                    expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.finished), timeout: 8.0 * tm)
+                    
+                    /* Start and End should be correctly set. */
+                    expect(videoPlayer.startPosition).toEventually(equal(9.0), timeout: 2.0 * tm)
+                    expect(videoPlayer.endPosition).toEventually(equal(15.0), timeout: 2.0 * tm)
                 }
             }
             
@@ -185,7 +202,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
 
-                    waitUntil(timeout: 10.0) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         var onceToken = 0x1
                         spy.onPlayerStateChanged = { _ in
@@ -209,7 +226,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    waitUntil(timeout: 10.0) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {
                             videoPlayer.play()
@@ -235,7 +252,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    waitUntil(timeout: 10.0) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onSeekableRangeUpdated = { _ in
                             delegateCalled = true
@@ -255,7 +272,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    waitUntil(timeout: 10.0) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {
                             delegateCalled = true
@@ -275,7 +292,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     var delegateCalled = false
                     
-                    waitUntil(timeout: 10.0) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlaybackFinished = {
                             delegateCalled = true
@@ -285,7 +302,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         spy.onPlayerReady = {
                             videoPlayer.play()
                             /* Seek to the near ending position. */
-                            videoPlayer.seekTo(position: 59.0)
+                            videoPlayer.seekTo(position: 58.0)
                         }
                         
                         /* Start player initialization now. */

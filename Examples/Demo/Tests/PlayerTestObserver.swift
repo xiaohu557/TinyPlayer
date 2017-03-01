@@ -50,8 +50,9 @@ public class PlayerTestObserver: TinyPlayerDelegate {
         
         for (index, tpAction) in timepointActionRepository.enumerated() {
             
+            let delta =  tpAction.timepoint - position
             if !timepointActionRepository[index].executed &&
-                tpAction.timepoint - position < 0.1 {
+               delta < 0.1 && delta >= 0 {
                 
                 tpAction.onTimepoint()
                 
@@ -103,7 +104,7 @@ public class PlayerTestObserver: TinyPlayerDelegate {
         The action closure only gets executed once(!) when the playback position is approaching the specified
         timepoint with a 0.1 sec tolerance.
      
-        - Note: Avoid to put the onPlaybackPositionUpdated closure inside Nimble's waitUntil(:) closure!
+        - Note: Avoid to put the onPlaybackPositionUpdated closure with the done() statement inside Nimble's waitUntil(:) closure!
         The reason is that onPlaybackPositionUpdated will get called at a 60fps rate, this causes issue when 
         unblocking the mainthread after the done() declaration within Nimble. Doing so will potentially cause 
         Nimble to throw an exception about calling done() too many times.

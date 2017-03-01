@@ -2,17 +2,26 @@
 # * http://www.objc.io/issue-6/travis-ci.html
 # * https://github.com/supermarin/xcpretty#usage
 
-osx_image: xcode8.1
+osx_image: xcode8.2
 language: objective-c
 xcode_sdk: iphonesimulator10.1
-
-# cache: cocoapods
+env:
+  - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.1" SCHEME="TinyPlayerDemo" SDK=iphonesimulator10.2
 podfile: Examples/Podfile
 
 before_install:
-gem install cocoapods # Since Travis is not always on latest version
-pod install --project-directory=Examples
+  - gem install cocoapods # Since Travis is not always on latest version
+  - gem install xcpretty -N --no-ri --no-rdoc
+  - pod repo update
+  - pod install --project-directory=Examples
+  - xcrun simctl list # list devices
 
 script:
-- set -o pipefail && xcodebuild test -workspace Examples/TinyPlayerDemo+Benchmark.xcworkspace -scheme TinyPlayerDemo -destination “platform=iOS Simulator,name=iPhone 6S” ONLY_ACTIVE_ARCH=NO | xcpretty
-- pod lib lint
+  - set -o pipefail
+  - xcodebuild clean test -workspace Examples/TinyPlayerDemo+Benchmark.xcworkspace -scheme "$SCHEME" -destination "$DESTINATION" ONLY_ACTIVE_ARCH=NO -enableCodeCoverage YES | xcpretty -c
+  - pod lib lint
+
+# Some test configurations:
+# cache: cocoapods
+# xcode_sdk: iphonesimulator10.2
+# xcodebuild clean build -workspace Examples/TinyPlayerDemo+Benchmark.xcworkspace -scheme TinyPlayerDemo -destination "platform=iOS Simulator,name=iPhone 7" ONLY_ACTIVE_ARCH=NO | xcpretty -c || ture
