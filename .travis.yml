@@ -2,11 +2,11 @@
 # * http://www.objc.io/issue-6/travis-ci.html
 # * https://github.com/supermarin/xcpretty#usage
 
-osx_image: xcode8.2
+osx_image: xcode8.1
 language: objective-c
-xcode_sdk: iphonesimulator10.2
+xcode_sdk: iphonesimulator10.1
 env:
-  - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.2" SCHEME="TinyPlayerDemo" SDK=iphonesimulator10.2
+  - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.1" SCHEME="TinyPlayerDemo" SDK=iphonesimulator10.1
 podfile: Examples/Podfile
 
 before_install:
