@@ -13,7 +13,7 @@ import UIKit
 /**
     - Note: Every TinyVideoPlayer contains a TinyVideoPlayerView.
  
-    The default backing CALayer of the TinyVideoPlayerView is set to a AVPlayerLayer.
+    The default backing layer(CALayer) of the TinyVideoPlayerView is set to a AVPlayerLayer.
     You should always create the TinyVideoPlayer first, before you can operate on its playerView property.
     This ensures that the video object gets initialized and handled properly before it gets propergated to view.
  

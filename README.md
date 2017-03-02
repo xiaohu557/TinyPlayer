@@ -18,7 +18,7 @@ Served as the core player component of our Quazer[http://apple.co/2blYuqq] app, 
 - **Simple**: integrate with just a few lines of code
 - **Modern**: fully utilize the modern APIs from iOS/tvOS 10
 - **Efficient**
-- **Controls**
+- **Flexible Controls**
 - **Various Formats**: play all common video/audio formats (mpeg/mov/avi/mp4/ts/mp3/aac/ac3/…).
 - **Streaming / HLS**: support video Streaming and HLS out-of-the-box
 - **Airplay**
@@ -113,7 +113,7 @@ To be able to react on the player’s state changes, you can assign a delegate t
 player.delegate = self
 ```
 
-Then you can implement the following delegate methods to gain more controls:
+Then you can choose to implement the following delegate methods to gain more controls:
 
 ```swfit
 func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
@@ -160,7 +160,7 @@ Any contributing and pull requests are warmly welcome! We would be appreciated i
 
 ## Maintainers
 
-Xi (Kevin) Chen [xiaohu557], kevinchen@me.com
+Xi(Kevin) Chen [xiaohu557], kevinchen@me.com
 
 ## License
 

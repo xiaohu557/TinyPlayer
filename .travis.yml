@@ -4,9 +4,9 @@
 
 osx_image: xcode8.2
 language: objective-c
-xcode_sdk: iphonesimulator10.1
+xcode_sdk: iphonesimulator10.2
 env:
-  - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.1" SCHEME="TinyPlayerDemo" SDK=iphonesimulator10.2
+  - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.2" SCHEME="TinyPlayerDemo" SDK=iphonesimulator10.2
 podfile: Examples/Podfile
 
 before_install:
