@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
 [![License](https://img.shields.io/cocoapods/l/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
 [![Platform](https://img.shields.io/cocoapods/p/TinyPlayer.svg?style=flat)](http://cocoapods.org/pods/TinyPlayer)
-[![CI Status](http://img.shields.io/travis/xiaohu557/TinyPlayer.svg?style=flat)](https://travis-ci.org/xiaohu557/TinyPlayer)
+[![CI Status](http://img.shields.io/travis/xiaohu557/TinyPlayer.svg?style=flat)](https://travis-ci.org/quazertv/TinyPlayer)
 
 TinyPlayer is simple, elegant and highly efficient video player for iOS and tvOS. It is based on Apple’s AVFoundation framework.
 
