@@ -50,6 +50,7 @@ public protocol TinyPlayer: class {
 
 /**
     This protocol defines the public delegate methods that TinyPlayer will call in certain conditions.
+    All the delegate methods are optional.
  */
 public protocol TinyPlayerDelegate: class {
     
@@ -70,7 +71,6 @@ public protocol TinyPlayerDelegate: class {
     func playerIsReadyToPlay(_ player: TinyPlayer)
 
     /**
-        This delegate method is optional.
         It gets called when the player thinks it has cached enough data
         for a seemless playback.
         - parameter player: The player that calls this delegate method.
@@ -90,9 +90,17 @@ public protocol TinyPlayerDelegate: class {
 /// TODO: Add ads playback support.
 
 /**
-    Optional methods in TinyPlayerDelegate.
+    Optional delegate methods in TinyPlayerDelegate.
  */
 public extension TinyPlayerDelegate {
+    
+    func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) { }
+    func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) { }
+    func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) { }
+    func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) { }
+    func playerHasFinishedPlayingVideo(_ player: TinyPlayer) { }
+    func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error) { }
+    func playerIsReadyToPlay(_ player: TinyPlayer) { }
     func playerIsLikelyToKeepUpPlaying(_ player: TinyPlayer) { }
     
     func player(_ player: TinyPlayer, didReceivedAdInjectPositions positions: [Float]) { }
