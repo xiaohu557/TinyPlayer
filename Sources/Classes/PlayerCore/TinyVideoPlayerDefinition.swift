@@ -28,7 +28,6 @@ public enum TinyPlayerState: Int {
 public protocol TinyPlayer: class {
     
     weak var delegate: TinyPlayerDelegate? { get set }
-    var playerView: TinyVideoPlayerView { get }
     var playbackState: TinyPlayerState { get }
     
     var videoDuration: Float? { get }
@@ -37,6 +36,9 @@ public protocol TinyPlayer: class {
     var bufferProgress: Float? { get }
     var hidden: Bool { get set }
     var willPrettifyPauseStateTransation: Bool { get set }
+    
+    func generateVideoProjectionView() -> TinyVideoProjectionView
+    func recycleVideoProjectionView(_ connectedView: TinyVideoProjectionView)
     
     func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext?)
     func play()

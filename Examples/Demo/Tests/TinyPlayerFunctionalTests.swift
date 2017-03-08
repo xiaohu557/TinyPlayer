@@ -44,7 +44,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.endPosition) == 0.0
                     expect(videoPlayer.playbackProgress).to(beNil())
                     
-                    expect(videoPlayer.playerView).toNot(beNil())
                     expect(videoPlayer.hidden).to(beFalse())
                 }
 
@@ -55,7 +54,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.playbackState).to(equal(TinyPlayerState.unknown))
                     expect(videoPlayer.player).toNot(beNil())
                     expect(videoPlayer.mediaContext).to(beNil())
-                    expect(videoPlayer.playerView).toNot(beNil())
 
                     /* The video which the url points to should be eventually loaded. */
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0 * tm)
@@ -70,7 +68,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     /* The endPosition should be set to the whole video length if it's not previously set. */
                     expect(videoPlayer.endPosition).toEventually(equal(videoPlayer.videoDuration))
                     
-                    expect(videoPlayer.playerView).toNot(beNil())
                     expect(videoPlayer.hidden).to(beFalse())
                 }
             }
@@ -159,20 +156,30 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 }
             }
             
-            describe("can hide itself") {
+            describe("can hide all projection views") {
                 
                 it("when hide") {
                     
                     let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionViewBeforeHide = videoPlayer.generateVideoProjectionView()
                     videoPlayer.hidden = true
-                    expect(videoPlayer.playerView.isHidden) == true
+                    let projectionViewAfterHide = videoPlayer.generateVideoProjectionView()
+                    
+                    expect(projectionViewBeforeHide.isHidden) == true
+                    expect(projectionViewAfterHide.isHidden) == true
                 }
                 
                 it("when unhide") {
                     
                     let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionViewBeforeUnhide = videoPlayer.generateVideoProjectionView()
                     videoPlayer.hidden = false
-                    expect(videoPlayer.playerView.isHidden) == false
+                    let projectionViewAfterUnhide = videoPlayer.generateVideoProjectionView()
+                    
+                    expect(projectionViewBeforeUnhide.isHidden) == false
+                    expect(projectionViewAfterUnhide.isHidden) == false
                 }
             }
             
@@ -182,14 +189,16 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     
                     let videoPlayer = TinyVideoPlayer()
                     
-                    videoPlayer.playerView.fillMode = .resizeFill
-                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResize
-
-                    videoPlayer.playerView.fillMode = .resizeAspect
-                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResizeAspect
+                    let projectionView = videoPlayer.generateVideoProjectionView()
                     
-                    videoPlayer.playerView.fillMode = .resizeAspectFill
-                    expect(videoPlayer.playerView.playerLayer.videoGravity)
+                    projectionView.fillMode = .resizeFill
+                    expect(projectionView.playerLayer.videoGravity) == AVLayerVideoGravityResize
+
+                    projectionView.fillMode = .resizeAspect
+                    expect(projectionView.playerLayer.videoGravity) == AVLayerVideoGravityResizeAspect
+                    
+                    projectionView.fillMode = .resizeAspectFill
+                    expect(projectionView.playerLayer.videoGravity)
                         == AVLayerVideoGravityResizeAspectFill
                 }
             }

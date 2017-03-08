@@ -36,20 +36,21 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
         
         super.viewWillAppear(animated)
         
-        self.view.addSubview(viewModel.tinyPlayer.playerView)
+        let projectionView = viewModel.tinyPlayer.generateVideoProjectionView()
+        self.view.addSubview(projectionView)
         
         /* 
             Setup player view constrains. 
          */
-        viewModel.tinyPlayer.playerView.translatesAutoresizingMaskIntoConstraints = false
+        projectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        viewModel.tinyPlayer.playerView.topAnchor
+        projectionView.topAnchor
             .constraint(equalTo: self.view.topAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.bottomAnchor
+        projectionView.bottomAnchor
             .constraint(equalTo: self.view.bottomAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.leftAnchor
+        projectionView.leftAnchor
             .constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
-        viewModel.tinyPlayer.playerView.rightAnchor
+        projectionView.rightAnchor
             .constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
     }
 }
