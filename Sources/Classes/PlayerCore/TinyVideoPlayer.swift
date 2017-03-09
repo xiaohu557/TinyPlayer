@@ -254,6 +254,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             projectionView.isHidden = true
         }
         
+        projectionView.player = player
+        
         return projectionView
     }
     
@@ -276,6 +278,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             projectionViewStore.remove(at: index)
         }
     }
+    
+    // - MARK: Media Resource Management
     
     /**
         Call this method triggers the initialization process of the media item at the specific url.
@@ -716,11 +720,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
      */
     fileprivate func playerItemIsReadyForPlaying(playerItem: AVPlayerItem) {
         
-        /* Link the initilized AVPlayer to all connected TinyVideoProjectionView. */
-        for projectionView in projectionViewStore {
-            projectionView.player = player
-        }
-
         /* Calculate the start/end position. */
         if endPosition == 0 {
             endPosition = Float(playerItem.duration.seconds)
