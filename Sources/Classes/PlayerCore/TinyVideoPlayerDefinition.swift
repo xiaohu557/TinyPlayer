@@ -48,6 +48,10 @@ public protocol TinyPlayer: class {
     func seekTo(position: Float, cancelPreviousSeeking: Bool, completion: ((Bool)-> Void)?)
     func seekForward(secs: Float, completion: ((Bool)-> Void)?)
     func seekBackward(secs: Float, completion: ((Bool)-> Void)?)
+    func captureStillImageFromCurrentVideoAssets(forTimes timePoints: [Float]?,
+                                                completion: @escaping (_ time: Float, _ image: UIImage?) -> Void)
+    func captureStillImageForHLSMediaItem(atTime timepoint: Float?,
+                                                 completion: @escaping (_ time: Float, _ image: UIImage?) -> Void)
 }
 
 /**

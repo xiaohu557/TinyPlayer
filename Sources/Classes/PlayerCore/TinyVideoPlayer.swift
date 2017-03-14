@@ -42,6 +42,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     internal var player: AVPlayer
     internal var playerItem: AVPlayerItem?
     internal var internalUrl: URL?
+    
+    /* This object is used to serve the backup solution for still image capture of the current playing video. */
+    fileprivate var playerItemVideoOutput: AVPlayerItemVideoOutput?
 
     /**
         After the playerItem initialization, this value will match the one set in the MediaContext.
@@ -359,14 +362,25 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         /* Re-attach necessary obsevers. */
         attachObserversOn(playerItem: playerItem!)
         
-        /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         bufferProgress = 0.0
+        
+        /* Create a video output object for still image capture support. */
+        let outputSettings: [String: Any] = [kCVPixelBufferPixelFormatTypeKey as String:
+                                                Int(kCVPixelFormatType_32ARGB)]
+        playerItemVideoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: outputSettings)
+
+        /* Link the video output object with current playerItem. */
+        if let output = playerItemVideoOutput {
+            playerItem?.add(output)
+        }
+
+        /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         player.replaceCurrentItem(with: playerItem)
     }
   
     /**
-         Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and its connected
-         projection views in place.
+         Partially release the memory. The playerItem will be cleared out of the memory, but leave the AVPlayer
+         and its connected projection views in place.
          Call this method if you want to call switchResourceUrl(:) at a later time to re-use the projection view
          to render another video without re-initializing the whole class.
      */
@@ -390,24 +404,158 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         if let currentPlayerItem = playerItem {
             detachObserversFrom(playerItem: currentPlayerItem)
+            
+            if let videoOutput = playerItemVideoOutput {
+                currentPlayerItem.remove(videoOutput)
+            }
         }
         
         /*
             When there is already a loaded media item, it make sense to notify the delegate about the change.
             Otherwise we make the state change silently.
          */
-        let notifyDelegate = (playerItem != nil)
+        let shouldNotifyDelegate = (playerItem != nil)
 
         playerItem = nil
         
         player.replaceCurrentItem(with: nil)
         
-        if notifyDelegate {
+        if shouldNotifyDelegate {
             updatePlaybackState(.closed)
         } else {
             playbackState = .closed
         }
     }
+    
+    /**
+        Capture a set of still images from the current media asset in its original resolution by giving a set of
+        timepoints. The image capture only takes place in the valid time span. If the specified timepoint is out
+        of bounds, TinyVideoPlayer will try to performe the action at the closest position. If the video asset 
+        has not been fully initialized, TinyVideoPlayer will instead try to capture the very first image.
+
+        - Parameter timePoint: A timepoint within the valid playable timespan at which TinyVideoPlayer will capture a still image from the video sequence.
+        - Parameter completion: A closure that will be called after the image capture is done. The final result 
+            will be passed in as a closure parameter.
+        - Parameter time: The timepoint for which the image is captured.
+        - Parameter image: The captured image. Or nil if the capture was failed.
+     
+        - Note: This method takes advantage of the AVAsset class and it won't work with HLS videos. 
+            Use capture
+            The completion closure will be called on the main thread!
+     */
+    public func captureStillImageFromCurrentVideoAssets(forTimes timePoints: [Float]? = nil,
+                                            completion: @escaping (_ time: Float, _ image: UIImage?) -> Void) {
+        
+        /* Won't call the completion when TinyVideoPlayer hasn't loaded any video assets yet. */
+        guard let playerItem = playerItem  else {
+            return
+        }
+        
+        var destinations: [NSValue] = []
+        
+        if let timePoints = timePoints {
+
+            for time in timePoints {
+                
+                var destination = fmin(fmax(time, 0.0), videoDuration ?? 0.0) + startPosition
+                
+                guard let destinationMediaTime = floatTimepointToCMTime(destination) else {
+                    continue
+                }
+                
+                destinations.append(NSValue(time: destinationMediaTime))
+            }
+            
+        } else {
+            
+            var destination = playbackPosition ?? 0.0 + startPosition
+
+            if let destinationMediaTime = floatTimepointToCMTime(destination) {
+                destinations.append(NSValue(time: destinationMediaTime))
+            }
+        }
+        
+        let imageGenerator = AVAssetImageGenerator(asset: playerItem.asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        imageGenerator.requestedTimeToleranceBefore = kCMTimeZero
+        imageGenerator.requestedTimeToleranceAfter = kCMTimeZero
+        
+        imageGenerator.generateCGImagesAsynchronously(forTimes: destinations) {
+                (requestedTime: CMTime, image: CGImage?, _, result: AVAssetImageGeneratorResult, error: Error?) in
+            
+            let floatRepresentedTime = Float(CMTimeGetSeconds(requestedTime))
+
+            if result == AVAssetImageGeneratorResult.failed {
+
+                if let error = error {
+                    self.infoLog("Image generation from video asset failed with error: \(error). " +
+                            "A possible reason for this is that the loaded current meida item is a HLS video. " +
+                            "Try backup solution now.")
+                }
+                
+                DispatchQueue.main.async {
+                    completion(floatRepresentedTime, nil)
+                }
+                
+            } else if result == AVAssetImageGeneratorResult.succeeded {
+            
+                let resultImage = image.flatMap{ UIImage(cgImage: $0) }
+                
+                DispatchQueue.main.async {
+                    completion(floatRepresentedTime, resultImage)
+                }
+            }
+        }
+    }
+    
+    /**
+     */
+    public func captureStillImageForHLSMediaItem(atTime timepoint: Float? = nil,
+                                        completion: @escaping (_ time: Float, _ image: UIImage?) -> Void) {
+
+        var destination: Float
+        
+        if let timepoint = timepoint {
+            destination = timepoint
+            
+        } else {
+            destination = playbackPosition ?? 0.0 + startPosition
+        }
+        
+        guard let aCMTime = floatTimepointToCMTime(destination) else {
+            
+            completion(destination, nil)
+            return
+        }
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            
+            let pixelBuffer = self.playerItemVideoOutput?.copyPixelBuffer(forItemTime: aCMTime, itemTimeForDisplay: nil)
+            let resultImage = pixelBuffer.flatMap{ CIImage.init(cvImageBuffer: $0) }
+                .flatMap { UIImage(ciImage: $0) }
+            
+            let floatRepresentedTime = Float(CMTimeGetSeconds(aCMTime))
+            
+            DispatchQueue.main.async {
+                completion(floatRepresentedTime, resultImage)
+            }
+        }
+    }
+    
+    /* A little helper to convert a timepoint from float representation to CMTime representation. */
+    fileprivate func floatTimepointToCMTime(_ timepoint: Float) -> CMTime? {
+        
+        let aCMTimepoint: CMTime = CMTime(seconds: Double(timepoint),
+                                          preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        
+        if !CMTIME_IS_VALID(aCMTimepoint) {
+            self.errorLog("Unable to capture image at the given timepoint because destination representation is invalid.")
+            return nil
+        }
+        
+        return aCMTimepoint
+    }
+
     
     // MARK: - Key-Value Obsevation & Notification Center Obsevation
   
@@ -655,7 +803,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                         bufferProgress = 0.0
                     }
                 }
-                
             }
         }
     }
