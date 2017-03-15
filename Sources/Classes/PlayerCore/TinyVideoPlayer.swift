@@ -457,7 +457,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
 
             for time in timePoints {
                 
-                var destination = fmin(fmax(time, 0.0), videoDuration ?? 0.0) + startPosition
+                let destination = fmin(fmax(time, 0.0), videoDuration ?? 0.0) + startPosition
                 
                 guard let destinationMediaTime = floatTimepointToCMTime(destination) else {
                     continue
@@ -468,7 +468,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
         } else {
             
-            var destination = playbackPosition ?? 0.0 + startPosition
+            let destination = playbackPosition ?? 0.0 + startPosition
 
             if let destinationMediaTime = floatTimepointToCMTime(destination) {
                 destinations.append(NSValue(time: destinationMediaTime))
