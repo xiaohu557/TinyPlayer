@@ -175,16 +175,13 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         didSet {
             if hidden {
-                for (_, value) in projectionViewStore {
-                    if let view = value {
-                        view.isHidden = true
-                    }
+                for (_, view) in projectionViewStore {
+                    view.isHidden = true
                 }
+                
             } else {
-                for (_, value) in projectionViewStore {
-                    if let view = value {
-                        view.isHidden = false
-                    }
+                for (_, view) in projectionViewStore {
+                    view.isHidden = false
                 }
             }
         }
