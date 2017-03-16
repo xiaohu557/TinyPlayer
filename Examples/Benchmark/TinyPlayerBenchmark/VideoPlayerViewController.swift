@@ -17,7 +17,7 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
 
     fileprivate let viewModel: VideoPlayerViewModel = VideoPlayerViewModel()
     
-    /* Hold an instance of the player's video projection view for later animated transation. */
+    /* Hold an instance of the player's video projection view for later animation. */
     fileprivate var videoProjectionView: TinyVideoProjectionView?
     
     required init?(coder aDecoder: NSCoder) {

@@ -38,6 +38,12 @@ public class TinyVideoProjectionView: UIView {
         return layer as! AVPlayerLayer
     }
     
+    /**
+        A read-only unique identify for a single video projection view instance, that is generated while the
+        instance is created.
+     */
+    private(set) public var hashId: String
+    
     override public class var layerClass: AnyClass {
         
         return AVPlayerLayer.self
@@ -66,12 +72,16 @@ public class TinyVideoProjectionView: UIView {
         
         fillMode = .resizeAspectFill
         
+        hashId = UUID().uuidString
+        
         super.init(frame: frame)
     }
   
     required public init?(coder aDecoder: NSCoder) {
 
         fillMode = .resizeAspectFill
+
+        hashId = UUID().uuidString
 
         super.init(coder: aDecoder)
     }

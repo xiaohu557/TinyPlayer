@@ -165,21 +165,26 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         Each TinyVideoPlayer can manage a group of projection views for content drawing.
         The video content on each connected projection view remains synchronized.
      */
-    private var projectionViewStore = [TinyVideoProjectionView]()
+    private var projectionViewStore = Dictionary<String, TinyVideoProjectionView>()
     
     /**
-        Use the hidden property to control whether to show the video content on all projection views or not.
+        Use the hidden property to control whether to show the video content on projection views or not.
+        This affects all connected video projection views.
      */
     public var hidden: Bool = false {
+        
         didSet {
             if hidden {
-                for view in projectionViewStore {
-                    view.isHidden = true
+                for (key, value) in projectionViewStore {
+                    if let view = value as? TinyVideoProjectionView {
+                        view.isHidden = true
+                    }
                 }
-                
             } else {
-                for view in projectionViewStore {
-                    view.isHidden = false
+                for (key, value) in projectionViewStore {
+                    if let view = value as? TinyVideoProjectionView {
+                        view.isHidden = false
+                    }
                 }
             }
         }
@@ -251,12 +256,12 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         let projectionView = TinyVideoProjectionView()
         
-        projectionViewStore.append(projectionView)
+        projectionViewStore[projectionView.hashId] = projectionView
         
         if hidden {
             projectionView.isHidden = true
         }
-        
+
         projectionView.player = player
         
         return projectionView
@@ -276,10 +281,8 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     public func recycleVideoProjectionView(_ connectedView: TinyVideoProjectionView) {
 
         connectedView.player = nil
-
-        if let index = projectionViewStore.index(of: connectedView) {
-            projectionViewStore.remove(at: index)
-        }
+        
+        projectionViewStore.removeValue(forKey: connectedView.hashId)
     }
     
     // - MARK: Media Resource Management
