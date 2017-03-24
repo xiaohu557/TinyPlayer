@@ -123,7 +123,7 @@ extension VideoPlayerViewController: TinyPlayerDelegate {
 
         if let projectionView = self.videoProjectionView {
             
-            if projectionView.alpha == 0.0 {
+            if projectionView.alpha < 1.0 {
                 UIView.animate(withDuration: 0.4) {
                     projectionView.alpha = 1.0
                 }

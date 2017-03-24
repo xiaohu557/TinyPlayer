@@ -752,7 +752,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                             bufferProgress = catchedSecs / TinyVideoPlayerDefaults.bufferSize
                             
                             if bufferProgress! <= Float(2.0) {
-                                infoLog("Buffering progress: \(bufferProgress! * 100)%")
+                                verboseLog("Buffering progress: \(bufferProgress! * 100)%")
                             }
                         }
                     } else {
@@ -959,8 +959,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         currentVideoPlaybackEnded = false
 
         updatePlaybackState(.ready)
-
-        /// WIP: video ignores the endTime if starts the second time.
     }
 
     private var isSeeking: Bool = false
