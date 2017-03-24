@@ -121,10 +121,12 @@ extension VideoPlayerViewController: TinyPlayerDelegate {
     
     func playerIsReadyToPlay(_ player: TinyPlayer) {
 
-        UIView.animate(withDuration: 0.4) {
+        if let projectionView = self.videoProjectionView {
             
-            if let projectionView = self.videoProjectionView {
-                projectionView.alpha = 1.0
+            if projectionView.alpha == 0.0 {
+                UIView.animate(withDuration: 0.4) {
+                    projectionView.alpha = 1.0
+                }
             }
         }
 
@@ -135,8 +137,6 @@ extension VideoPlayerViewController: TinyPlayerDelegate {
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
         
         viewModel.tinyPlayer.resetPlayback()
-        
-        viewModel.tinyPlayer.play()
     }
     
     

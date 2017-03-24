@@ -41,7 +41,7 @@ struct VideoPlayerViewModel {
         let mediaContext = MediaContext(videoTitle: "This is a test video.",
                                          artistName: "TinyPlayerBenchmark",
                                          startPosition: Float(arc4random()%10),
-                                         endPosition: 0.0,
+                                         endPosition: 10.0, /// WIP
                                          thumbnailImage: nil)
         
         tinyPlayer = TinyVideoPlayer(resourceUrl: videoUrl!, mediaContext: mediaContext)

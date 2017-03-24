@@ -156,6 +156,22 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 }
             }
             
+            describe("can create and recycle projection views") {
+            
+                it("at creation") {
+
+                    let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionView = videoPlayer.generateVideoProjectionView()
+                    expect(projectionView.hashId).toNot(beNil())
+                }
+                
+                it("at recycling") {
+                    
+                    
+                }
+            }
+            
             describe("can hide all projection views") {
                 
                 it("when hide") {
