@@ -212,7 +212,7 @@ class TinyPlayerStateTransationSpecs: QuickSpec {
                     let spy = PlayerTestObserver(player: videoPlayer)
                     
                     /* Wait until the player receives the ready signal. */
-                    waitUntil(timeout: 5.0 * tm) { done -> Void in
+                    waitUntil(timeout: 10.0 * tm) { done -> Void in
                         
                         spy.onPlayerReady = {
                             videoPlayer.play()

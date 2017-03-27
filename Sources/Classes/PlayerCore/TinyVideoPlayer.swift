@@ -861,13 +861,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
 
     /**
-     This property is used to make sure that one video only emits one .finished state.
+        This property is used to make sure that one video only emits one .finished state.
      */
-    internal var currentVideoPlaybackEnded: Bool = false
+    private var currentVideoPlaybackEnded: Bool = false
     
     internal func playerItemDidPlayToEndTime(_ notification: Notification? = nil) {
-        
-        /// WIP: Enable thread safe value update
         
         guard !currentVideoPlaybackEnded else {
             return
@@ -878,11 +876,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             player.rate = 0.0
         }
         
+        self.currentVideoPlaybackEnded = true
+        
         updatePlaybackState(.finished)
         
         delegate?.playerHasFinishedPlayingVideo(self)
-        
-        self.currentVideoPlaybackEnded = true
     }
 
     internal func playerItemPlaybackStalled(_ notification: Notification) {
@@ -957,7 +955,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         seekTo(position: 0.0)
         
         currentVideoPlaybackEnded = false
-
+        
         updatePlaybackState(.ready)
     }
 
