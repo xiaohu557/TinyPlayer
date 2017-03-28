@@ -21,9 +21,8 @@ public enum TinyPlayerState: Int {
     case error = -1
 }
 
-
 /**
-    This protocol defines the public APIs of the TinyVideoPlayer.
+    This protocol defines the public general APIs of the TinyPlayer.
  */
 public protocol TinyPlayer: class {
     
@@ -34,11 +33,7 @@ public protocol TinyPlayer: class {
     var playbackPosition: Float? { get }
     var playbackProgress: Float? { get }
     var bufferProgress: Float? { get }
-    var hidden: Bool { get set }
     var willPrettifyPauseStateTransation: Bool { get set }
-    
-    func generateVideoProjectionView() -> TinyVideoProjectionView
-    func recycleVideoProjectionView(_ connectedView: TinyVideoProjectionView)
     
     func switchResourceUrl(_ resourceUrl: URL, mediaContext: MediaContext?)
     func play()
@@ -48,10 +43,22 @@ public protocol TinyPlayer: class {
     func seekTo(position: Float, cancelPreviousSeeking: Bool, completion: ((Bool)-> Void)?)
     func seekForward(secs: Float, completion: ((Bool)-> Void)?)
     func seekBackward(secs: Float, completion: ((Bool)-> Void)?)
+}
+
+/**
+    This protocol defines the additional video related public APIs for the TinyVideoPlayer.
+ */
+public protocol TinyVideoPlayerProtocol: TinyPlayer {
+    
+    var hidden: Bool { get set }
+
+    func generateVideoProjectionView() -> TinyVideoProjectionView
+    func recycleVideoProjectionView(_ connectedView: TinyVideoProjectionView)
+    
     func captureStillImageFromCurrentVideoAssets(forTimes timePoints: [Float]?,
-                                                completion: @escaping (_ time: Float, _ image: UIImage?) -> Void)
+                                                 completion: @escaping (_ time: Float, _ image: UIImage?) -> Void) throws
     func captureStillImageForHLSMediaItem(atTime timepoint: Float?,
-                                                 completion: @escaping (_ time: Float, _ image: UIImage?) -> Void)
+                                          completion: @escaping (_ time: Float, _ image: UIImage?) -> Void)
 }
 
 /**
@@ -160,6 +167,7 @@ public struct MediaContext {
 enum TinyVideoPlayerError: Error {
     case assetNotPlayable
     case assetDownloadFailed
+    case playerItemNotReady
 }
 
 
