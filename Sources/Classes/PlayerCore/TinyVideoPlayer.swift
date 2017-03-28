@@ -286,7 +286,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             var error: NSError?
             let keyStatus = asset.statusOfValue(forKey: key, error: &error)
             if keyStatus == AVKeyValueStatus.failed {
-                errorLog("[TinyPlayer][Error]: AVAsset loading key \(key) failed: \(error)")
+                errorLog("[TinyPlayer][Error]: AVAsset loading key \(key) failed: \(String(describing: error))")
                 shouldCancel = true
             }
         }
