@@ -12,22 +12,22 @@ import AVFoundation
 extension TinyVideoPlayer {
     
     /**
-     Capture a set of still images from the current media asset in its original resolution by giving a set of
-     timepoints. The image capture only takes place in the valid time span. If the one of specified timepoints is
-     out of bounds, TinyVideoPlayer will try to performe the action at the closest position. If the video duration
-     is not known yet, TinyVideoPlayer will instead try to capture the very first frame of the video.
+        Capture a set of still images from the current media asset in its original resolution by giving a set of
+        timepoints. The image capture only takes place in the valid time span. If the one of specified timepoints is
+        out of bounds, TinyVideoPlayer will try to performe the action at the closest position. If the video duration
+        is not known yet, TinyVideoPlayer will instead try to capture the very first frame of the video.
      
-     - Parameter timepoints: A set of timepoint within the valid playable timespan at which TinyVideoPlayer will
-        capture a still image from the video sequence. If you let it empty, then the currentPlayback time will 
-        be used.
-     - Parameter completion: A closure that will be called after the image capture is done. The final result
-        will be passed in as a closure parameter. This closure will be called once per valid timepoint.
-     - Parameter time: The timepoint for which the image is captured.
-     - Parameter image: The captured image. Or nil if the capture was failed.
+        - Parameter timepoints: A set of timepoint within the valid playable timespan at which TinyVideoPlayer will
+            capture a still image from the video sequence. If you let it empty, then the currentPlayback time will
+            be used.
+        - Parameter completion: A closure that will be called after the image capture is done. The final result
+            will be passed in as a closure parameter. This closure will be called once per valid timepoint.
+        - Parameter time: The timepoint for which the image is captured.
+        - Parameter image: The captured image. Or nil if the capture was failed.
      
-     - Note: This method takes advantage of the AVAsset class and it won't work with HLS videos.
-     Use captureStillImageForHLSMediaItem(:) for HLS videos instead. The completion closure will be called on
-     the main thread!
+        - Note: This method takes advantage of the AVAsset class and it won't work with HLS videos.
+        Use captureStillImageForHLSMediaItem(:) for HLS videos instead. The completion closure will be called on
+        the main thread!
      */
     public func captureStillImageFromCurrentVideoAssets(forTimes timepoints: [Float]? = nil,
                                         completion: @escaping (_ time: Float, _ image: UIImage?) -> Void) throws {
@@ -44,7 +44,18 @@ extension TinyVideoPlayer {
             
             for time in timepoints {
                 
-                let destination = fmin(fmax(time, 0.0), videoDuration ?? 0.0) + startPosition
+                var duration = videoDuration ?? 0.0
+                
+                if duration > 0 {
+                    
+                    /* 
+                        Due to a small glitch of AVAssetImageGenerator, we need to apply a small safety
+                        margin to guarantee video retrieval.
+                     */
+                    duration = duration - 0.2
+                }
+                
+                let destination = fmin(fmax(time, 0.0), duration) + startPosition
                 
                 guard let destinationMediaTime = floatTimepointToCMTime(destination) else {
                     continue

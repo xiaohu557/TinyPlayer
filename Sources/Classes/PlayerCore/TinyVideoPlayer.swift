@@ -364,9 +364,10 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
             if let videoOutput = playerItemVideoOutput {
                 
                 currentPlayerItem.remove(videoOutput)
-                playerItemVideoOutput = nil
             }
         }
+
+        playerItemVideoOutput = nil
         
         /*
             When there is already a loaded media item, it make sense to notify the delegate about the change.
