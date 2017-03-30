@@ -8,7 +8,6 @@ target 'TinyPlayerDemo' do
 end
 
 target 'TinyPlayerTests' do
-    #inherit! :search_paths
     workspace 'TinyPlayerDemo+Benchmark'
     project 'Demo/TinyPlayerDemo.xcodeproj'
 
