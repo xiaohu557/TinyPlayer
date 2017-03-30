@@ -43,8 +43,8 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.startPosition) == 0.0
                     expect(videoPlayer.endPosition) == 0.0
                     expect(videoPlayer.playbackProgress).to(beNil())
+                    expect(videoPlayer.playerItemVideoOutput).to(beNil())
                     
-                    expect(videoPlayer.playerView).toNot(beNil())
                     expect(videoPlayer.hidden).to(beFalse())
                 }
 
@@ -55,7 +55,6 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.playbackState).to(equal(TinyPlayerState.unknown))
                     expect(videoPlayer.player).toNot(beNil())
                     expect(videoPlayer.mediaContext).to(beNil())
-                    expect(videoPlayer.playerView).toNot(beNil())
 
                     /* The video which the url points to should be eventually loaded. */
                     expect(videoPlayer.playbackState).toEventually(equal(TinyPlayerState.ready), timeout: 3.0 * tm)
@@ -66,11 +65,11 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     expect(videoPlayer.playbackPosition).toEventually(beCloseTo(0.0, within: 0.2), timeout: 3.0 * tm)
                     expect(videoPlayer.playbackProgress).toEventually(equal(0.0))
                     expect(videoPlayer.startPosition).toEventually(equal(0.0))
+                    expect(videoPlayer.playerItemVideoOutput).toEventuallyNot(beNil())
                     
                     /* The endPosition should be set to the whole video length if it's not previously set. */
                     expect(videoPlayer.endPosition).toEventually(equal(videoPlayer.videoDuration))
                     
-                    expect(videoPlayer.playerView).toNot(beNil())
                     expect(videoPlayer.hidden).to(beFalse())
                 }
             }
@@ -101,6 +100,7 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                         expect(videoPlayer.endPosition).to(equal(0.0))
                         expect(videoPlayer.playbackPosition).toEventually(beNil())
                         expect(videoPlayer.playbackProgress).toEventually(beNil())
+                        expect(videoPlayer.playerItemVideoOutput).toEventually(beNil())
                         
                         expect(videoPlayer.player).toNot(beNil())
                         expect(videoPlayer.player.currentItem).toEventually(beNil())
@@ -159,20 +159,46 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                 }
             }
             
-            describe("can hide itself") {
+            describe("can create and recycle projection views") {
+            
+                it("at creation") {
+
+                    let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionView = videoPlayer.generateVideoProjectionView()
+                    expect(projectionView.hashId).toNot(beNil())
+                }
+                
+                it("at recycling") {
+                    
+                    
+                }
+            }
+            
+            describe("can hide all projection views") {
                 
                 it("when hide") {
                     
                     let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionViewBeforeHide = videoPlayer.generateVideoProjectionView()
                     videoPlayer.hidden = true
-                    expect(videoPlayer.playerView.isHidden) == true
+                    let projectionViewAfterHide = videoPlayer.generateVideoProjectionView()
+                    
+                    expect(projectionViewBeforeHide.isHidden) == true
+                    expect(projectionViewAfterHide.isHidden) == true
                 }
                 
                 it("when unhide") {
                     
                     let videoPlayer = TinyVideoPlayer()
+                    
+                    let projectionViewBeforeUnhide = videoPlayer.generateVideoProjectionView()
                     videoPlayer.hidden = false
-                    expect(videoPlayer.playerView.isHidden) == false
+                    let projectionViewAfterUnhide = videoPlayer.generateVideoProjectionView()
+                    
+                    expect(projectionViewBeforeUnhide.isHidden) == false
+                    expect(projectionViewAfterUnhide.isHidden) == false
                 }
             }
             
@@ -182,14 +208,16 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     
                     let videoPlayer = TinyVideoPlayer()
                     
-                    videoPlayer.playerView.fillMode = .resizeFill
-                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResize
-
-                    videoPlayer.playerView.fillMode = .resizeAspect
-                    expect(videoPlayer.playerView.playerLayer.videoGravity) == AVLayerVideoGravityResizeAspect
+                    let projectionView = videoPlayer.generateVideoProjectionView()
                     
-                    videoPlayer.playerView.fillMode = .resizeAspectFill
-                    expect(videoPlayer.playerView.playerLayer.videoGravity)
+                    projectionView.fillMode = .resizeFill
+                    expect(projectionView.playerLayer.videoGravity) == AVLayerVideoGravityResize
+
+                    projectionView.fillMode = .resizeAspect
+                    expect(projectionView.playerLayer.videoGravity) == AVLayerVideoGravityResizeAspect
+                    
+                    projectionView.fillMode = .resizeAspectFill
+                    expect(projectionView.playerLayer.videoGravity)
                         == AVLayerVideoGravityResizeAspectFill
                 }
             }
@@ -310,6 +338,125 @@ class TinyPlayerFunctionalSpecs: QuickSpec {
                     }
                     
                     expect(delegateCalled) == true
+                }
+            }
+            
+            describe("can capture still images from video") {
+                
+                /* 
+                    Unfortunately AVPlayerItemVideoOutput is not supported on Simulators.
+                    Enable these tests only for devices. 
+                 */
+                #if !(arch(i386) || arch(x86_64))
+                    
+                it("can capture one image at a specific timepoint") {
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 10 * tm) { done -> Void in
+                        
+                        spy.onPlayerReady =  {
+                            videoPlayer.play()
+                            
+                            videoPlayer.captureStillImageForHLSMediaItem(atTime: 10.0) { aTime, aImage in
+                                
+                                expect(aTime).toNot(beNil())
+                                expect(aImage).toNot(beNil())
+                                done()
+                            }
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                }
+                
+                it("can capture one image without specifing a timepoint") {
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 10 * tm) { done -> Void in
+                        
+                        spy.onPlayerReady =  {
+                            videoPlayer.play()
+                            
+                            videoPlayer.captureStillImageForHLSMediaItem { aTime, aImage in
+                                
+                                expect(aTime).toNot(beNil())
+                                expect(aImage).toNot(beNil())
+                                done()
+                            }
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                }
+                
+                it("can capture one image outside of valid video duration") {
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 10 * tm) { done -> Void in
+                        
+                        spy.onPlayerReady =  {
+                            videoPlayer.play()
+                            
+                            videoPlayer.captureStillImageForHLSMediaItem(atTime: 120.0) { aTime, aImage in
+                                
+                                expect(aTime).toNot(beNil())
+                                expect(aImage).toNot(beNil())
+                                done()
+                            }
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                }
+                    
+                #endif
+                
+                it("can capture several images with a single call") {
+                    
+                    let videoPlayer = TinyVideoPlayer()
+                    let spy = PlayerTestObserver(player: videoPlayer)
+                    
+                    waitUntil(timeout: 10 * tm) { done -> Void in
+                        
+                        spy.onPlayerReady =  {
+                            videoPlayer.play()
+                            done()
+                        }
+                        
+                        /* Start player initialization now. */
+                        videoPlayer.switchResourceUrl(url)
+                    }
+                    
+                    let timepoints: [Float] = [-15.0, 20.0, 30.0, 120.0]
+                    
+                    waitUntil(timeout: 16 * tm) { done -> Void in
+                        
+                        var executionRegister = 0
+
+                        expect{
+                            
+                            try videoPlayer.captureStillImageFromCurrentVideoAssets(forTimes: timepoints) { aTime, aImage in
+
+                                expect(aTime).toNot(beNil())
+                                expect(aImage).toNot(beNil())
+                                
+                                executionRegister = executionRegister + 1
+                                if executionRegister == timepoints.count {
+                                    done()
+                                }
+                            }
+                            
+                        }.toNot(throwError())
+                    }
                 }
             }
         }

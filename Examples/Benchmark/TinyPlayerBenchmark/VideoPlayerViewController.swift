@@ -17,8 +17,11 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
 
     fileprivate let viewModel: VideoPlayerViewModel = VideoPlayerViewModel()
     
+    /* Hold an instance of the player's video projection view for later animation. */
+    fileprivate var videoProjectionView: TinyVideoProjectionView?
+    
     required init?(coder aDecoder: NSCoder) {
-
+        
         super.init(coder: aDecoder)
 
         viewModel.tinyPlayer.delegate = self
@@ -35,6 +38,18 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
         
         viewModel.tinyPlayer.delegate = nil
         
+        /*
+            Just a demo of using the recycle method.
+         
+            In this project it's not necessary to deliberately recycle the projection view, because this view 
+            controller owns the instance of its own view model, and therefore indirectly owns the TinyVideoPlayer
+            instance. While releasing the view controller, we also release the TinyVideoPlayer instance (and the
+            projection view owned by it).
+         */
+        if let videoProjectionView = videoProjectionView {
+            viewModel.tinyPlayer.recycleVideoProjectionView(videoProjectionView)
+        }
+
         infoLog("Player view controller is dealloced.")
     }
     
@@ -42,26 +57,31 @@ class VideoPlayerViewController: UIViewController, TinyLogging {
         
         super.viewWillAppear(animated)
         
-        /* Fetch the view from TinyVideoPlayer and add it to the current view hierarchy. */
-        let playerView = viewModel.tinyPlayer.playerView
-        playerView.alpha = 0.2
-        playerView.fillMode = .resizeAspectFill
+        /* Generate a projection view from TinyVideoPlayer and add it to the current view hierarchy. */
+        videoProjectionView = viewModel.tinyPlayer.generateVideoProjectionView()
+
+        guard let videoProjectionView = videoProjectionView else {
+            return
+        }
+
+        videoProjectionView.alpha = 0.2
+        videoProjectionView.fillMode = .resizeAspectFill
         
         let hueValue = CGFloat(arc4random() % 256) / 255.0
-        playerView.backgroundColor = UIColor.init(hue: hueValue, saturation: 0.16, brightness: 0.2, alpha: 1.0)
+        videoProjectionView.backgroundColor = UIColor.init(hue: hueValue, saturation: 0.16, brightness: 0.2, alpha: 1.0)
         
-        self.view.addSubview(playerView)
+        self.view.addSubview(videoProjectionView)
         self.view.backgroundColor = UIColor.clear
         
         /* 
             Setup player view constrains. 
          */
-        playerView.translatesAutoresizingMaskIntoConstraints = false
+        videoProjectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        playerView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0).isActive = true
-        playerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0).isActive = true
-        playerView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
-        playerView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
+        videoProjectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0.0).isActive = true
+        videoProjectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0.0).isActive = true
+        videoProjectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0.0).isActive = true
+        videoProjectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0.0).isActive = true
     }
 }
 
@@ -100,11 +120,16 @@ extension VideoPlayerViewController: TinyPlayerDelegate {
     
     
     func playerIsReadyToPlay(_ player: TinyPlayer) {
-        
-        UIView.animate(withDuration: 0.4) {
-            self.viewModel.tinyPlayer.playerView.alpha = 1.0
+
+        if let projectionView = self.videoProjectionView {
+            
+            if projectionView.alpha < 1.0 {
+                UIView.animate(withDuration: 0.4) {
+                    projectionView.alpha = 1.0
+                }
+            }
         }
-        
+
         viewModel.tinyPlayer.play()
     }
     
@@ -112,8 +137,6 @@ extension VideoPlayerViewController: TinyPlayerDelegate {
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
         
         viewModel.tinyPlayer.resetPlayback()
-        
-        viewModel.tinyPlayer.play()
     }
     
     

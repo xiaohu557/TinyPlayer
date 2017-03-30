@@ -22,7 +22,7 @@ public struct TinyVideoPlayerDefaults {
      */
     static var seekingInterval: Float = 10.0    // in secs
     
-    /** 
+    /**
         This defines how frequently the playing time will be updated. 
      */
     static var timeObservationInterval: Float = 1.0/30    // in secs, 30fps
@@ -33,7 +33,7 @@ public struct TinyVideoPlayerDefaults {
     static var bufferSize: Float = 6.0      // in secs
 }
 
-public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
+public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
   
     /* Feel free to set this value to .none to disable the logging behavior of TinyPlayer. */
     public var loggingLevel: TinyLoggingLevel = .info
@@ -42,6 +42,9 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     internal var player: AVPlayer
     internal var playerItem: AVPlayerItem?
     internal var internalUrl: URL?
+    
+    /* This object is used to serve the backup solution for still image capture of the current playing video. */
+    internal var playerItemVideoOutput: AVPlayerItemVideoOutput?
 
     /**
         After the playerItem initialization, this value will match the one set in the MediaContext.
@@ -159,27 +162,33 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     ]
 
     /**
-       Each TinyVideoPlayer owns a playerView for content drawing.
-       This view can be inserted directly into your UI presentation hierachy.
+        Each TinyVideoPlayer can manage a group of projection views for content drawing.
+        The video content on each connected projection view remains synchronized.
      */
-    public let playerView: TinyVideoPlayerView = TinyVideoPlayerView()
+    fileprivate var projectionViewStore = Dictionary<String, TinyVideoProjectionView>()
     
     /**
-        Use the hidden property to control whether to show the playing content or not.
+        Use the hidden property to control whether to show the video content on projection views or not.
+        This affects all connected video projection views.
      */
     public var hidden: Bool = false {
         
         didSet {
             if hidden {
-                playerView.isHidden = true
+                for (_, view) in projectionViewStore {
+                    view.isHidden = true
+                }
                 
             } else {
-                playerView.isHidden = false
+                for (_, view) in projectionViewStore {
+                    view.isHidden = false
+                }
             }
         }
     }
 
-    // MAKR: - Lifecycle management
+
+    // MARK: - Lifecycle management
 
     public override init() {
         
@@ -227,10 +236,10 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         player.replaceCurrentItem(with: nil)
 
         detachObserversFrom(player: player)
-
-        playerView.player = nil
     }
 
+    // - MARK: Media Resource Management
+    
     /**
         Call this method triggers the initialization process of the media item at the specific url.
         
@@ -277,7 +286,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             var error: NSError?
             let keyStatus = asset.statusOfValue(forKey: key, error: &error)
             if keyStatus == AVKeyValueStatus.failed {
-                errorLog("[TinyPlayer][Error]: AVAsset loading key \(key) failed: \(error)")
+                errorLog("[TinyPlayer][Error]: AVAsset loading key \(key) failed: \(String(describing: error))")
                 shouldCancel = true
             }
         }
@@ -309,15 +318,27 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         /* Re-attach necessary obsevers. */
         attachObserversOn(playerItem: playerItem!)
         
-        /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         bufferProgress = 0.0
+        
+        /* Create a video output object for still image capture (for HLS). */
+        let outputSettings: [String: Any] = [kCVPixelBufferPixelFormatTypeKey as String:
+                                                Int(kCVPixelFormatType_32ARGB)]
+        playerItemVideoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: outputSettings)
+
+        /* Link the video output object with the current playerItem. */
+        if let output = playerItemVideoOutput {
+            playerItem?.add(output)
+        }
+
+        /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         player.replaceCurrentItem(with: playerItem)
     }
   
     /**
-         Partially release the memory. The playerItem will be cleared, but leave the AVPlayer and the playerView in place.
-         Call this method if you want to call switchResourceUrl(:) at a later time to re-use the playerView to
-         play another video without re-initializing the whole class.
+         Partially release the memory. The playerItem will be cleared out of the memory, but leave the AVPlayer
+         and its connected projection views in place.
+         Call this method if you want to call switchResourceUrl(:) at a later time to re-use the projection view
+         to render another video without re-initializing the whole class.
      */
     public func closeCurrentItem() {
         
@@ -339,19 +360,26 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         
         if let currentPlayerItem = playerItem {
             detachObserversFrom(playerItem: currentPlayerItem)
+            
+            if let videoOutput = playerItemVideoOutput {
+                
+                currentPlayerItem.remove(videoOutput)
+            }
         }
+
+        playerItemVideoOutput = nil
         
         /*
             When there is already a loaded media item, it make sense to notify the delegate about the change.
             Otherwise we make the state change silently.
          */
-        let notifyDelegate = (playerItem != nil)
+        let shouldNotifyDelegate = (playerItem != nil)
 
         playerItem = nil
         
         player.replaceCurrentItem(with: nil)
         
-        if notifyDelegate {
+        if shouldNotifyDelegate {
             updatePlaybackState(.closed)
         } else {
             playbackState = .closed
@@ -597,14 +625,13 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
                             bufferProgress = catchedSecs / TinyVideoPlayerDefaults.bufferSize
                             
                             if bufferProgress! <= Float(2.0) {
-                                infoLog("Buffering progress: \(bufferProgress! * 100)%")
+                                verboseLog("Buffering progress: \(bufferProgress! * 100)%")
                             }
                         }
                     } else {
                         bufferProgress = 0.0
                     }
                 }
-                
             }
         }
     }
@@ -630,7 +657,7 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
     }
     
     /**
-        Update playback state and decide whether to propagate the state change to it's delegate.
+        Update playback state and decide whether to propagate the state change to its delegate.
       */
     fileprivate func updatePlaybackState(_ newState: TinyPlayerState) {
         
@@ -669,9 +696,6 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
      */
     fileprivate func playerItemIsReadyForPlaying(playerItem: AVPlayerItem) {
         
-        /* Link the initilized AVPlayer to the TinyVideoPlayerView. */
-        playerView.player = player
-        
         /* Calculate the start/end position. */
         if endPosition == 0 {
             endPosition = Float(playerItem.duration.seconds)
@@ -704,15 +728,15 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             
             followUpOperations(true)
         }
-        
+
         /* Reset the videoEnded flag. */
         currentVideoPlaybackEnded = false
     }
 
     /**
-     This property is used to make sure that one video only emits one .finished state.
+        This property is used to make sure that one video only emits one .finished state.
      */
-    internal var currentVideoPlaybackEnded: Bool = false
+    private var currentVideoPlaybackEnded: Bool = false
     
     internal func playerItemDidPlayToEndTime(_ notification: Notification? = nil) {
         
@@ -725,11 +749,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
             player.rate = 0.0
         }
         
+        self.currentVideoPlaybackEnded = true
+        
         updatePlaybackState(.finished)
         
         delegate?.playerHasFinishedPlayingVideo(self)
-        
-        self.currentVideoPlaybackEnded = true
     }
 
     internal func playerItemPlaybackStalled(_ notification: Notification) {
@@ -801,11 +825,11 @@ public class TinyVideoPlayer: NSObject, TinyPlayer, TinyLogging {
         /* This is a trick that makes the player switching back to the .ready state possible. */
         playbackState = .unknown
         
-        updatePlaybackState(.ready)
+        seekTo(position: 0.0)
         
         currentVideoPlaybackEnded = false
         
-        seekTo(position: 0.0)
+        updatePlaybackState(.ready)
     }
 
     private var isSeeking: Bool = false
@@ -1047,3 +1071,54 @@ public extension TinyVideoPlayer {
     }
 }
 
+// MARK: - Video Presentation Interfaces
+
+extension TinyVideoPlayer {
+    
+    /**
+         Ask for generating a video projection view for content drawing. You have the flexibility to
+         determine when and how this view will get inserted or remvoed from its superview.
+         
+         - Returns: A video projection view that can be inserted directly into your UI presentation hierachy.
+         
+         Note:  This view remains under management of TinyVideoPlayer, and when you don't
+         need it anymore, make sure you call the recycleVideoProjectView(_:) method to recycle it.
+     */
+    public func generateVideoProjectionView() -> TinyVideoProjectionView {
+        
+        let projectionView = TinyVideoProjectionView()
+        
+        projectionViewStore[projectionView.hashId] = projectionView
+        
+        if self.hidden {
+            projectionView.isHidden = true
+        }
+        
+        projectionView.player = player
+        
+        return projectionView
+    }
+    
+    /**
+         Recycle the video projection view and release the stored connection to its parent TinyVideoPlayer.
+         This action is recommanded if you want to destory a specific projection view while keeping
+         the TinyVideoPlayer instance.
+         
+         - Parameter connectedView: The video projection view that has been previously generated by the
+         generateVideoProjectionView() method.
+         
+         Note: You should also remove this view from your view hierachy in order to make sure
+         the memory release is successful.
+     */
+    public func recycleVideoProjectionView(_ connectedView: TinyVideoProjectionView) {
+        
+        connectedView.player = nil
+        
+        projectionViewStore.removeValue(forKey: connectedView.hashId)
+    }
+    
+    public var connectedProjectionViewsCount: Int {
+        
+        return projectionViewStore.keys.count
+    }
+}
