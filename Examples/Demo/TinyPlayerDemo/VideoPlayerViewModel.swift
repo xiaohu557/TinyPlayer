@@ -10,15 +10,19 @@ import Foundation
 import UIKit
 import TinyPlayer
 
-class VideoPlayerViewModel: TinyLogging {
+protocol PlayerViewModelDelegatable {
+    var delegate: PlayerViewModelDelegate? { get set }
+}
+
+class VideoPlayerViewModel: PlayerViewModelDelegatable, TinyLogging {
     
     /* Required property from the TinyLogging protocol. */
     var loggingLevel: TinyLoggingLevel = .info
     
-    internal let tinyPlayer: TinyVideoPlayer
+    let tinyPlayer: TinyVideoPlayer
     
     /* A observer that will receive updates from a VideoPlayerViewModel instance. */
-    internal weak var viewModelObserver: PlayerViewModelObserver?
+    weak var delegate: PlayerViewModelDelegate?
     
     init(repository: VideoURLRepository) {
         /*
@@ -55,7 +59,7 @@ extension VideoPlayerViewModel: TinyPlayerDelegate {
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
         infoLog("Tiny player has changed state: \(oldState) >> \(newState)")
         
-        viewModelObserver?.demoPlayerHasUpdatedState(state: newState)
+        delegate?.demoPlayerHasUpdatedState(state: newState)
     }
     
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
@@ -75,12 +79,12 @@ extension VideoPlayerViewModel: TinyPlayerDelegate {
     }
     
     func playerIsReadyToPlay(_ player: TinyPlayer) {
-        viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
+        delegate?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
     
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
         tinyPlayer.resetPlayback()
-        viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
+        delegate?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
 }
 
@@ -116,7 +120,7 @@ extension VideoPlayerViewModel: VideoPlayerViewModelInput {
     This protocol defines the delegate methods of a videoPlayerViewModel observer.
     In our case it describes the communication uplink from a VideoPlayerViewModel to a RootViewModel.
  */
-internal protocol PlayerViewModelObserver: class {
+internal protocol PlayerViewModelDelegate: class {
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
     func demoPlayerHasUpdatedState(state: TinyPlayerState)
 }

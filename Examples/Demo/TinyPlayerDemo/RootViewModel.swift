@@ -15,25 +15,23 @@ class RootViewModel: RootViewModelOutput {
     var playButtonDisplayMode = Observable<PlayButtonDisplayMode>(.playButton)
     
     /**
-        A command receiver will take commands from this view model.
+        A command receiver (video player) will take commands from this view model.
      */
-    var commandReceiver: VideoPlayerViewModel
+    var commandReceiver: VideoPlayerViewModelInput & PlayerViewModelDelegatable
 
-    /* UI update logic. */
-    
+    /**
+        UI update logic. 
+     */
     fileprivate func needToUpdatePlayButtonMode(_ buttonMode: PlayButtonDisplayMode) {
-        
         guard playButtonDisplayMode.value != buttonMode else {
             return
         }
-        
         playButtonDisplayMode.next(buttonMode)
     }
 
-    // TBD: Use protocols instead of concret types
-    init(playerViewModel: VideoPlayerViewModel) {
+    init(playerViewModel: VideoPlayerViewModelInput & PlayerViewModelDelegatable) {
         self.commandReceiver = playerViewModel
-        commandReceiver.viewModelObserver = self
+        commandReceiver.delegate = self
     }
 }
 
@@ -58,9 +56,9 @@ extension RootViewModel: RootViewModelInput {
     }
 }
 
-// MARK: - PlayerViewModelObserver
+// MARK: - PlayerViewModelDelegate
 
-extension RootViewModel: PlayerViewModelObserver {
+extension RootViewModel: PlayerViewModelDelegate {
     
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool) {
        needToUpdatePlayButtonMode(.playButton)
