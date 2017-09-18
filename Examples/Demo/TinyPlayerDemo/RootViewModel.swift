@@ -67,11 +67,13 @@ extension RootViewModel: PlayerViewModelObserver {
     }
     
     func demoPlayerHasUpdatedState(state: TinyPlayerState) {
-        if state == .playing {
+        switch state {
+        case .playing:
             needToUpdatePlayButtonMode(.pauseButton)
-            
-        } else if state == .paused {
+        case .paused:
             needToUpdatePlayButtonMode(.playButton)
+        default:
+            break
         }
     }
 }

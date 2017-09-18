@@ -17,7 +17,7 @@ class VideoPlayerViewModel: TinyLogging {
     
     internal let tinyPlayer: TinyVideoPlayer
     
-    /* A observer to receive updates from a VideoPlayerViewModel instance. */
+    /* A observer that will receive updates from a VideoPlayerViewModel instance. */
     internal weak var viewModelObserver: PlayerViewModelObserver?
     
     init(repository: VideoURLRepository) {
@@ -53,39 +53,32 @@ class VideoPlayerViewModel: TinyLogging {
 extension VideoPlayerViewModel: TinyPlayerDelegate {
     
     func player(_ player: TinyPlayer, didChangePlaybackStateFromState oldState: TinyPlayerState, toState newState: TinyPlayerState) {
-        
         infoLog("Tiny player has changed state: \(oldState) >> \(newState)")
         
         viewModelObserver?.demoPlayerHasUpdatedState(state: newState)
     }
     
     func player(_ player: TinyPlayer, didUpdatePlaybackPosition position: Float, playbackProgress: Float) {
-        
         verboseLog("Tiny player has updated playing position: \(position), progress: \(playbackProgress)")
     }
     
     func player(_ player: TinyPlayer, didUpdateBufferRange range: ClosedRange<Float>) {
-        
         verboseLog("Tiny player has updated buffered time range: \(range.lowerBound) - \(range.upperBound)")
     }
     
     func player(_ player: TinyPlayer, didUpdateSeekableRange range: ClosedRange<Float>) {
-        
         infoLog("Tiny player has updated seekable time range: \(range.lowerBound) - \(range.upperBound)")
     }
     
     public func player(_ player: TinyPlayer, didEncounterFailureWithError error: Error) {
-        
         infoLog("Tiny player has encountered an error: \(error)")
     }
     
     func playerIsReadyToPlay(_ player: TinyPlayer) {
-        
         viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
     
     func playerHasFinishedPlayingVideo(_ player: TinyPlayer) {
-        
         tinyPlayer.resetPlayback()
         viewModelObserver?.demoPlayerIsReadyToStartPlayingFromBeginning(isReady: true)
     }
@@ -96,16 +89,13 @@ extension VideoPlayerViewModel: TinyPlayerDelegate {
 extension VideoPlayerViewModel: VideoPlayerViewModelInput {
     
     func playButtonTapped() {
-        
-        if tinyPlayer.playbackState == .paused ||
-           tinyPlayer.playbackState == .ready ||
-           tinyPlayer.playbackState == .finished {
-            
+        switch tinyPlayer.playbackState {
+        case .paused, .ready, .finished:
             tinyPlayer.play()
-            
-        } else if tinyPlayer.playbackState == .playing {
-            
+        case .playing:
             tinyPlayer.pause()
+        default:
+            break
         }
     }
     
@@ -122,16 +112,14 @@ extension VideoPlayerViewModel: VideoPlayerViewModelInput {
     }
 }
 
-
 /**
-    This protocol defines the callbacks from a viewModel observer. 
+    This protocol defines the delegate methods of a videoPlayerViewModel observer.
     In our case it describes the communication uplink from a VideoPlayerViewModel to a RootViewModel.
  */
 internal protocol PlayerViewModelObserver: class {
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
     func demoPlayerHasUpdatedState(state: TinyPlayerState)
 }
-
 
 /**
  This protocol defines all the commands that a CommandReceiver can take as input.
