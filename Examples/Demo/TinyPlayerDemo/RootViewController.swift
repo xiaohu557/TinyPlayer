@@ -21,9 +21,10 @@ final class RootViewController: UIViewController {
         videoPlayerVC = viewController
         addChildViewController(viewController)
         view.insertSubview(viewController.view, belowSubview: startButton)
+        viewController.didMove(toParentViewController: self)
     }
 
-    fileprivate func removePlayer() {
+    fileprivate func removePlayerViewController() {
         guard let vc = videoPlayerVC else {
             return
         }
@@ -103,7 +104,7 @@ extension RootViewController {
     
     @IBAction func closeButtonTapped(_ sender: Any) {
         viewModel.freePlayerItemResource()
-        removePlayer()
+        removePlayerViewController()
     }
     
     @IBAction func freePlayerItemResource(_ sender: Any) {
