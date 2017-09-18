@@ -17,6 +17,7 @@
 		C71D8F741E40A6FC005E4B64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F6E1E40A6FC005E4B64 /* Assets.xcassets */; };
 		C71D8F7B1E40A71B005E4B64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F771E40A71B005E4B64 /* LaunchScreen.storyboard */; };
 		C71D8F7C1E40A71B005E4B64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C71D8F791E40A71B005E4B64 /* Main.storyboard */; };
+		C77261AD1F702304004C12FB /* VideoURLRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77261AC1F702304004C12FB /* VideoURLRepository.swift */; };
 		C78F98EA1F62DA5B008D1E9A /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F98E91F62DA5B008D1E9A /* Observable.swift */; };
 		C7980C8C1E44F8C60002BEFB /* TinyPlayerFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* TinyPlayerFunctionalTests.swift */; };
 		C7A4A19C1E54B02B0049EFFA /* unittest_video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = C7EE50961E44D9AD00D17127 /* unittest_video.mp4 */; };
@@ -63,6 +64,7 @@
 		C71D8F781E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C71D8F7A1E40A71B005E4B64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = TinyPlayerDemo/Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C71D8F8B1E40B052005E4B64 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TinyPlayerDemo/Info.plist; sourceTree = "<group>"; };
+		C77261AC1F702304004C12FB /* VideoURLRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoURLRepository.swift; sourceTree = "<group>"; };
 		C78F98E91F62DA5B008D1E9A /* Observable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Observable.swift; path = ../Shared/Observable.swift; sourceTree = "<group>"; };
 		C7A4A19D1E54C43C0049EFFA /* PlayerTestObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTestObserver.swift; sourceTree = "<group>"; };
 		C7B559CC1E5B403900BDE78F /* unittest_video_alternative.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = unittest_video_alternative.mp4; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				15132F281E6346FC00910453 /* RootViewModel.swift */,
 				C71D8F671E40A6D8005E4B64 /* VideoPlayerViewController.swift */,
 				C71D8F681E40A6D8005E4B64 /* VideoPlayerViewModel.swift */,
+				C77261AC1F702304004C12FB /* VideoURLRepository.swift */,
 				C78F98E91F62DA5B008D1E9A /* Observable.swift */,
 				C71D8F771E40A71B005E4B64 /* LaunchScreen.storyboard */,
 				C71D8F791E40A71B005E4B64 /* Main.storyboard */,
@@ -415,6 +418,7 @@
 				C71D8F6B1E40A6D8005E4B64 /* VideoPlayerViewModel.swift in Sources */,
 				C71D8F691E40A6D8005E4B64 /* RootViewController.swift in Sources */,
 				C7EC42C21F6AC4CC00A3905C /* AppRouter.swift in Sources */,
+				C77261AD1F702304004C12FB /* VideoURLRepository.swift in Sources */,
 				C78F98EA1F62DA5B008D1E9A /* Observable.swift in Sources */,
 				C71D8F6A1E40A6D8005E4B64 /* VideoPlayerViewController.swift in Sources */,
 			);

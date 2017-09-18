@@ -28,7 +28,7 @@ final class AppRouter {
             return
         }
 
-        let playerViewModel = VideoPlayerViewModel()
+        let playerViewModel = VideoPlayerViewModel(repository: VideoURLRepository())
         videoPlayerVC.viewModel = playerViewModel
 
         let rootViewModel = RootViewModel(playerViewModel: playerViewModel)

@@ -2,7 +2,7 @@
 //  Observable.swift
 //  TinyPlayerDemo
 //
-//  Created by Xi Chen on 08.09.17.
+//  Created by Kevin Chen on 08.09.17.
 //  Copyright © 2017 CocoaPods. All rights reserved.
 //
 
