@@ -12,9 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var appRouter: AppRouter?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
+        window = UIWindow(frame: UIScreen.main.bounds)
+
+        guard let window = window else {
+            fatalError("Failed to load App Router")
+        }
+
+        appRouter = AppRouter(window: window)
+        appRouter?.load()
 
         return true
     }
@@ -40,7 +49,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 

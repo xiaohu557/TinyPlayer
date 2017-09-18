@@ -9,53 +9,53 @@
 import UIKit
 import TinyPlayer
 
-class RootViewController: UIViewController {
+final class RootViewController: UIViewController {
 
     @IBOutlet weak var startButton: UIButton!
     
-    fileprivate var viewModel: RootViewModel!
+    var viewModel: (RootViewModelInput & RootViewModelOutput)!
     
-    fileprivate var videoPlayerVC: VideoPlayerViewController?
-    
-    // MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-        
-        viewModel = RootViewModel(viewDelegate: self)
-        
-        videoPlayerVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController
-        
-        if let videoPlayerVC = videoPlayerVC {
-            
-            /* Link the video model to the child view controller. */
-            let playerViewModel = VideoPlayerViewModel()
-            videoPlayerVC.viewModel = playerViewModel
+    fileprivate var videoPlayerVC: UIViewController?
 
-            /* A command downlink between view models: RootViewModel -> VideoPlayerViewModel */
-            viewModel.commandReceiver = playerViewModel
-            
-            /* A callback uplink between view models: VideoPlayerViewModel -> RootViewModel */
-            playerViewModel.viewModelObserver = viewModel
-            
-            self.addChildViewController(videoPlayerVC)
-            self.view.insertSubview(videoPlayerVC.view, belowSubview: startButton)
+    func embedPlayer(with viewController: UIViewController) {
+        videoPlayerVC = viewController
+        addChildViewController(viewController)
+        view.insertSubview(viewController.view, belowSubview: startButton)
+    }
+
+    fileprivate func removePlayer() {
+        guard let vc = videoPlayerVC else {
+            return
         }
+        vc.view.removeFromSuperview()
+        vc.removeFromParentViewController()
+        videoPlayerVC = nil
+    }
+
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        bind(to: viewModel)
     }
 
     override func didReceiveMemoryWarning() {
-        
         super.didReceiveMemoryWarning()
+    }
+
+    private func bind(to viewModel: RootViewModelOutput) {
+        viewModel.playButtonDisplayMode.observe { [weak self] mode in
+            self?.updatePlayButtonToMode(buttonMode: mode)
+        }
     }
 }
 
-// MARK: - Update UI based on view model changes.
+// MARK: - UI updates
 
-extension RootViewController: RootViewUpdateDelegate {
-    
-    internal func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
-        
+extension RootViewController {
+
+    fileprivate func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode) {
         let designatedAlpha: CGFloat
         var buttonTitle: String?
         
@@ -90,34 +90,23 @@ extension RootViewController: RootViewUpdateDelegate {
 extension RootViewController {
     
     @IBAction func playButtonTapped(button: UIButton) {
-        
         viewModel.playButtonTapped()
     }
     
     @IBAction func seekBackwardsButtonTapped(button: UIButton) {
-        
         viewModel.seekBackwardsFor5Secs()
     }
     
     @IBAction func seekForwardsButtonTapped(button: UIButton) {
-        
         viewModel.seekForwardsFor5Secs()
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
-        
         viewModel.freePlayerItemResource()
-        
-        if let vc = videoPlayerVC {
-            
-            vc.view.removeFromSuperview()
-            vc.removeFromParentViewController()
-            videoPlayerVC = nil
-        }
+        removePlayer()
     }
     
     @IBAction func freePlayerItemResource(_ sender: Any) {
-        
         viewModel.freePlayerItemResource()
     }
 }

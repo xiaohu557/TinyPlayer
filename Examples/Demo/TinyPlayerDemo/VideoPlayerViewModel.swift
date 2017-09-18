@@ -109,7 +109,7 @@ extension VideoPlayerViewModel: TinyPlayerDelegate {
 
 // MARK: - Process commands from RootViewModel
 
-extension VideoPlayerViewModel: RootViewModelCommandReceiver {
+extension VideoPlayerViewModel: VideoPlayerViewModelInput {
     
     func playButtonTapped() {
         
@@ -126,17 +126,14 @@ extension VideoPlayerViewModel: RootViewModelCommandReceiver {
     }
     
     func seekBackwardsFor5Secs() {
-        
         tinyPlayer.seekBackward(secs: 5.0)
     }
     
     func seekForwardsFor5Secs() {
-        
         tinyPlayer.seekForward(secs: 5.0)
     }
     
     func freePlayerItemResource() {
-        
         tinyPlayer.closeCurrentItem()
     }
 }
@@ -147,7 +144,18 @@ extension VideoPlayerViewModel: RootViewModelCommandReceiver {
     In our case it describes the communication uplink from a VideoPlayerViewModel to a RootViewModel.
  */
 internal protocol PlayerViewModelObserver: class {
-    
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool)
     func demoPlayerHasUpdatedState(state: TinyPlayerState)
+}
+
+
+/**
+ This protocol defines all the commands that a CommandReceiver can take as input.
+ In our case, a CommandReceiver will be a VideoPlayerViewModel instance.
+ */
+protocol VideoPlayerViewModelInput: class {
+    func playButtonTapped()
+    func seekBackwardsFor5Secs()
+    func seekForwardsFor5Secs()
+    func freePlayerItemResource()
 }

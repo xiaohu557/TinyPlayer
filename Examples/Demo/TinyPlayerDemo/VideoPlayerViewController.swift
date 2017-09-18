@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 import TinyPlayer
 
-class VideoPlayerViewController: UIViewController, TinyLogging {
+final class VideoPlayerViewController: UIViewController, TinyLogging {
     
     /* Required property from the TinyLogging protocol. */
     var loggingLevel: TinyLoggingLevel = .info
 
-    internal var viewModel: VideoPlayerViewModel!
+    var viewModel: VideoPlayerViewModel!
     
     required init?(coder aDecoder: NSCoder) {
 
