@@ -20,9 +20,9 @@ fileprivate enum TestRemoteVideoUrls: String {
     case hlsVideo4 = "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8"
 }
 
-fileprivate let testLocalVideo = Bundle.main.path(forResource: "unittest_video", ofType: "mp4")
+fileprivate let testLocalVideoUrl = Bundle.main.path(forResource: "unittest_video", ofType: "mp4")
 
-class VideoURLRepository {
+final class VideoURLRepository {
     func fetchVideoUrlString() -> String {
         return TestRemoteVideoUrls.normalVideo.rawValue
     }

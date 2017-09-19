@@ -37,5 +37,6 @@ final class AppRouter {
         rootViewController.embedPlayer(with: videoPlayerVC)
 
         window.rootViewController = rootViewController
+        window.makeKeyAndVisible()
     }
 }
