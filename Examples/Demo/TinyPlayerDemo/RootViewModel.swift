@@ -10,108 +10,96 @@ import Foundation
 import UIKit
 import TinyPlayer
 
-class RootViewModel {
+class RootViewModel: RootViewModelOutput {
     
-    internal weak var viewDelegate: RootViewUpdateDelegate?
-    
-    internal var playButtonDisplayMode: PlayButtonDisplayMode = .playButton
+    var playButtonDisplayMode = Observable<PlayButtonDisplayMode>(.playButton)
     
     /**
-        A command receiver will take commands from this view model.
+        A command receiver (video player) will take commands from this view model.
      */
-    internal weak var commandReceiver: RootViewModelCommandReceiver?
-    
-    init(viewDelegate: RootViewUpdateDelegate) {
-        
-        self.viewDelegate = viewDelegate
-    }
-    
-    /* UI update logic. */
-    
-    func needToUpdatePlayButtonMode(_ buttonMode: PlayButtonDisplayMode) {
-        
-        guard playButtonDisplayMode != buttonMode else {
+    var commandReceiver: VideoPlayerViewModelInput & PlayerViewModelDelegatable
+
+    /**
+        UI update logic. 
+     */
+    fileprivate func needToUpdatePlayButtonMode(_ buttonMode: PlayButtonDisplayMode) {
+        guard playButtonDisplayMode.value != buttonMode else {
             return
         }
-        
-        playButtonDisplayMode = buttonMode
-        
-        viewDelegate?.updatePlayButtonToMode(buttonMode: playButtonDisplayMode)
+        playButtonDisplayMode.next(buttonMode)
+    }
+
+    init(playerViewModel: VideoPlayerViewModelInput & PlayerViewModelDelegatable) {
+        self.commandReceiver = playerViewModel
+        commandReceiver.delegate = self
     }
 }
 
 // MARK: - Handle commands received from the correspond view controller.
 
-extension RootViewModel {
+extension RootViewModel: RootViewModelInput {
     
     func playButtonTapped() {
-        
-        commandReceiver?.playButtonTapped()
+        commandReceiver.playButtonTapped()
     }
     
     func seekBackwardsFor5Secs() {
-        
-        commandReceiver?.seekBackwardsFor5Secs()
+        commandReceiver.seekBackwardsFor5Secs()
     }
     
     func seekForwardsFor5Secs() {
-        
-        commandReceiver?.seekForwardsFor5Secs()
+        commandReceiver.seekForwardsFor5Secs()
     }
     
     func freePlayerItemResource() {
-        
-        commandReceiver?.freePlayerItemResource()
+        commandReceiver.freePlayerItemResource()
     }
 }
 
-// MARK: - PlayerViewModelObserver
+// MARK: - PlayerViewModelDelegate
 
-extension RootViewModel: PlayerViewModelObserver {
+extension RootViewModel: PlayerViewModelDelegate {
     
     func demoPlayerIsReadyToStartPlayingFromBeginning(isReady: Bool) {
-        
        needToUpdatePlayButtonMode(.playButton)
     }
     
     func demoPlayerHasUpdatedState(state: TinyPlayerState) {
-        
-        if state == .playing {
+        switch state {
+        case .playing:
             needToUpdatePlayButtonMode(.pauseButton)
-            
-        } else if state == .paused {
+        case .paused:
             needToUpdatePlayButtonMode(.playButton)
+        default:
+            break
         }
     }
 }
 
-// MARK: - Additional definitions
+// MARK: - Definitions
 
 /**
     Display modes of the play/pause button.
  */
-internal enum PlayButtonDisplayMode {
+enum PlayButtonDisplayMode {
     case playButton
     case pauseButton
     case hidden
 }
 
 /**
-    This protocol defines the UI update commands that the coorespond view needs to implement.
+    This protocol defines the operations that the view model can take as inputs.
  */
-internal protocol RootViewUpdateDelegate: class {
-    
-    func updatePlayButtonToMode(buttonMode: PlayButtonDisplayMode)
-}
-
-/**
-    This protocol defines all the commands that a CommandReceiver can take as input.
-    In our case, a CommandReceiver will be a VideoPlayerViewModel instance.
- */
-internal protocol RootViewModelCommandReceiver: class {
-    
+protocol RootViewModelInput: class {
     func playButtonTapped()
     func seekBackwardsFor5Secs()
     func seekForwardsFor5Secs()
     func freePlayerItemResource()
+}
+
+/**
+    This protocol defines the inferfaces that the view model exposes to update the UI.
+ */
+protocol RootViewModelOutput: class {
+    var playButtonDisplayMode: Observable<PlayButtonDisplayMode> { get }
 }
