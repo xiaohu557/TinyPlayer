@@ -11,22 +11,28 @@ import UIKit
 
 final class AppRouter {
 
-    fileprivate let window: UIWindow
+    private let window: UIWindow
+    private var storyboard: UIStoryboard?
+    fileprivate let rootViewController: RootViewController
+    fileprivate var videoPlayerViewController: VideoPlayerViewController?
 
     init(window: UIWindow) {
         self.window = window
+
+        storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        guard let rootVC = storyboard?.instantiateViewController(withIdentifier: "RootViewController") as? RootViewController else {
+            fatalError("Failed initiate RootViewController")
+        }
+        rootViewController = rootVC
+        rootViewController.delegate = self
     }
 
     func load() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-        guard let rootViewController = storyboard.instantiateViewController(withIdentifier: "RootViewController") as? RootViewController else {
-            return
+        guard let videoPlayerVC = storyboard?.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController else {
+            fatalError("Failed initiate VideoPlayerViewController")
         }
-
-        guard let videoPlayerVC = storyboard.instantiateViewController(withIdentifier: "VideoPlayerViewController") as? VideoPlayerViewController else {
-            return
-        }
+        videoPlayerViewController = videoPlayerVC
 
         let playerViewModel = VideoPlayerViewModel(repository: VideoURLRepository())
         videoPlayerVC.viewModel = playerViewModel
@@ -34,9 +40,20 @@ final class AppRouter {
         let rootViewModel = RootViewModel(playerViewModel: playerViewModel)
         rootViewController.viewModel = rootViewModel
 
-        rootViewController.embedPlayer(with: videoPlayerVC)
+        rootViewController.embedPlayer(within: videoPlayerVC)
 
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
+    }
+}
+
+extension AppRouter: RootViewControllerDelegate {
+
+    func needToDismissVideoPlayer() {
+        guard let videoPlayerVC = videoPlayerViewController else {
+            return
+        }
+        rootViewController.removePlayer(within: videoPlayerVC)
+        videoPlayerViewController = nil
     }
 }

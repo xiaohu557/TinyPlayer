@@ -9,30 +9,30 @@
 import UIKit
 import TinyPlayer
 
+/**
+    This delegate protocol forms a communication channel to the Router for 
+    presenting/dismissing.
+ */
+protocol RootViewControllerDelegate: class {
+    func needToDismissVideoPlayer()
+}
+
+/**
+    This delegate protocol defines the commands that its parent Router could
+    issue.
+ */
+protocol RootViewControllerPresentable: class {
+    func embedPlayer(within viewController: UIViewController)
+    func removePlayer(within viewController: UIViewController)
+}
+
 final class RootViewController: UIViewController {
 
     @IBOutlet weak var startButton: UIButton!
     
     var viewModel: (RootViewModelInput & RootViewModelOutput)!
+    weak var delegate: RootViewControllerDelegate?
     
-    fileprivate var videoPlayerVC: UIViewController?
-
-    func embedPlayer(with viewController: UIViewController) {
-        videoPlayerVC = viewController
-        addChildViewController(viewController)
-        view.insertSubview(viewController.view, belowSubview: startButton)
-        viewController.didMove(toParentViewController: self)
-    }
-
-    fileprivate func removePlayerViewController() {
-        guard let vc = videoPlayerVC else {
-            return
-        }
-        vc.view.removeFromSuperview()
-        vc.removeFromParentViewController()
-        videoPlayerVC = nil
-    }
-
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -49,6 +49,22 @@ final class RootViewController: UIViewController {
         viewModel.playButtonDisplayMode.observe { [weak self] mode in
             self?.updatePlayButtonToMode(buttonMode: mode)
         }
+    }
+}
+
+// MARK: - Present and dismiss
+
+extension RootViewController: RootViewControllerPresentable {
+
+    func embedPlayer(within viewController: UIViewController) {
+        addChildViewController(viewController)
+        view.insertSubview(viewController.view, belowSubview: startButton)
+        viewController.didMove(toParentViewController: self)
+    }
+
+    func removePlayer(within viewController: UIViewController) {
+        viewController.view.removeFromSuperview()
+        viewController.removeFromParentViewController()
     }
 }
 
@@ -104,7 +120,7 @@ extension RootViewController {
     
     @IBAction func closeButtonTapped(_ sender: Any) {
         viewModel.freePlayerItemResource()
-        removePlayerViewController()
+        delegate?.needToDismissVideoPlayer()
     }
     
     @IBAction func freePlayerItemResource(_ sender: Any) {
