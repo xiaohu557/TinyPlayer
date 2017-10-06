@@ -338,6 +338,7 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
 
         /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         player.replaceCurrentItem(with: playerItem)
+        currentVideoPlaybackEnded = false
     }
   
     /**
