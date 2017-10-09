@@ -718,12 +718,14 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
         delegate?.player(self, didUpdateSeekableRange: 0...videoDuration!)
         
         /* This closure will be executed on the main thread. */
-        let followUpOperations = { (succeed: Bool) in
+        let followUpOperations = { [weak self] (succeed: Bool) in
+            guard let strongSelf = self
+                else { return }
             
-            self.delegate?.playerIsReadyToPlay(self)
+            strongSelf.delegate?.playerIsReadyToPlay(strongSelf)
             
             if #available(iOS 10.0, tvOS 10.0, *) {
-                self.playerItem?.preferredForwardBufferDuration = 0.0
+                strongSelf.playerItem?.preferredForwardBufferDuration = 0.0
             }
         }
         
@@ -874,9 +876,8 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
         isSeeking = true
         
         player.seek(to: timePoint) { completed in
-            
-            DispatchQueue.main.async { [unowned self]  in
-                self.isSeeking = false
+            DispatchQueue.main.async { [weak self]  in
+                self?.isSeeking = false
                 completion?(completed)
             }
         }
