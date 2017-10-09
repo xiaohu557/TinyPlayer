@@ -135,6 +135,11 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
 
     public var bufferProgress: Float?
     
+    public var volume: Float {
+        get { return player.volume }
+        set { player.volume = newValue }
+    }
+    
     public var enableAirplayMediaRoute: Bool {
         didSet {
             player.allowsExternalPlayback = enableAirplayMediaRoute
@@ -174,15 +179,8 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
     public var hidden: Bool = false {
         
         didSet {
-            if hidden {
-                for (_, view) in projectionViewStore {
-                    view.isHidden = true
-                }
-                
-            } else {
-                for (_, view) in projectionViewStore {
-                    view.isHidden = false
-                }
+            for (_, view) in projectionViewStore {
+                view.isHidden = hidden
             }
         }
     }
@@ -236,6 +234,14 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
         player.replaceCurrentItem(with: nil)
 
         detachObserversFrom(player: player)
+        performCleanupActions()
+    }
+    
+    fileprivate var cleanupActions: [() -> ()] = []
+    fileprivate func performCleanupActions() {
+        while let action = cleanupActions.popLast() {
+            action()
+        }
     }
 
     // - MARK: Media Resource Management
@@ -332,6 +338,7 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
 
         /* Attach an AVPlayerItem to player immediately triggers the media preparation, KVO works after here. */
         player.replaceCurrentItem(with: playerItem)
+        currentVideoPlaybackEnded = false
     }
   
     /**
@@ -433,6 +440,7 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
 
     fileprivate func detachObserversFrom(player: AVPlayer) {
         
+        player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
         
         if #available(iOS 10.0, tvOS 10.0, *) {
@@ -710,12 +718,14 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
         delegate?.player(self, didUpdateSeekableRange: 0...videoDuration!)
         
         /* This closure will be executed on the main thread. */
-        let followUpOperations = { (succeed: Bool) in
+        let followUpOperations = { [weak self] (succeed: Bool) in
+            guard let strongSelf = self
+                else { return }
             
-            self.delegate?.playerIsReadyToPlay(self)
+            strongSelf.delegate?.playerIsReadyToPlay(strongSelf)
             
             if #available(iOS 10.0, tvOS 10.0, *) {
-                self.playerItem?.preferredForwardBufferDuration = 0.0
+                strongSelf.playerItem?.preferredForwardBufferDuration = 0.0
             }
         }
         
@@ -866,9 +876,8 @@ public class TinyVideoPlayer: NSObject, TinyVideoPlayerProtocol, TinyLogging {
         isSeeking = true
         
         player.seek(to: timePoint) { completed in
-            
-            DispatchQueue.main.async { [unowned self]  in
-                self.isSeeking = false
+            DispatchQueue.main.async { [weak self]  in
+                self?.isSeeking = false
                 completion?(completed)
             }
         }
@@ -927,21 +936,41 @@ public extension TinyVideoPlayer {
      */
     public func setupCommandCenterTriggers() {
         
+        performCleanupActions()
+        
         let commandCenter = MPRemoteCommandCenter.shared()
         
-        let seekForwardCommand = commandCenter.seekForwardCommand
-        seekForwardCommand.isEnabled = true
-        seekForwardCommand.addTarget { event -> MPRemoteCommandHandlerStatus in
-
-            guard let _ = self.playerItem else {
-                
-                if #available(iOS 9.1, *) {
-                    return .noActionableNowPlayingItem
-                } else {
-                    return .commandFailed
-                }
+        func addHandler(to command: MPRemoteCommand,
+                        handler: @escaping (TinyVideoPlayer, MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus) {
+            
+            let actionNotFoundStatus: MPRemoteCommandHandlerStatus
+            
+            if #available(iOS 9.1, *) {
+                actionNotFoundStatus = .noActionableNowPlayingItem
+            } else {
+                actionNotFoundStatus = .commandFailed
             }
-
+            
+            let wasEnabled = command.isEnabled
+            let target = command.addTarget { [weak self] event -> MPRemoteCommandHandlerStatus in
+                guard let strongSelf = self else {
+                    return actionNotFoundStatus
+                }
+                
+                guard let _ = strongSelf.playerItem else {
+                    return actionNotFoundStatus
+                }
+                
+                return handler(strongSelf, event)
+            }
+            
+            cleanupActions.append {
+                command.removeTarget(target)
+                command.isEnabled = wasEnabled
+            }
+        }
+        
+        addHandler(to: commandCenter.seekForwardCommand) { (self, event) -> MPRemoteCommandHandlerStatus in
             guard let position = self.playbackPosition else {
                 return .commandFailed
             }
@@ -950,57 +979,21 @@ public extension TinyVideoPlayer {
             return .success
         }
         
-        let seekBackwardCommand = commandCenter.seekBackwardCommand
-        seekBackwardCommand.isEnabled = true
-        seekBackwardCommand.addTarget { event -> MPRemoteCommandHandlerStatus in
-
-            guard let _ = self.playerItem else {
-                
-                if #available(iOS 9.1, *) {
-                    return .noActionableNowPlayingItem
-                } else {
-                    return .commandFailed
-                }
-            }
-
+        addHandler(to: commandCenter.seekBackwardCommand) { (self, event) -> MPRemoteCommandHandlerStatus in
             guard let position = self.playbackPosition else {
                 return .commandFailed
             }
-
-            self.seekTo(position: position + TinyVideoPlayerDefaults.seekingInterval)
+            
+            self.seekTo(position: position - TinyVideoPlayerDefaults.seekingInterval)
             return .success
         }
         
-        let playCommand = commandCenter.playCommand
-        playCommand.isEnabled = true
-        playCommand.addTarget { event -> MPRemoteCommandHandlerStatus in
-            
-            guard let _ = self.playerItem else {
-                
-                if #available(iOS 9.1, *) {
-                    return .noActionableNowPlayingItem
-                } else {
-                    return .commandFailed
-                }
-            }
-            
+        addHandler(to: commandCenter.playCommand) { (self, event) -> MPRemoteCommandHandlerStatus in
             self.player.rate = 1.0
             return .success
         }
-
-        let pauseCommand = commandCenter.pauseCommand
-        pauseCommand.isEnabled = true
-        pauseCommand.addTarget { event -> MPRemoteCommandHandlerStatus in
-            
-            guard let _ = self.playerItem else {
-                
-                if #available(iOS 9.1, *) {
-                    return .noActionableNowPlayingItem
-                } else {
-                    return .commandFailed
-                }
-            }
-            
+        
+        addHandler(to: commandCenter.pauseCommand) { (self, event) -> MPRemoteCommandHandlerStatus in
             self.player.rate = 0.0
             return .success
         }
